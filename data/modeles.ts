@@ -83,7 +83,7 @@ export const MODELES: Modele[] = [
 		],
 		media: {
 			topImage: "/models/plus/pic1.jpg",
-			topVideo: "/video.mp4",
+			topVideo: "/models/plus/djetplus.mp4",
 			bottomLeftImage: "/models/plus/plint2.png",
 			bottomRightImage: "/models/plus/pic3.png",
 			slideImage: "/models/plus/slide1.png",
@@ -168,10 +168,10 @@ export const MODELES: Modele[] = [
 			"Caméra 360° et contrôle de stabilité",
 		],
 		media: {
-			topImage: "/models/djet/pic2.jpg",
+			topImage: "/models/djet/int2.jpg",
 			topVideo: "/video.mp4",
-			bottomLeftImage: "/models/djet/pic1.jpg",
-			bottomRightImage: "/models/djet/arriere3.jpg",
+			bottomLeftImage: "/models/djet/front.jpg",
+			bottomRightImage: "/models/djet/back.jpg",
 			slideImage: "/models/djet/slide1.png",
 			bgSlideImage: "/models/djet/bgslide1.jpg",
 		},

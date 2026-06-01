@@ -234,6 +234,16 @@ body {
   }
 }
 
+.kp-hero-zoom {
+  animation: kp-cinematic-zoom 22s ease-in-out infinite alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kp-hero-zoom {
+    animation: none !important;
+  }
+}
+
 @keyframes kp-light-sweep {
   0% {
     transform: translateX(-130%) skewX(-12deg);

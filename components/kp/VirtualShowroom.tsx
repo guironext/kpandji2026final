@@ -56,10 +56,10 @@ const MODELS: ShowroomModel[] = [
       "Contrôle de stabilité",
     ],
     gallery: [
-      { src: "/models/djet/pic2.jpg", alt: "DJETRAN — extérieur", tag: "Extérieur" },
-      { src: "/models/djet/pic1.jpg", alt: "DJETRAN — intérieur", tag: "Intérieur" },
+      { src: "/models/djet/pic3.png", alt: "DJETRAN — extérieur", tag: "Extérieur" },
+      { src: "/models/djet/int/int1.jpg", alt: "DJETRAN — intérieur", tag: "Intérieur" },
       { src: "/models/djet/arriere.jpg", alt: "DJETRAN — arrière", tag: "Extérieur" },
-      { src: "/models/djet/arriere3.jpg", alt: "DJETRAN — arrière", tag: "Extérieur" },
+      { src: "/models/djet/int/int3.jpg", alt: "DJETRAN — habitacle", tag: "Intérieur" },
     ],
   },
   {

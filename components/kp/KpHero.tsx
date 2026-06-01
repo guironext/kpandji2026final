@@ -93,11 +93,11 @@ export function KpHero() {
 
 					<h1 className="max-w-[18ch] font-serif text-[clamp(2.6rem,6.4vw,6rem)] font-medium leading-[1.02] tracking-[-0.025em] text-white">
 						<span className="kp-hero-reveal kp-hero-delay-2 block">
-							KPANDJI
+							KPANDJI AUTOMOBILES
 						</span>
 						<span className="kp-hero-reveal kp-hero-delay-3 block">
 							<span className="bg-linear-to-r from-white via-white to-kp-gold bg-clip-text text-transparent text-[clamp(1.6rem,6.4vw,3rem)]">
-							Constructeur automobile
+							Constructeur & Assembleur automobile
 							</span>
 						</span>
 					</h1>

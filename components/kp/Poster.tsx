@@ -33,6 +33,21 @@ export default function Poster() {
     [0, 1],
     reduceMotion ? ["0%", "0%"] : ["5%", "-4%"],
   );
+  const textY = useTransform(
+    scrollYProgress,
+    [0, 1],
+    reduceMotion ? ["0%", "0%"] : ["1%", "-11%"],
+  );
+  const textOpacity = useTransform(
+    scrollYProgress,
+    [0, 0.12, 1],
+    reduceMotion ? [1, 1, 1] : [0.96, 1, 0.98],
+  );
+  const textScale = useTransform(
+    scrollYProgress,
+    [0, 0.45, 1],
+    reduceMotion ? [1, 1, 1] : [0.92, 1, 1.05],
+  );
   const stripClip = useTransform(
     scrollYProgress,
     [0, 0.35],
@@ -44,7 +59,7 @@ export default function Poster() {
   return (
     <section
       className="relative isolate overflow-hidden border-t border-white/8 bg-[linear-gradient(180deg,rgba(8,8,8,0.94)_0%,rgba(5,5,5,0.98)_42%,rgba(6,11,18,0.96)_100%)] py-[clamp(3.5rem,9vw,7rem)]"
-      aria-labelledby="kp-poster-heading"
+      aria-labelledby="kp-poster-heading -mt-[clamp(3.5rem,9vw,7rem)] md:-mt-[clamp(4.5rem,11vw,8.5rem)]" 
     >
       {/* Depth layers */}
       <div
@@ -206,6 +221,88 @@ export default function Poster() {
                       />
                     </div>
                   )}
+
+                  {/* Sky scrim — keeps tagline readable on bright poster clouds */}
+                  <div
+                    aria-hidden
+                    className="pointer-events-none absolute inset-x-[6%] top-[10%] z-11 h-[min(38vw,340px)] bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.78)_0%,rgba(248,250,252,0.52)_48%,transparent_72%)] blur-[1px] md:inset-x-[10%] md:top-[11%]"
+                  />
+
+                  <motion.div
+                    className="pointer-events-none absolute inset-x-0 top-[22%] z-20 mx-auto max-w-[min(98vw,1320px)] px-4 text-center will-change-transform md:top-[24%] md:px-6"
+                    style={
+                      reduceMotion
+                        ? undefined
+                        : {
+                            y: textY,
+                            opacity: textOpacity,
+                            scale: textScale,
+                          }
+                    }
+                  >
+                    <motion.span
+                      className="block font-serif text-[clamp(2.35rem,7.2vw,5.5rem)] font-semibold leading-[1.06] tracking-[-0.035em] text-[#143328] [text-shadow:0_1px_0_rgba(255,255,255,0.95),0_2px_28px_rgba(255,255,255,0.65)]"
+                      initial={reduceMotion ? false : { opacity: 0, y: 48, filter: "blur(12px)" }}
+                      whileInView={
+                        reduceMotion
+                          ? undefined
+                          : { opacity: 1, y: 0, filter: "blur(0px)" }
+                      }
+                      viewport={{ once: true, amount: 0.35 }}
+                      transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+                    >
+                      La force d&apos;une racine,
+                    </motion.span>
+
+                    <motion.span
+                      className="mt-2 block md:mt-3"
+                      initial={reduceMotion ? false : { opacity: 0, y: 56, filter: "blur(14px)" }}
+                      whileInView={
+                        reduceMotion
+                          ? undefined
+                          : { opacity: 1, y: 0, filter: "blur(0px)" }
+                      }
+                      viewport={{ once: true, amount: 0.35 }}
+                      transition={{
+                        duration: 1.05,
+                        delay: 0.2,
+                        ease: [0.22, 1, 0.36, 1],
+                      }}
+                    >
+                      <motion.span
+                        className="inline-block font-serif text-[clamp(2.65rem,8vw,6.25rem)] font-semibold leading-[1.04] tracking-[-0.035em] text-[#f6a709] [text-shadow:0_1px_0_rgba(255,255,255,0.9),0_3px_32px_rgba(255,255,255,0.55)]"
+                        animate={
+                          reduceMotion
+                            ? undefined
+                            : {
+                                color: ["#6b5324", "#8a6f35", "#6b5324"],
+                              }
+                        }
+                        transition={{
+                          duration: 8,
+                          repeat: Infinity,
+                          ease: "easeInOut",
+                        }}
+                      >
+                        l&apos;élan d&apos;une nation
+                      </motion.span>
+                    </motion.span>
+
+                    <motion.span
+                      aria-hidden
+                      className="mx-auto mt-6 block h-px w-[min(320px,78vw)] bg-linear-to-r from-transparent via-[#6b5324]/75 to-transparent md:mt-7"
+                      initial={reduceMotion ? false : { scaleX: 0, opacity: 0 }}
+                      whileInView={
+                        reduceMotion ? undefined : { scaleX: 1, opacity: 1 }
+                      }
+                      viewport={{ once: true, amount: 0.35 }}
+                      transition={{
+                        duration: 0.9,
+                        delay: 0.45,
+                        ease: [0.22, 1, 0.36, 1],
+                      }}
+                    />
+                  </motion.div>
                 </motion.div>
               </div>
             </div>
