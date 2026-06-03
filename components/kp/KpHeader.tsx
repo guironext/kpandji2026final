@@ -1,10 +1,13 @@
 "use client";
 
+import { UserButton, useUser } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { KpClientLoginModal } from "@/components/kp/KpClientLoginModal";
+import { kpClerkAppearance } from "@/components/kp/clerk-appearance";
 
 type NavItem = {
   label: string;
@@ -267,14 +270,21 @@ export function KpHeader() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [loginOpen, setLoginOpen] = useState(false);
+  const { isSignedIn, isLoaded } = useUser();
   const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const searchId = useId();
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   const closeOverlays = useCallback(() => {
     setMenuOpen(false);
     setSearchOpen(false);
+    setLoginOpen(false);
   }, []);
+
+  const loginModalOpen = loginOpen && isLoaded && !isSignedIn;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 48);
@@ -284,11 +294,12 @@ export function KpHeader() {
   }, []);
 
   useEffect(() => {
-    document.body.style.overflow = menuOpen || searchOpen ? "hidden" : "";
+    document.body.style.overflow =
+      menuOpen || searchOpen || loginModalOpen ? "hidden" : "";
     return () => {
       document.body.style.overflow = "";
     };
-  }, [menuOpen, searchOpen]);
+  }, [menuOpen, searchOpen, loginModalOpen]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -305,7 +316,23 @@ export function KpHeader() {
     }
   }, [searchOpen]);
 
-  const barSolid = scrolled || menuOpen || searchOpen;
+  useEffect(() => {
+    if (!isLoaded || isSignedIn) return;
+    if (searchParams.get("clientLogin") !== "1") return;
+
+    const frame = window.requestAnimationFrame(() => setLoginOpen(true));
+
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete("clientLogin");
+    const nextSearch = params.toString();
+    const nextUrl =
+      pathname + (nextSearch ? `?${nextSearch}` : "") + window.location.hash;
+    router.replace(nextUrl, { scroll: false });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, [isLoaded, isSignedIn, pathname, router, searchParams]);
+
+  const barSolid = scrolled || menuOpen || searchOpen || loginModalOpen;
 
   return (
     <>
@@ -319,7 +346,9 @@ export function KpHeader() {
         {/* Utility strip — Mercedes “Group / careers / language” rhythm */}
         <div
           className={`grid transition-[grid-template-rows] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-            scrolled && !menuOpen && !searchOpen ? "grid-rows-[0fr]" : "grid-rows-[1fr]"
+            scrolled && !menuOpen && !searchOpen && !loginModalOpen
+              ? "grid-rows-[0fr]"
+              : "grid-rows-[1fr]"
           }`}
         >
           <div className="overflow-hidden">
@@ -384,7 +413,7 @@ export function KpHeader() {
           {/* Right icon cluster — Mercedes search / account / menu */}
           <div className="ml-auto flex items-center gap-0.5 sm:gap-1">
             <Link
-              href="/contact"
+              href="/essai"
               className="hidden items-center rounded-full border border-white/15 bg-white/6 px-5 py-2 font-sans text-[11px] font-semibold uppercase tracking-[0.22em] text-white/90 backdrop-blur-sm transition hover:border-white/30 hover:bg-white/9 hover:text-white xl:inline-flex"
             >
               Réserver un essai
@@ -397,13 +426,25 @@ export function KpHeader() {
             >
               <IconSearch />
             </button>
-            <button
-              type="button"
-              className="hidden h-11 w-11 items-center justify-center rounded-full text-white/85 transition-colors hover:bg-white/10 hover:text-white sm:flex"
-              aria-label="Espace client"
-            >
-              <IconUser />
-            </button>
+            {isLoaded && isSignedIn ? (
+              <div className="hidden sm:flex sm:items-center sm:justify-center">
+                <UserButton appearance={kpClerkAppearance} />
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchOpen(false);
+                  setMenuOpen(false);
+                  setLoginOpen(true);
+                }}
+                className="hidden h-11 w-11 items-center justify-center rounded-full text-white/85 transition-colors hover:bg-white/10 hover:text-white sm:flex"
+                aria-label="Ouvrir l'espace client"
+                aria-haspopup="dialog"
+              >
+                <IconUser />
+              </button>
+            )}
             <button
               type="button"
               onClick={() => {
@@ -434,6 +475,11 @@ export function KpHeader() {
           }`}
         />
       </header>
+
+      <KpClientLoginModal
+        open={loginModalOpen}
+        onClose={() => setLoginOpen(false)}
+      />
 
       {/* Search overlay — full-screen, Mercedes-style focus */}
       <div
@@ -543,9 +589,27 @@ export function KpHeader() {
                 {item.label}
               </Link>
             ))}
-            <div className="px-4 pb-2 pt-6">
+            <div className="space-y-3 px-4 pb-2 pt-6">
+              {isLoaded && !isSignedIn && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMenuOpen(false);
+                    setLoginOpen(true);
+                  }}
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/15 px-6 py-3 font-sans text-[11px] font-semibold uppercase tracking-[0.22em] text-white/90 transition hover:border-white/30 hover:bg-white/5"
+                >
+                  <IconUser className="h-4 w-4" />
+                  Espace client
+                </button>
+              )}
+              {isLoaded && isSignedIn && (
+                <div className="flex justify-center py-1">
+                  <UserButton appearance={kpClerkAppearance} />
+                </div>
+              )}
               <Link
-                href="/contact"
+                href="/essai"
                 onClick={() => setMenuOpen(false)}
                 className="inline-flex w-full items-center justify-center rounded-full bg-white px-6 py-3 font-sans text-[11px] font-semibold uppercase tracking-[0.22em] text-black transition hover:bg-white/95"
               >

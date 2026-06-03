@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import "./globals.css";
 import { KpHeader } from "@/components/kp/KpHeader";
 import { KpFooter } from "@/components/kp/KpFooter";
+import { KpClerkProvider } from "@/components/providers/KpClerkProvider";
 
 function HeaderFallback() {
   return (
@@ -66,11 +67,13 @@ export default function RootLayout({
         className="relative min-h-full flex flex-col bg-kp-bg text-kp-accent"
         suppressHydrationWarning
       >
-        <Suspense fallback={<HeaderFallback />}>
-          <KpHeader />
-        </Suspense>
-        {children}
-        <KpFooter />
+        <KpClerkProvider>
+          <Suspense fallback={<HeaderFallback />}>
+            <KpHeader />
+          </Suspense>
+          {children}
+          <KpFooter />
+        </KpClerkProvider>
       </body>
     </html>
   );

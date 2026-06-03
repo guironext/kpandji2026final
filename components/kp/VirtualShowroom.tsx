@@ -215,7 +215,7 @@ export default function VirtualShowroom() {
         }}
       />
 
-      <div className="relative mx-auto max-w-[1600px] px-5 md:px-10">
+      <div className="relative w-full max-w-none px-3 sm:px-5 lg:px-8 xl:px-10">
         <Reveal>
           <header className="mx-auto max-w-3xl text-center">
             <div className="flex flex-col items-center">
@@ -238,7 +238,7 @@ export default function VirtualShowroom() {
         </Reveal>
 
         <Reveal className="mt-10">
-          <div className="sticky top-[84px] z-40 -mx-2 overflow-hidden rounded-2xl border border-white/10 bg-black/55 p-1 shadow-[0_28px_90px_-38px_rgba(0,0,0,0.95)] ring-1 ring-white/6 backdrop-blur-2xl sm:mx-0">
+          <div className="sticky top-[84px] z-40 overflow-hidden rounded-xl border border-white/10 bg-black/55 p-1 shadow-[0_28px_90px_-38px_rgba(0,0,0,0.95)] ring-1 ring-white/6 backdrop-blur-2xl sm:rounded-2xl">
             <div
               aria-hidden
               className="pointer-events-none absolute inset-0 bg-[radial-gradient(700px_220px_at_50%_0%,rgba(201,169,98,0.12),transparent_55%)]"
@@ -349,8 +349,8 @@ export default function VirtualShowroom() {
                   className="pointer-events-none absolute inset-0 bg-linear-to-b from-white/6 via-transparent to-black/35"
                 />
 
-                <div className="relative mx-auto w-full max-w-[min(100%,72rem)] px-4 pt-4 sm:px-6 sm:pt-5 md:px-10 md:pt-6">
-                  <div className="relative aspect-video w-full overflow-hidden rounded-xl ring-1 ring-white/8">
+                <div className="relative w-full px-2 pt-3 sm:px-4 sm:pt-4 md:px-6 md:pt-5 lg:px-8">
+                  <div className="relative aspect-video w-full overflow-hidden rounded-lg ring-1 ring-white/8 sm:rounded-xl">
                     <AnimatePresence mode="wait">
                       {active ? (
                         <motion.div
@@ -367,7 +367,7 @@ export default function VirtualShowroom() {
                             fill
                             priority
                             loading="eager"
-                            sizes="(max-width: 1024px) 100vw, 66vw"
+                            sizes="100vw"
                             className="object-cover object-center"
                           />
                           <div className="pointer-events-none absolute inset-0 bg-linear-to-b from-black/10 via-transparent to-black/45" />
@@ -423,7 +423,7 @@ export default function VirtualShowroom() {
                             key={`${g.src}-${idx}`}
                             type="button"
                             onClick={() => setActiveIndex(idx)}
-                            className={`relative h-[74px] w-[118px] shrink-0 overflow-hidden rounded-xl border transition ${
+                            className={`relative h-[74px] w-[118px] shrink-0 overflow-hidden rounded-xl border transition sm:h-[82px] sm:w-[132px] lg:h-[88px] lg:w-[148px] ${
                               isActive
                                 ? "border-kp-gold/55 ring-2 ring-kp-gold/20"
                                 : "border-white/10 hover:border-white/22"
@@ -497,7 +497,7 @@ export default function VirtualShowroom() {
       </div>
 
       <div className="mt-14 border-t border-white/6 bg-kp-bg/70 py-14">
-        <div className="mx-auto max-w-[1600px] px-5 md:px-10">
+        <div className="w-full max-w-none px-3 sm:px-5 lg:px-8 xl:px-10">
           <Reveal>
             <div className="grid gap-8 md:grid-cols-12 md:items-center">
               <div className="md:col-span-7">
