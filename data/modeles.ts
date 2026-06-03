@@ -93,12 +93,12 @@ export const MODELES: Modele[] = [
 			desc1: {
 				ext1: "/models/desc/plus/avant1.jpg",
 				descDetail1:
-					"Dimensions: L×l×H : 5393 (5692) × 2045 × 1965 (1920) mm (Standard/Allégé) ; Empattement : 3230/3513 mm (Allégé) ; Voie : 1730 mm ; Châssis/Benne : Châssis haut : Suspension avant indépendante à double triangulation + Suspension arrière à cinq bras / Benne standard ; Châssis bas : Suspension avant indépendante à double triangulation + Suspension à lames / Benne allongée",
+					`Dimensions: L\u00D7l\u00D7H : 5393 (5692) \u00D7 2045 \u00D7 1965 (1920) mm (Standard/Allégé) ; Empattement : 3230/3513 mm (Allégé) ; Voie : 1730 mm ; Châssis/Benne : Châssis haut : Suspension avant indépendante à double triangulation + Suspension arrière à cinq bras / Benne standard ; Châssis bas : Suspension avant indépendante à double triangulation + Suspension à lames / Benne allongée`,
 			},
 			desc2: {
 				ext2: "/models/desc/plus/avant7.jpg",
 				descDetail2:
-					"Diesel : 2,3T+6MT (Puissance : 120 KW/163 CV Couple : 380 N.m) Essence : 2,0 GDI+8AT (Puissance : 145 KW/197 CV Couple : 360 N.m) Système d'aide à la conduite intelligent L2 : ACC/ LDWS/ FCW/ Moniteur de vision panoramique à 360°/ Phare automatique/ Essuie-glace à induction",
+					`Diesel : 2,3T + 6MT (Puissance : 120 KW/163 CV Couple : 380 N.m) Essence : 2,0 GDI + 8AT (Puissance : 145 KW/197 CV Couple : 360 N.m) Système d'aide à la conduite intelligent L2 : ACC/ LDWS/ FCW/ Moniteur de vision panoramique à 360°/ Phare automatique/ Essuie-glace à induction`,
 			},
 			desc3: {
 				ext3: "/models/desc/plus/avant9.jpg",
