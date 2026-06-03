@@ -17,55 +17,55 @@ export type Modele = {
 		desc1: {
 			ext1: string;
 			descDetail1: string;
-		},
+		};
 		desc2: {
 			ext2: string;
 			descDetail2: string;
-		},
+		};
 		desc3: {
 			ext3: string;
 			descDetail3: string;
-		},
-		desc4: {
+		};
+		desc4?: {
 			ext4: string;
 			descDetail4: string;
-		},
+		};
 	};
 	intern: {
 		desc1: {
 			ext1: string;
 			descDetail1: string;
-		},
+		};
 		desc2: {
 			ext2: string;
 			descDetail2: string;
-		},
+		};
 		desc3: {
 			ext3: string;
 			descDetail3: string;
-		},
-		desc4: {
+		};
+		desc4?: {
 			ext4: string;
 			descDetail4: string;
-		},
+		};
 	};
 	back: {
 		desc1: {
 			ext1: string;
 			descDetail1: string;
-		},
+		};
 		desc2: {
 			ext2: string;
 			descDetail2: string;
-		},
+		};
 		desc3: {
 			ext3: string;
 			descDetail3: string;
-		},	
-		desc4: {
+		};
+		desc4?: {
 			ext4: string;
 			descDetail4: string;
-		},
+		};
 	};
 };
 
@@ -86,74 +86,62 @@ export const MODELES: Modele[] = [
 			topVideo: "/models/plus/djetplus.mp4",
 			bottomLeftImage: "/models/plus/plint2.png",
 			bottomRightImage: "/models/plus/pic3.png",
-			slideImage: "/models/plus/slide1.png",
-			bgSlideImage: "/models/plus/bgslide1.jpg",
+			slideImage: "/derniers/djetranplus.png",
+			bgSlideImage: "/models/plus/back.jpg",
 		},
 		extern: {
 			desc1: {
-				ext1: "/models/desc/djetext1.jpg",
+				ext1: "/models/desc/plus/avant1.jpg",
 				descDetail1:
 					"Conçu aussi bien pour un usage professionnel que personnel, ce véhicule se distingue par des dimensions supérieures à celles des modèles concurrents de sa catégorie, offrant ainsi le plus grand volume de chargement arrière. Son habitacle spacieux garantit un confort de conduite optimal, tandis que la capote modulable permet de le transformer en SUV selon vos besoins. Les sièges arrière inclinables viennent renforcer cette sensation de confort et de flexibilité.",
 			},
 			desc2: {
-				ext2: "/models/desc/djetext2.jpg",
+				ext2: "/models/desc/plus/avant7.jpg",
 				descDetail2:
 					"Conçu aussi bien pour un usage professionnel que personnel, ce véhicule se distingue par des dimensions supérieures à celles des modèles concurrents de sa catégorie, offrant ainsi le plus grand volume de chargement arrière. Son habitacle spacieux garantit un confort de conduite optimal, tandis que la capote modulable permet de le transformer en SUV selon vos besoins. Les sièges arrière inclinables viennent renforcer cette sensation de confort et de flexibilité.",
 			},
 			desc3: {
-				ext3: "/models/desc/pic2.jpg",
+				ext3: "/models/desc/plus/avant9.jpg",
 				descDetail3:
 					"Conçu aussi bien pour un usage professionnel que personnel, ce véhicule se distingue par des dimensions supérieures à celles des modèles concurrents de sa catégorie, offrant ainsi le plus grand volume de chargement arrière. Son habitacle spacieux garantit un confort de conduite optimal, tandis que la capote modulable permet de le transformer en SUV selon vos besoins. Les sièges arrière inclinables viennent renforcer cette sensation de confort et de flexibilité.",
 			},
-			desc4: {
-				ext4: "/models/desc/djetext2.jpg",
-				descDetail4:
-					"Conçu aussi bien pour un usage professionnel que personnel, ce véhicule se distingue par des dimensions supérieures à celles des modèles concurrents de sa catégorie, offrant ainsi le plus grand volume de chargement arrière. Son habitacle spacieux garantit un confort de conduite optimal, tandis que la capote modulable permet de le transformer en SUV selon vos besoins. Les sièges arrière inclinables viennent renforcer cette sensation de confort et de flexibilité.",
-			},
+			
 		},
 		intern: {
 			desc1: {
-				ext1: "/models/desc/djetext1.jpg",
+				ext1: "/models/desc/plus/int1.png",
 				descDetail1:
 					"Conçu aussi bien pour un usage professionnel que personnel, ce véhicule se distingue par des dimensions supérieures à celles des modèles concurrents de sa catégorie, offrant ainsi le plus grand volume de chargement arrière. Son habitacle spacieux garantit un confort de conduite optimal, tandis que la capote modulable permet de le transformer en SUV selon vos besoins. Les sièges arrière inclinables viennent renforcer cette sensation de confort et de flexibilité.",
 			},
 			desc2: {
-				ext2: "/models/desc/djetext2.jpg",
+				ext2: "/models/desc/plus/int2.png",
 				descDetail2:
 					"Conçu aussi bien pour un usage professionnel que personnel, ce véhicule se distingue par des dimensions supérieures à celles des modèles concurrents de sa catégorie, offrant ainsi le plus grand volume de chargement arrière. Son habitacle spacieux garantit un confort de conduite optimal, tandis que la capote modulable permet de le transformer en SUV selon vos besoins. Les sièges arrière inclinables viennent renforcer cette sensation de confort et de flexibilité.",
 			},
 			desc3: {
-				ext3: "/models/desc/pic2.jpg",
+				ext3: "/models/desc/plus/int3.png",
 				descDetail3:
 					"Conçu aussi bien pour un usage professionnel que personnel, ce véhicule se distingue par des dimensions supérieures à celles des modèles concurrents de sa catégorie, offrant ainsi le plus grand volume de chargement arrière. Son habitacle spacieux garantit un confort de conduite optimal, tandis que la capote modulable permet de le transformer en SUV selon vos besoins. Les sièges arrière inclinables viennent renforcer cette sensation de confort et de flexibilité.",
 			},
-			desc4: {
-				ext4: "/models/desc/djetext2.jpg",
-				descDetail4:
-					"Conçu aussi bien pour un usage professionnel que personnel, ce véhicule se distingue par des dimensions supérieures à celles des modèles concurrents de sa catégorie, offrant ainsi le plus grand volume de chargement arrière. Son habitacle spacieux garantit un confort de conduite optimal, tandis que la capote modulable permet de le transformer en SUV selon vos besoins. Les sièges arrière inclinables viennent renforcer cette sensation de confort et de flexibilité.",
-			},
+			
 		},
 		back: {
 			desc1: {
-				ext1: "/models/desc/djetext1.jpg",
+				ext1: "/models/desc/plus/back1.jpg",
 				descDetail1:
 					"Conçu aussi bien pour un usage professionnel que personnel, ce véhicule se distingue par des dimensions supérieures à celles des modèles concurrents de sa catégorie, offrant ainsi le plus grand volume de chargement arrière. Son habitacle spacieux garantit un confort de conduite optimal, tandis que la capote modulable permet de le transformer en SUV selon vos besoins. Les sièges arrière inclinables viennent renforcer cette sensation de confort et de flexibilité.",
 			},
 			desc2: {
-				ext2: "/models/desc/djetext2.jpg",
+				ext2: "/models/desc/plus/back4.jpg",
 				descDetail2:
 					"Conçu aussi bien pour un usage professionnel que personnel, ce véhicule se distingue par des dimensions supérieures à celles des modèles concurrents de sa catégorie, offrant ainsi le plus grand volume de chargement arrière. Son habitacle spacieux garantit un confort de conduite optimal, tandis que la capote modulable permet de le transformer en SUV selon vos besoins. Les sièges arrière inclinables viennent renforcer cette sensation de confort et de flexibilité.",
 			},
 			desc3: {
-				ext3: "/models/desc/pic2.jpg",
+				ext3: "/models/desc/plus/back5.jpg",
 				descDetail3:
 					"Conçu aussi bien pour un usage professionnel que personnel, ce véhicule se distingue par des dimensions supérieures à celles des modèles concurrents de sa catégorie, offrant ainsi le plus grand volume de chargement arrière. Son habitacle spacieux garantit un confort de conduite optimal, tandis que la capote modulable permet de le transformer en SUV selon vos besoins. Les sièges arrière inclinables viennent renforcer cette sensation de confort et de flexibilité.",
 			},
-			desc4: {
-				ext4: "/models/desc/djetext2.jpg",
-				descDetail4:
-					"Conçu aussi bien pour un usage professionnel que personnel, ce véhicule se distingue par des dimensions supérieures à celles des modèles concurrents de sa catégorie, offrant ainsi le plus grand volume de chargement arrière. Son habitacle spacieux garantit un confort de conduite optimal, tandis que la capote modulable permet de le transformer en SUV selon vos besoins. Les sièges arrière inclinables viennent renforcer cette sensation de confort et de flexibilité.",
-			},
+			
 		},
 	},
 	{
@@ -177,69 +165,57 @@ export const MODELES: Modele[] = [
 		},
 		extern: {
 			desc1: {
-				ext1: "/models/djet/int/int1.jpg",
+				ext1: "/models/desc/djetran/avant3.jpg",
 				descDetail1:
 					"Système audio/vidéo embarqué 5 en 1, ordinateur de bord intelligent (affichage de 10 informations) et surveillance de la pression et de la température des pneus.",
 			},
 			desc2: {
-				ext2: "/models/djet/int/int3.jpg",
+				ext2: "/models/desc/djetran/avant4.jpg",
 				descDetail2:
 					"Système multimédia 9 pouces intégrant navigation, communication, divertissement, surveillance de la pression des pneus et assistance au stationnement à 360° • Ordinateur de bord intelligent, accès aux informations du véhicule à tout moment et en tout lieu",
 			},
 			desc3: {
-				ext3: "/models/djet/int/int2.jpg",
+				ext3: "/models/desc/djetran/avant5.jpg",
 				descDetail3:
 					"Consommation de carburant instantanée, consommation pour un trajet simple, consommation cumulée sur longs trajets • Indicateur d'autonomie restante • Températures intérieure et extérieure • Horloge et temps de conduite • Réglage du rétroéclairage du tableau de bord • Indicateur indépendant des commandes des 4 portes.",
 			},
-			desc4: {
-				ext4: "/models/djet/int/int6.jpg",
-				descDetail4:
-					"Consommation de carburant instantanée, consommation pour un trajet simple, consommation cumulée sur longs trajets • Indicateur d'autonomie restante • Températures intérieure et extérieure • Horloge et temps de conduite • Réglage du rétroéclairage du tableau de bord • Indicateur indépendant des commandes des 4 portes.",
-			},
+			
 		},
 		intern: {
 			desc1: {
-				ext1: "/models/desc/djetext1.jpg",
+				ext1: "/models/desc/djetran/int1.jpg",
 				descDetail1:
 					"Conçu aussi bien pour un usage professionnel que personnel, ce véhicule se distingue par des dimensions supérieures à celles des modèles concurrents de sa catégorie, offrant ainsi le plus grand volume de chargement arrière. Son habitacle spacieux garantit un confort de conduite optimal, tandis que la capote modulable permet de le transformer en SUV selon vos besoins. Les sièges arrière inclinables viennent renforcer cette sensation de confort et de flexibilité.",
 			},
 			desc2: {
-				ext2: "/models/desc/djetext2.jpg",
+				ext2: "/models/desc/djetran/int2.jpg",
 				descDetail2:
 					"Grâce à un système avancé de surveillance de la pression et de la température des pneus, vous roulez en toute sérénité. Son design captivant allie élégance raffinée et robustesse, avec des finitions soignées et des matériaux de haute qualité qui soulignent son caractère premium.",
 			},
 			desc3: {
-				ext3: "/models/desc/pic2.jpg",
+				ext3: "/models/desc/djetran/int3.jpg",
 				descDetail3:
 					"Pensé pour l’aventure comme pour le travail, ce véhicule offre une excellente capacité de franchissement ainsi qu’une grande capacité de chargement. Son châssis tout-terrain haute performance, développé selon les normes internationales les plus strictes, assure solidité et fiabilité, soutenues par une garantie de 5 ans ou 150 000 km. Sa structure élargie et renforcée, associée à une direction précise, garantit une maîtrise optimale sur tous les terrains.Côté sécurité et confort, rien n’a été laissé au hasard : équipé de série des systèmes ESC et TCS, ainsi que de l’assistance au freinage (EBA) et au démarrage en côte (HAC), il offre une protection maximale pour une conduite à la fois dynamique et sécurisée.",
 			},
-			desc4: {
-				ext4: "/models/djet/int/int6.jpg",
-				descDetail4:
-					"Affichage des instruments divisé, petit volant à 4 branches et écran de contrôle central de 8 pouces : un style sportif et élégant.",
-			},
+			
 		},
 		back: {
 			desc1: {
-				ext1: "/models/desc/djetext1.jpg",
+				ext1: "/models/desc/djetran/bak1.jpg",
 				descDetail1:
 					"Conçu aussi bien pour un usage professionnel que personnel, ce véhicule se distingue par des dimensions supérieures à celles des modèles concurrents de sa catégorie, offrant ainsi le plus grand volume de chargement arrière. Son habitacle spacieux garantit un confort de conduite optimal, tandis que la capote modulable permet de le transformer en SUV selon vos besoins. Les sièges arrière inclinables viennent renforcer cette sensation de confort et de flexibilité.",
 			},
 			desc2: {
-				ext2: "/models/desc/djetext2.jpg",
+				ext2: "/models/desc/djetran/bak2.jpg",
 				descDetail2:
 					"Grâce à un système avancé de surveillance de la pression et de la température des pneus, vous roulez en toute sérénité. Son design captivant allie élégance raffinée et robustesse, avec des finitions soignées et des matériaux de haute qualité qui soulignent son caractère premium.",
 			},
 			desc3: {
-				ext3: "/models/desc/pic2.jpg",
+				ext3: "/models/desc/djetran/bak3.jpg",
 				descDetail3:
 					"Pensé pour l’aventure comme pour le travail, ce véhicule offre une excellente capacité de franchissement ainsi qu’une grande capacité de chargement. Son châssis tout-terrain haute performance, développé selon les normes internationales les plus strictes, assure solidité et fiabilité, soutenues par une garantie de 5 ans ou 150 000 km. Sa structure élargie et renforcée, associée à une direction précise, garantit une maîtrise optimale sur tous les terrains.Côté sécurité et confort, rien n’a été laissé au hasard : équipé de série des systèmes ESC et TCS, ainsi que de l’assistance au freinage (EBA) et au démarrage en côte (HAC), il offre une protection maximale pour une conduite à la fois dynamique et sécurisée.",
 			},
-			desc4: {
-				ext4: "/models/djet/int/int6.jpg",
-				descDetail4:
-					"Consommation de carburant instantanée, consommation pour un trajet simple, consommation cumulée sur longs trajets • Indicateur d'autonomie restante • Températures intérieure et extérieure • Horloge et temps de conduite • Réglage du rétroéclairage du tableau de bord • Indicateur indépendant des commandes des 4 portes.",
-			},
+			
 		},
 	},
 	{
@@ -255,54 +231,46 @@ export const MODELES: Modele[] = [
 		],
 		media: {
 			topImage: "/models/lath/pic3.jpg",
-			topVideo: "/video.mp4",
+			topVideo: "/videolat.mp4",
 			bottomLeftImage: "/models/lath/pic4.jpg",
 			bottomRightImage: "/models/lath/pic2.jpeg",
-			slideImage: "/models/lath/slide1.png",
-			bgSlideImage: "/models/lath/bgslide1.jpg",
+			slideImage: "/derniers/lathaye.png",
+			bgSlideImage: "/derniers/backlat.png",
 		},
 		extern: {
 			desc1: {
-				ext1: "/models/desc/djetext1.jpg",
+				ext1: "/models/desc/lat/avt1.jpg",
 				descDetail1:
 					"Moteur 2.0T GDI Turbo compressé pour une performance exceptionnelle à chaque voyage.",
 			},
 			desc2: {
-				ext2: "/models/desc/djetext2.jpg",
+				ext2: "/models/desc/lat/avt2.jpg",
 				descDetail2:
 					"Transmission automatique CVT à 8 vitesses pour fluidité et efficience.",
 			},
 			desc3: {
-				ext3: "/models/desc/pic2.jpg",
+				ext3: "/models/desc/lat/avt3.jpg",
 				descDetail3: "Vitesse maximale de 210 km/h : un véritable bolide qui redéfinit la performance.",
 			},
-			desc4: {
-				ext4: "/models/desc/djetext2.jpg",
-				descDetail4:
-					"Transmission automatique CVT à 8 vitesses : fluidité, efficience et plaisir de conduite au quotidien.",
-			},
+			
 		},
 		intern: {
 			desc1: {
-				ext1: "/models/desc/djetext1.jpg",
+				ext1: "/models/desc/lat/int1.jpg",
 				descDetail1:
 					"Conçu aussi bien pour un usage professionnel que personnel, ce véhicule se distingue par des dimensions supérieures à celles des modèles concurrents de sa catégorie, offrant ainsi le plus grand volume de chargement arrière. Son habitacle spacieux garantit un confort de conduite optimal, tandis que la capote modulable permet de le transformer en SUV selon vos besoins. Les sièges arrière inclinables viennent renforcer cette sensation de confort et de flexibilité.",
 			},
 			desc2: {
-				ext2: "/models/desc/djetext2.jpg",
+				ext2: "/models/desc/lat/int2.jpg",
 				descDetail2:
 					"Grâce à un système avancé de surveillance de la pression et de la température des pneus, vous roulez en toute sérénité. Son design captivant allie élégance raffinée et robustesse, avec des finitions soignées et des matériaux de haute qualité qui soulignent son caractère premium.",
 			},
 			desc3: {
-				ext3: "/models/desc/pic2.jpg",
+				ext3: "/models/desc/lat/int3.jpg",
 				descDetail3:
 					"Pensé pour l’aventure comme pour le travail, ce véhicule offre une excellente capacité de franchissement ainsi qu’une grande capacité de chargement. Son châssis tout-terrain haute performance, développé selon les normes internationales les plus strictes, assure solidité et fiabilité, soutenues par une garantie de 5 ans ou 150 000 km. Sa structure élargie et renforcée, associée à une direction précise, garantit une maîtrise optimale sur tous les terrains.Côté sécurité et confort, rien n’a été laissé au hasard : équipé de série des systèmes ESC et TCS, ainsi que de l’assistance au freinage (EBA) et au démarrage en côte (HAC), il offre une protection maximale pour une conduite à la fois dynamique et sécurisée.",
 			},
-			desc4: {
-				ext4: "/models/desc/djetext2.jpg",
-				descDetail4:
-					"Habitacle et finitions pensés pour allier confort longue distance et sensation sportive à bord du LATHAYE.",
-			},
+			
 		},
 		back: {
 			desc1: {
@@ -320,11 +288,7 @@ export const MODELES: Modele[] = [
 				descDetail3:
 					"Pensé pour l’aventure comme pour le travail, ce véhicule offre une excellente capacité de franchissement ainsi qu’une grande capacité de chargement. Son châssis tout-terrain haute performance, développé selon les normes internationales les plus strictes, assure solidité et fiabilité, soutenues par une garantie de 5 ans ou 150 000 km. Sa structure élargie et renforcée, associée à une direction précise, garantit une maîtrise optimale sur tous les terrains.Côté sécurité et confort, rien n’a été laissé au hasard : équipé de série des systèmes ESC et TCS, ainsi que de l’assistance au freinage (EBA) et au démarrage en côte (HAC), il offre une protection maximale pour une conduite à la fois dynamique et sécurisée.",
 			},
-			desc4: {
-				ext4: "/models/desc/pic2.jpg",
-				descDetail4:
-					"Ligne arrière affirmée, volumes équilibrés et signature lumineuse : une présence routière distinctive.",
-			},
+			
 		},
 	},
 ];

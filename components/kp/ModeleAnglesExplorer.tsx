@@ -8,16 +8,31 @@ type AngleKey = "intern" | "extern" | "back";
 
 type Slide = { src: string; text: string };
 
+type AngleDesc = {
+	ext: string;
+	text: string;
+};
+
 /** One of `Modele.intern` | `Modele.extern` | `Modele.back` from `data/modeles.ts` (same shape). */
 function slidesFromAngleBlock(
 	block: Modele["intern"] | Modele["extern"] | Modele["back"],
 ): Slide[] {
-	return [
-		{ src: block.desc1.ext1, text: block.desc1.descDetail1 },
-		{ src: block.desc2.ext2, text: block.desc2.descDetail2 },
-		{ src: block.desc3.ext3, text: block.desc3.descDetail3 },
-		{ src: block.desc4.ext4, text: block.desc4.descDetail4 },
+	const candidates: AngleDesc[] = [
+		{ ext: block.desc1.ext1, text: block.desc1.descDetail1 },
+		{ ext: block.desc2.ext2, text: block.desc2.descDetail2 },
+		{ ext: block.desc3.ext3, text: block.desc3.descDetail3 },
 	];
+
+	if (block.desc4) {
+		candidates.push({
+			ext: block.desc4.ext4,
+			text: block.desc4.descDetail4,
+		});
+	}
+
+	return candidates
+		.filter(({ ext, text }) => Boolean(ext && text))
+		.map(({ ext, text }) => ({ src: ext, text }));
 }
 
 const ANGLES: {

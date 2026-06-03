@@ -22,6 +22,25 @@ function IconMail({ className }: { className?: string }) {
   );
 }
 
+function IconPhone({ className }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+    </svg>
+  );
+}
+
 function IconPin({ className }: { className?: string }) {
   return (
     <svg
@@ -116,15 +135,45 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
   );
 }
 
-const footerLinkClass =
-  "group inline-flex items-center gap-2.5 rounded-md py-1 -mx-1 px-1 text-sm text-white/60 transition-all duration-300 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-kp-gold/50 focus-visible:ring-offset-2 focus-visible:ring-offset-kp-elevated";
+const panelClass =
+  "flex flex-col rounded-2xl border border-white/6 bg-kp-elevated/25 p-7 backdrop-blur-sm transition-colors duration-300 hover:border-white/9 hover:bg-kp-elevated/35 md:p-8";
 
-const linkChevron = (
-  <span
-    className="h-1 w-1 shrink-0 rounded-full bg-kp-gold/0 transition-all duration-300 group-hover:bg-kp-gold/90 group-hover:shadow-[0_0_10px_rgba(201,169,98,0.45)]"
-    aria-hidden
-  />
-);
+const footerLinkClass =
+  "group inline-flex w-full items-center gap-2.5 rounded-lg py-2 -mx-1 px-1 text-sm text-white/60 transition-all duration-300 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-kp-gold/50 focus-visible:ring-offset-2 focus-visible:ring-offset-kp-elevated";
+
+const contactLineClass =
+  "group flex items-start gap-2.5 text-sm text-white/50 transition-colors duration-300 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-kp-gold/50 focus-visible:ring-offset-2 focus-visible:ring-offset-kp-elevated";
+
+const iconWrapClass =
+  "flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-kp-gold/20 bg-kp-gold/8 text-kp-gold shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] transition-colors duration-300 group-hover:border-kp-gold/35 group-hover:bg-kp-gold/12";
+
+const PHONE_CONTACTS = [
+  {
+    role: "Contact fixe",
+    display: "+225 27 23 27 95 67",
+    tel: "+2252723279567",
+  },
+  {
+    role: "Marketing",
+    display: "+225 07 07 20 22 11",
+    tel: "+2250707202211",
+  },
+  {
+    role: "S.A.V",
+    display: "+225 07 07 20 19 92",
+    tel: "+2250707201992",
+  },
+  {
+    role: "Commercial",
+    display: "+225 07 07 20 22 11",
+    tel: "+2250707202211",
+  },
+] as const;
+
+const RESOURCE_LINKS = [
+  ["Fiche technique", "/fiche_djetran.pdf"],
+  ["Brochure", "/Lathaye.pdf"],
+] as const;
 
 export function KpFooter() {
   return (
@@ -132,7 +181,6 @@ export function KpFooter() {
       id="contact"
       className="relative overflow-hidden border-t border-white/[0.07] bg-kp-bg"
     >
-      {/* Ambient layers */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 -z-10 bg-kp-surface"
@@ -149,14 +197,14 @@ export function KpFooter() {
       <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-kp-gold/50 to-transparent" />
 
       <div className="mx-auto max-w-[1600px] px-5 pt-16 pb-12 md:px-10 md:pt-20 md:pb-16">
-        <div className="grid gap-12 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1.4fr)] lg:gap-16 xl:gap-24">
+        <div className="grid gap-12 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.5fr)] lg:items-start lg:gap-16 xl:gap-20">
           {/* Brand column */}
-          <Reveal className="relative">
+          <Reveal className="relative min-w-0 lg:row-span-2">
             <div
               aria-hidden
               className="absolute -left-5 top-0 bottom-0 w-px bg-linear-to-b from-kp-gold/50 via-white/10 to-transparent md:-left-6"
             />
-            <div className="rounded-2xl border border-white/6 bg-kp-elevated/40 p-8 shadow-[0_24px_80px_-32px_rgba(0,0,0,0.85)] backdrop-blur-md md:p-10">
+            <div className="flex h-full flex-col rounded-2xl border border-white/6 bg-kp-elevated/40 p-8 shadow-[0_24px_80px_-32px_rgba(0,0,0,0.85)] backdrop-blur-md md:p-10">
               <Link
                 href="/#accueil"
                 className="inline-block rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-kp-gold/50 focus-visible:ring-offset-2 focus-visible:ring-offset-kp-elevated"
@@ -179,95 +227,95 @@ export function KpFooter() {
                 Conception, assemblage et commercialisation de véhicules pensés
                 pour l&apos;exigence du terrain et du quotidien.
               </p>
-              <a
-                href="mailto:contact@kpandji.com"
-                className="mt-10 inline-flex w-full items-center justify-center rounded-xl border border-kp-gold/35 bg-linear-to-br from-kp-gold/15 to-transparent px-8 py-4 font-sans text-[11px] font-semibold uppercase tracking-[0.24em] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] transition duration-300 hover:border-kp-gold/55 hover:from-kp-gold/25 hover:shadow-[0_0_0_1px_rgba(201,169,98,0.12),0_20px_50px_-24px_rgba(201,169,98,0.35)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-kp-gold/50 sm:w-auto"
-              >
-                Écrire au constructeur
-              </a>
+
+              <div className="mt-8 flex items-start gap-3 rounded-xl border border-white/6 bg-black/20 px-4 py-3.5">
+                <span className={iconWrapClass}>
+                  <IconPin className="h-[15px] w-[15px]" />
+                </span>
+                <div className="min-w-0">
+                  <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-kp-gold/75">
+                    Siège
+                  </p>
+                  <p className="mt-0.5 font-sans text-sm text-white/75">
+                    Côte d&apos;Ivoire
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-auto pt-10">
+                <a
+                  href="mailto:contact@kpandji.com"
+                  className="inline-flex w-full items-center justify-center rounded-xl border border-kp-gold/35 bg-linear-to-br from-kp-gold/15 to-transparent px-8 py-4 font-sans text-[11px] font-semibold uppercase tracking-[0.24em] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] transition duration-300 hover:border-kp-gold/55 hover:from-kp-gold/25 hover:shadow-[0_0_0_1px_rgba(201,169,98,0.12),0_20px_50px_-24px_rgba(201,169,98,0.35)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-kp-gold/50 sm:w-auto"
+                >
+                  Écrire au constructeur
+                </a>
+              </div>
             </div>
           </Reveal>
 
-          {/* Link panels */}
-          <div className="grid gap-5 sm:grid-cols-3">
-            <Reveal className="flex flex-col rounded-2xl border border-white/6 bg-kp-elevated/25 p-7 backdrop-blur-sm transition-colors hover:border-white/9 hover:bg-kp-elevated/35 md:p-8">
-              <SectionLabel>Navigation</SectionLabel>
+          {/* Right column — Ressources & Contact */}
+          <div className="grid min-w-0 gap-5 sm:grid-cols-2 lg:col-start-2 lg:row-start-1 lg:items-start">
+            <Reveal delayMs={40} className={`${panelClass} w-full min-w-0`}>
+              <SectionLabel>Ressources</SectionLabel>
               <ul className="mt-8 space-y-1">
-                {(
-                  [
-                    ["Véhicules", "/#vehicules"],
-                    ["Innovation", "/#innovation"],
-                    ["Marque", "/#marque"],
-                    ["Service après-vente", "/service-apres-vente"],
-                  ] as const
-                ).map(([label, href]) => (
+                {RESOURCE_LINKS.map(([label, href]) => (
                   <li key={href}>
-                    <Link href={href} className={footerLinkClass}>
-                      {linkChevron}
-                      {label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </Reveal>
-
-            <Reveal delayMs={70} className="flex flex-col rounded-2xl border border-white/6 bg-kp-elevated/25 p-7 backdrop-blur-sm transition-colors hover:border-white/9 hover:bg-kp-elevated/35 md:p-8">
-              <SectionLabel>Contact</SectionLabel>
-              <address className="mt-8 not-italic">
-                <ul className="space-y-5">
-                  <li>
                     <a
-                      href="mailto:contact@kpandji.com"
-                      className={`${footerLinkClass} items-start`}
+                      href={href}
+                      className={footerLinkClass}
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
-                      <IconMail className="mt-0.5 shrink-0 text-kp-gold/75" />
-                      <span className="break-all leading-snug">
-                        contact@kpandji.com
+                      <IconFile className="shrink-0 text-kp-gold/75" />
+                      <span className="flex min-w-0 flex-1 items-center gap-2">
+                        {label}
+                        <IconExternal className="ml-auto shrink-0 text-white/25 transition-colors group-hover:text-kp-gold/70" />
                       </span>
                     </a>
                   </li>
+                ))}
+              </ul>
+              <div className="mt-auto pt-8" aria-hidden>
+                <div className="h-px bg-linear-to-r from-kp-gold/30 via-white/8 to-transparent" />
+                <p className="mt-5 font-sans text-[12px] leading-relaxed text-white/32">
+                  Documents officiels — téléchargement direct.
+                </p>
+              </div>
+            </Reveal>
+
+            <Reveal delayMs={80} className={`${panelClass} w-full min-w-0`}>
+              <SectionLabel>Contact</SectionLabel>
+              <address className="mt-8 not-italic">
+                <ul className="space-y-5" role="list">
+                  {PHONE_CONTACTS.map(({ role, display, tel }) => (
+                    <li key={role}>
+                      <a href={`tel:${tel}`} className={contactLineClass}>
+                        <IconPhone className="mt-0.5 shrink-0 text-kp-gold/75" />
+                        <span>
+                          <span>{role}</span>
+                          <span className="text-white/35"> : </span>
+                          <span className="tabular-nums tracking-wide">
+                            {display}
+                          </span>
+                        </span>
+                      </a>
+                    </li>
+                  ))}
                   <li>
-                    <p className="flex items-start gap-2.5 text-sm text-white/50">
-                      <IconPin className="mt-0.5 shrink-0 text-kp-gold/75" />
-                      <span>Côte d&apos;Ivoire</span>
-                    </p>
+                    <a
+                      href="mailto:contact@kpandji.com"
+                      className={contactLineClass}
+                    >
+                      <IconMail className="mt-0.5 shrink-0 text-kp-gold/75" />
+                      <span>
+                        <span>Courriel</span>
+                        <span className="text-white/35"> : </span>
+                        <span className="break-all">contact@kpandji.com</span>
+                      </span>
+                    </a>
                   </li>
                 </ul>
               </address>
-            </Reveal>
-
-            <Reveal delayMs={140} className="flex flex-col rounded-2xl border border-white/6 bg-kp-elevated/25 p-7 backdrop-blur-sm transition-colors hover:border-white/9 hover:bg-kp-elevated/35 md:p-8">
-              <SectionLabel>Ressources</SectionLabel>
-              <ul className="mt-8 space-y-1">
-                <li>
-                  <a
-                    href="/fiche_djetran.pdf"
-                    className={footerLinkClass}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <IconFile className="shrink-0 text-kp-gold/75" />
-                    <span className="flex min-w-0 flex-1 items-center gap-2">
-                      Fiche technique
-                      <IconExternal className="shrink-0 text-white/25 transition-colors group-hover:text-kp-gold/70" />
-                    </span>
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="/Lathaye.pdf"
-                    className={footerLinkClass}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <IconFile className="shrink-0 text-kp-gold/75" />
-                    <span className="flex min-w-0 flex-1 items-center gap-2">
-                      Brochure
-                      <IconExternal className="shrink-0 text-white/25 transition-colors group-hover:text-kp-gold/70" />
-                    </span>
-                  </a>
-                </li>
-              </ul>
             </Reveal>
           </div>
         </div>

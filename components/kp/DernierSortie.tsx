@@ -13,8 +13,6 @@ const MODELS = [
     description:
       "Cette pick-up robuste, allie la force brute à l'élégance pure. Le véritable outil de distinction pour les bâtisseurs de demain.",
     image: "/derniers/djetranplus.png",
-    slideImage: "/models/plus/slide1.png",
-    bgSlideImage: "/models/plus/bgslide1.jpg",
     href: "/modeles/djetranplus",
   },
   {
@@ -24,8 +22,6 @@ const MODELS = [
     description:
       "Pick-up conquérant, robuste et élégant. L'outil de travail infatigable des entrepreneurs et des bâtisseurs de la nation.",
     image: "/derniers/djetran.png",
-    slideImage: "/models/djet/slide1.png",
-    bgSlideImage: "/models/djet/bgslide1.jpg",
     href: "/modeles/djetran",
   },
 
@@ -37,8 +33,6 @@ const MODELS = [
     description:
       "SUV de direction de 221 ch, une véritable bolide qui redéfinit la performance à chaque voyage.",
     image: "/derniers/lathaye.png",
-    slideImage: "/models/lath/slide1.png",
-    bgSlideImage: "/models/lath/bgslide1.jpg",
     href: "/modeles/lathaye",
   },
   
