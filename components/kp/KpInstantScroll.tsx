@@ -26,7 +26,7 @@ export function KpInstantScroll() {
 	const pathname = usePathname();
 
 	useLayoutEffect(() => {
-		let retryId: ReturnType<typeof setInterval> | undefined;
+		let retryId: number | undefined;
 
 		const clearRetry = () => {
 			if (retryId !== undefined) {
