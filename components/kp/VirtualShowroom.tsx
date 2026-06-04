@@ -4,18 +4,19 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   AnimatePresence,
-  motion,
+  LazyMotion,
+  domAnimation,
+  m as motion,
   useReducedMotion,
   useScroll,
-  useSpring,
 } from "framer-motion";
-import { useEffect, useId, useMemo, useRef, useState } from "react";
-import { Reveal } from "./Reveal";
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 
 type ShowroomModel = {
   id: string;
   name: string;
   badge?: string;
+  tagline: string;
   description: string;
   brochureHref?: string;
   highlights: string[];
@@ -27,13 +28,14 @@ const MODELS: ShowroomModel[] = [
     id: "djetranplus",
     name: "DJETRAN PLUS",
     badge: "Nouveau",
+    tagline: "Pick-up premium, diesel ou essence, assistance niveau 2.",
     description:
-      "Moteur Turbo Diesel 2,5L (136 ch / 100 kW) et couple 340 Nm. Démarrage sans clé, caméra panoramique 360°, ABS + EBD : une synthèse de confort, sécurité et sobriété.",
+      "Deux motorisations au choix : diesel 2.3T (163 ch, 380 Nm) ou essence 2.0 GDI (197 ch, 360 Nm). Régulateur adaptatif, alerte de ligne, collision frontale, vision 360° et équipements de confort haut de gamme.",
     highlights: [
-      "Turbo Diesel 2,5L — 136 ch",
-      "Couple 340 Nm",
-      "Caméra panoramique 360°",
-      "ABS + EBD",
+      "Diesel 2.3T — 163 ch / 380 Nm",
+      "Essence 2.0 GDI — 197 ch / 360 Nm",
+      "Assistance à la conduite niveau 2",
+      "Vision panoramique 360°",
     ],
     gallery: [
       { src: "/models/plus/pic1.jpg", alt: "DJETRAN PLUS — extérieur", tag: "Extérieur" },
@@ -46,8 +48,9 @@ const MODELS: ShowroomModel[] = [
   {
     id: "djetran",
     name: "DJETRAN",
+    tagline: "4×4 robuste pour la route et le tout-terrain.",
     description:
-      "Turbo Diesel 2,3L (163 ch) et couple 340 Nm. Caméra 360°, contrôle de stabilité, ABS + EBD : un 4x4 pensé pour la route comme le tout-terrain.",
+      "Turbo Diesel 2,3L (163 ch) et couple 340 Nm. Caméra 360°, contrôle de stabilité, ABS + EBD : un 4×4 pensé pour la route comme le tout-terrain.",
     brochureHref: "/fiche_djetran.pdf",
     highlights: [
       "Turbo Diesel 2,3L — 163 ch",
@@ -65,6 +68,7 @@ const MODELS: ShowroomModel[] = [
   {
     id: "lathaye",
     name: "LATHAYE",
+    tagline: "SUV fluide, moderne et performant.",
     description:
       "Moteur 2.0T GDI (165 kW) et transmission automatique CVT à 8 vitesses. Vitesse maximale 210 km/h : une conduite fluide, moderne et efficiente.",
     brochureHref: "/Lathaye.pdf",
@@ -83,6 +87,11 @@ const MODELS: ShowroomModel[] = [
   },
 ];
 
+const TAGS = ["Tous", "Extérieur", "Intérieur"] as const;
+type GalleryTag = (typeof TAGS)[number];
+
+const easeLux = [0.22, 1, 0.36, 1] as const;
+
 function Chip({
   active,
   children,
@@ -96,7 +105,7 @@ function Chip({
     <button
       type="button"
       onClick={onClick}
-      className={`rounded-full border px-4 py-2 font-sans text-[11px] font-semibold uppercase tracking-[0.18em] transition ${
+      className={`min-h-11 shrink-0 rounded-full border px-4 py-2.5 font-sans text-[11px] font-semibold uppercase tracking-[0.16em] transition sm:tracking-[0.18em] ${
         active
           ? "border-kp-gold/55 bg-kp-gold/15 text-kp-accent shadow-[0_0_0_1px_rgba(201,169,98,0.14)]"
           : "border-white/12 bg-white/4 text-white/65 hover:border-white/22 hover:bg-white/6 hover:text-white/80"
@@ -111,10 +120,55 @@ function PrimaryButton({ href, children }: { href: string; children: React.React
   return (
     <Link
       href={href}
-      className="inline-flex items-center justify-center rounded-full border border-kp-gold/45 bg-white/95 px-6 py-3 font-sans text-[11px] font-semibold uppercase tracking-[0.2em] text-zinc-950 shadow-[0_10px_26px_-14px_rgba(0,0,0,0.65)] transition duration-300 ease-out hover:scale-[1.02] hover:border-kp-gold/70 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-kp-gold/60 focus-visible:ring-offset-2 focus-visible:ring-offset-kp-bg active:scale-[0.98]"
+      className="inline-flex min-h-11 w-full items-center justify-center rounded-full border border-kp-gold/45 bg-white/95 px-6 py-3 font-sans text-[11px] font-semibold uppercase tracking-[0.18em] text-zinc-950 shadow-[0_10px_26px_-14px_rgba(0,0,0,0.65)] transition duration-300 ease-out hover:scale-[1.02] hover:border-kp-gold/70 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-kp-gold/60 focus-visible:ring-offset-2 focus-visible:ring-offset-kp-bg active:scale-[0.98] sm:w-auto sm:tracking-[0.2em]"
     >
       {children}
     </Link>
+  );
+}
+
+function ChevronIcon({ direction }: { direction: "left" | "right" }) {
+  return (
+    <svg
+      aria-hidden
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.75"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="size-5"
+    >
+      {direction === "left" ? (
+        <path d="M15 6l-6 6 6 6" />
+      ) : (
+        <path d="M9 6l6 6-6 6" />
+      )}
+    </svg>
+  );
+}
+
+function IconButton({
+  label,
+  onClick,
+  disabled,
+  children,
+}: {
+  label: string;
+  onClick: () => void;
+  disabled?: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      aria-label={label}
+      disabled={disabled}
+      onClick={onClick}
+      className="inline-flex size-11 items-center justify-center rounded-full border border-white/14 bg-black/45 text-white/85 backdrop-blur-md transition hover:border-white/28 hover:bg-black/60 disabled:pointer-events-none disabled:opacity-35"
+    >
+      {children}
+    </button>
   );
 }
 
@@ -123,8 +177,9 @@ export default function VirtualShowroom() {
   const regionId = useId();
   const tabsId = useId();
   const rootRef = useRef<HTMLElement | null>(null);
+  const thumbsRef = useRef<HTMLDivElement | null>(null);
   const [selectedId, setSelectedId] = useState(MODELS[0]?.id ?? "djetran");
-  const [tag, setTag] = useState<"Tous" | "Extérieur" | "Intérieur">("Tous");
+  const [tag, setTag] = useState<GalleryTag>("Tous");
   const [activeIndex, setActiveIndex] = useState(0);
   const [isHoveringGallery, setIsHoveringGallery] = useState(false);
 
@@ -141,8 +196,15 @@ export default function VirtualShowroom() {
 
   const safeIndex = Math.min(activeIndex, Math.max(filteredGallery.length - 1, 0));
   const active = filteredGallery[safeIndex];
+  const hasMultiple = filteredGallery.length > 1;
 
-  const easeLux = [0.22, 1, 0.36, 1] as const;
+  const goTo = useCallback(
+    (delta: number) => {
+      if (!filteredGallery.length) return;
+      setActiveIndex((i) => (i + delta + filteredGallery.length) % filteredGallery.length);
+    },
+    [filteredGallery.length]
+  );
 
   function selectModel(id: string) {
     setSelectedId(id);
@@ -153,11 +215,6 @@ export default function VirtualShowroom() {
   const { scrollYProgress } = useScroll({
     target: rootRef,
     offset: ["start start", "end start"],
-  });
-  const progress = useSpring(scrollYProgress, {
-    stiffness: 110,
-    damping: 26,
-    mass: 0.7,
   });
 
   useEffect(() => {
@@ -172,19 +229,32 @@ export default function VirtualShowroom() {
     return () => window.clearInterval(id);
   }, [filteredGallery.length, isHoveringGallery, reduceMotion, tag]);
 
+  /** Scroll only the thumbnail strip — never scrollIntoView (moves the whole page). */
+  function scrollThumbStrip(index: number, smooth: boolean) {
+    const container = thumbsRef.current;
+    const thumb = container?.querySelector<HTMLElement>(`[data-thumb="${index}"]`);
+    if (!container || !thumb) return;
+    const targetLeft =
+      thumb.offsetLeft - (container.clientWidth - thumb.offsetWidth) / 2;
+    container.scrollTo({
+      left: Math.max(0, targetLeft),
+      behavior: smooth && !reduceMotion ? "smooth" : "auto",
+    });
+  }
+
   return (
+    <LazyMotion features={domAnimation}>
     <section
       ref={(el) => {
         rootRef.current = el;
       }}
       aria-labelledby={regionId}
-      className="relative overflow-hidden pt-[110px] md:pt-[132px]"
+      className="relative overflow-hidden pb-6 pt-[96px] sm:pt-[110px] md:pb-10 md:pt-[132px]"
     >
-      {/* Scroll progress (subtle, premium) */}
       <motion.div
         aria-hidden
         className="fixed left-0 right-0 top-0 z-90 h-px origin-left bg-linear-to-r from-kp-gold/0 via-kp-gold/65 to-kp-gold/0 opacity-60"
-        style={{ scaleX: progress }}
+        style={{ scaleX: scrollYProgress }}
       />
 
       <div
@@ -192,85 +262,70 @@ export default function VirtualShowroom() {
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(850px_420px_at_22%_14%,rgba(201,169,98,0.14),transparent_60%),radial-gradient(900px_520px_at_80%_70%,rgba(255,255,255,0.05),transparent_60%)]"
       />
       <div aria-hidden className="kp-grain pointer-events-none absolute inset-0 opacity-[0.10]" />
-      <motion.div
+      <div
         aria-hidden
         className="pointer-events-none absolute -left-24 top-28 size-[460px] rounded-full bg-kp-gold/8 blur-3xl"
-        animate={reduceMotion ? undefined : { y: [0, 16, 0], x: [0, 10, 0] }}
-        transition={{
-          duration: 9.5,
-          ease: easeLux,
-          repeat: reduceMotion ? 0 : Infinity,
-          repeatType: "mirror",
-        }}
       />
-      <motion.div
+      <div
         aria-hidden
         className="pointer-events-none absolute -right-28 top-[420px] size-[520px] rounded-full bg-white/6 blur-3xl"
-        animate={reduceMotion ? undefined : { y: [0, -14, 0], x: [0, -8, 0] }}
-        transition={{
-          duration: 10.5,
-          ease: easeLux,
-          repeat: reduceMotion ? 0 : Infinity,
-          repeatType: "mirror",
-        }}
       />
 
-      <div className="relative w-full max-w-none px-3 sm:px-5 lg:px-8 xl:px-10">
-        <Reveal>
-          <header className="mx-auto max-w-3xl text-center">
-            <div className="flex flex-col items-center">
-              <span
-                className="h-px w-28 bg-linear-to-r from-transparent via-kp-gold/90 to-transparent md:w-52"
-                aria-hidden
-              />
-              <p className="mt-6 font-sans text-[11px] font-semibold uppercase tracking-[0.38em] text-kp-muted">
+      <div className="relative mx-auto w-full max-w-[1440px] px-4 sm:px-6 lg:px-10">
+          <header className="mx-auto max-w-3xl text-center opacity-0-start animate-fade-up">
+            <span
+              className="mx-auto block h-px w-24 bg-linear-to-r from-transparent via-kp-gold/90 to-transparent sm:w-40 md:w-52"
+              aria-hidden
+            />
+            <p className="mt-5 font-sans text-[10px] font-semibold uppercase tracking-[0.32em] text-kp-muted sm:mt-6 sm:text-[11px] sm:tracking-[0.38em]">
               Découvrez notre
-              </p>
-              <h1
-                id={regionId}
-                className="mt-5 font-serif text-[clamp(2.1rem,5.6vw,3.4rem)] font-medium leading-[1.06] tracking-[-0.02em] text-kp-accent"
-              >
-                 Kpandji Showroom virtuel
-              </h1>
-              
-            </div>
+            </p>
+            <h1
+              id={regionId}
+              className="mt-4 font-serif text-[clamp(1.85rem,6.5vw,3.4rem)] font-medium leading-[1.08] tracking-[-0.02em] text-kp-accent sm:mt-5"
+            >
+              Showroom virtuel
+            </h1>
+            <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-white/50 sm:text-[15px]">
+              Parcourez nos modèles en images, filtrez extérieur et intérieur, et
+              téléchargez les fiches techniques.
+            </p>
           </header>
-        </Reveal>
 
-        <Reveal className="mt-10">
-          <div className="sticky top-[84px] z-40 overflow-hidden rounded-xl border border-white/10 bg-black/55 p-1 shadow-[0_28px_90px_-38px_rgba(0,0,0,0.95)] ring-1 ring-white/6 backdrop-blur-2xl sm:rounded-2xl">
+          <div className="mt-8 opacity-0-start animate-fade-up animation-delay-100 sm:mt-10">
+          <div className="sticky top-[72px] z-40 overflow-hidden rounded-2xl border border-white/10 bg-black/60 shadow-[0_28px_90px_-38px_rgba(0,0,0,0.95)] ring-1 ring-white/6 backdrop-blur-2xl sm:top-[84px]">
             <div
               aria-hidden
               className="pointer-events-none absolute inset-0 bg-[radial-gradient(700px_220px_at_50%_0%,rgba(201,169,98,0.12),transparent_55%)]"
             />
-            <div className="relative px-3 py-4 md:px-5 md:py-5">
+            <div className="relative p-3 sm:p-4 md:p-5">
               <p
                 id={tabsId}
-                className="px-1 font-sans text-[10px] font-semibold uppercase tracking-[0.28em] text-white/45"
+                className="px-1 font-sans text-[10px] font-semibold uppercase tracking-[0.24em] text-white/45 sm:tracking-[0.28em]"
               >
-                Sélectionner un modèle
+                Modèle
               </p>
               <div
                 role="tablist"
                 aria-labelledby={tabsId}
-                className="mt-3 flex gap-1 overflow-x-auto pb-px kp-hide-scrollbar sm:gap-2"
+                className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-3 sm:gap-1.5"
               >
-                {MODELS.map((m) => {
-                  const isActive = m.id === selectedId;
+                {MODELS.map((model) => {
+                  const isActive = model.id === selectedId;
                   return (
                     <button
-                      key={m.id}
+                      key={model.id}
                       type="button"
                       role="tab"
-                      id={`tab-${m.id}`}
+                      id={`tab-${model.id}`}
                       aria-selected={isActive}
-                      aria-controls={`panel-${m.id}`}
+                      aria-controls={`panel-${model.id}`}
                       tabIndex={isActive ? 0 : -1}
-                      onClick={() => selectModel(m.id)}
+                      onClick={() => selectModel(model.id)}
                       onKeyDown={(e) => {
                         if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
                         e.preventDefault();
-                        const idx = MODELS.findIndex((x) => x.id === m.id);
+                        const idx = MODELS.findIndex((x) => x.id === model.id);
                         const next =
                           e.key === "ArrowRight"
                             ? MODELS[(idx + 1) % MODELS.length]
@@ -280,27 +335,30 @@ export default function VirtualShowroom() {
                           document.getElementById(`tab-${next.id}`)?.focus();
                         }, 0);
                       }}
-                      className={`relative shrink-0 rounded-t-xl px-4 py-3 text-left transition sm:px-5 sm:py-3.5 ${
+                      className={`relative rounded-xl px-4 py-3.5 text-left transition sm:rounded-t-xl sm:py-4 ${
                         isActive
-                          ? "bg-white/9 text-kp-accent"
+                          ? "bg-white/10 text-kp-accent ring-1 ring-kp-gold/25"
                           : "text-white/55 hover:bg-white/6 hover:text-white/85"
                       }`}
                     >
                       <span className="flex flex-wrap items-center gap-2">
                         <span className="font-serif text-base font-medium tracking-[-0.02em] sm:text-lg">
-                          {m.name}
+                          {model.name}
                         </span>
-                        {m.badge ? (
+                        {model.badge ? (
                           <span className="rounded-full border border-kp-gold/35 bg-kp-gold/10 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-[0.16em] text-kp-gold">
-                            {m.badge}
+                            {model.badge}
                           </span>
                         ) : null}
+                      </span>
+                      <span className="mt-1 block text-xs text-white/45 sm:text-[13px]">
+                        {model.tagline}
                       </span>
                       {isActive ? (
                         <motion.span
                           aria-hidden
                           layoutId="kp-showroom-tab-underline"
-                          className="absolute inset-x-2 bottom-0 h-0.5 rounded-full bg-kp-gold/85"
+                          className="absolute inset-x-3 bottom-0 hidden h-0.5 rounded-full bg-kp-gold/85 sm:block"
                           transition={{ duration: reduceMotion ? 0 : 0.45, ease: easeLux }}
                         />
                       ) : null}
@@ -310,67 +368,122 @@ export default function VirtualShowroom() {
               </div>
             </div>
           </div>
-        </Reveal>
+          </div>
 
-        <Reveal className="mt-6">
           <div
+            className="mt-6 opacity-0-start animate-fade-up animation-delay-200 sm:mt-8"
             role="tabpanel"
             id={`panel-${selectedId}`}
             aria-labelledby={`tab-${selectedId}`}
-            className="grid gap-6"
           >
-            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/8 pb-4">
-              <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.28em] text-white/40">
-                Visuels
-              </p>
-              <div className="flex flex-wrap gap-2">
-                <Chip active={tag === "Tous"} onClick={() => setTag("Tous")}>
-                  Tous
-                </Chip>
-                <Chip active={tag === "Extérieur"} onClick={() => setTag("Extérieur")}>
-                  Extérieur
-                </Chip>
-                <Chip active={tag === "Intérieur"} onClick={() => setTag("Intérieur")}>
-                  Intérieur
-                </Chip>
-              </div>
-            </div>
-
             <motion.div
               key={selectedId}
-              initial={reduceMotion ? false : { opacity: 0, y: 10 }}
+              initial={reduceMotion ? false : { opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: reduceMotion ? 0 : 0.45, ease: easeLux }}
-              className="grid gap-6"
+              className="grid gap-6 lg:grid-cols-12 lg:gap-8"
             >
-              <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-black/25 shadow-[0_30px_90px_-45px_rgba(0,0,0,0.95)] ring-1 ring-white/6">
-                <div
-                  aria-hidden
-                  className="pointer-events-none absolute inset-0 bg-linear-to-b from-white/6 via-transparent to-black/35"
-                />
+              {/* Highlights — first on mobile for context */}
+              <aside className="order-1 lg:order-2 lg:col-span-4">
+                <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-kp-elevated/55 p-5 shadow-[0_28px_90px_-38px_rgba(0,0,0,0.95)] ring-1 ring-white/5 backdrop-blur sm:p-6">
+                  <div
+                    aria-hidden
+                    className="pointer-events-none absolute inset-0 bg-[radial-gradient(700px_280px_at_20%_12%,rgba(201,169,98,0.16),transparent_60%),linear-gradient(to_bottom,rgba(255,255,255,0.06),transparent_55%)]"
+                  />
+                  <div aria-hidden className="kp-grain pointer-events-none absolute inset-0 opacity-[0.12]" />
 
-                <div className="relative w-full px-2 pt-3 sm:px-4 sm:pt-4 md:px-6 md:pt-5 lg:px-8">
-                  <div className="relative aspect-video w-full overflow-hidden rounded-lg ring-1 ring-white/8 sm:rounded-xl">
-                    <AnimatePresence mode="wait">
+                  <div className="relative">
+                    <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.28em] text-white/45">
+                      Points forts
+                    </p>
+                    <h2 className="mt-2 font-serif text-2xl font-medium tracking-[-0.02em] text-kp-accent sm:text-[1.65rem]">
+                      {selected?.name}
+                    </h2>
+                    <p className="mt-2 text-sm leading-relaxed text-white/55">
+                      {selected?.description}
+                    </p>
+                    <ul className="mt-5 space-y-3 border-t border-white/8 pt-5 text-[13px] text-white/60 sm:text-sm">
+                      {(selected?.highlights ?? []).map((h) => (
+                        <li key={h} className="flex gap-3">
+                          <span
+                            className="mt-2 size-1.5 shrink-0 rounded-full bg-kp-gold/70 shadow-[0_0_12px_rgba(201,169,98,0.35)]"
+                            aria-hidden
+                          />
+                          <span>{h}</span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    <div className="mt-6 grid gap-2.5 sm:grid-cols-2 lg:grid-cols-1">
+                      {selected?.brochureHref ? (
+                        <PrimaryButton href={selected.brochureHref}>
+                          Fiche technique
+                        </PrimaryButton>
+                      ) : null}
+                      <PrimaryButton href="/service-apres-vente">
+                        Prenez rendez-vous
+                      </PrimaryButton>
+                      <Link
+                        href="/"
+                        className="inline-flex min-h-11 w-full items-center justify-center rounded-full border border-white/12 bg-white/4 px-6 py-3 font-sans text-[11px] font-semibold uppercase tracking-[0.18em] text-white/75 transition hover:border-white/22 hover:bg-white/6 hover:text-white sm:col-span-2 lg:col-span-1"
+                      >
+                        Retour à l&apos;accueil
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </aside>
+
+              {/* Gallery + hero */}
+              <div className="order-2 flex flex-col gap-4 sm:gap-5 lg:order-1 lg:col-span-8">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                  <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.28em] text-white/40">
+                    Visuels — {selected?.name}
+                  </p>
+                  <div className="flex gap-2 overflow-x-auto pb-0.5 kp-hide-scrollbar">
+                    {TAGS.map((t) => (
+                      <Chip key={t} active={tag === t} onClick={() => setTag(t)}>
+                        {t}
+                      </Chip>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-black/30 shadow-[0_30px_90px_-45px_rgba(0,0,0,0.95)] ring-1 ring-white/6 sm:rounded-3xl">
+                  <div
+                    aria-hidden
+                    className="pointer-events-none absolute inset-0 z-10 bg-linear-to-b from-white/5 via-transparent to-black/40"
+                  />
+
+                  <div className="relative aspect-4/3 w-full overflow-hidden sm:aspect-video">
+                    <AnimatePresence initial={false}>
                       {active ? (
                         <motion.div
                           key={active.src}
                           className="absolute inset-0"
-                          initial={reduceMotion ? false : { opacity: 0, scale: 1.01 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          exit={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.995 }}
-                          transition={{ duration: reduceMotion ? 0 : 0.55, ease: easeLux }}
+                          initial={reduceMotion ? false : { opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={reduceMotion ? { opacity: 0 } : { opacity: 0 }}
+                          transition={{ duration: reduceMotion ? 0 : 0.4, ease: easeLux }}
                         >
                           <Image
                             src={active.src}
                             alt={active.alt}
                             fill
-                            priority
-                            loading="eager"
-                            sizes="100vw"
+                            priority={safeIndex === 0 && selectedId === MODELS[0]?.id}
+                            fetchPriority={
+                              safeIndex === 0 && selectedId === MODELS[0]?.id
+                                ? "high"
+                                : "auto"
+                            }
+                            loading={
+                              safeIndex === 0 && selectedId === MODELS[0]?.id
+                                ? "eager"
+                                : "lazy"
+                            }
+                            sizes="(max-width: 1024px) 100vw, 66vw"
                             className="object-cover object-center"
                           />
-                          <div className="pointer-events-none absolute inset-0 bg-linear-to-b from-black/10 via-transparent to-black/45" />
                         </motion.div>
                       ) : (
                         <div className="absolute inset-0 grid place-items-center">
@@ -378,158 +491,153 @@ export default function VirtualShowroom() {
                         </div>
                       )}
                     </AnimatePresence>
-                  </div>
-                </div>
 
-                <div className="relative border-t border-white/10 bg-black/35 px-4 py-3 md:px-5 md:py-4">
-                  <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-                    <div className="min-w-0">
-                      <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.28em] text-white/45">
-                        {selected?.name}
-                        {active?.tag ? (
-                          <span className="ml-2 text-white/30">— {active.tag}</span>
-                        ) : null}
-                      </p>
-                      <p className="mt-1 kp-clamp-2 text-sm text-white/60">
-                        {selected?.description}
-                      </p>
-                    </div>
+                    {active?.tag ? (
+                      <span className="absolute left-4 top-4 z-20 rounded-full border border-white/12 bg-black/55 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/80 backdrop-blur-md">
+                        {active.tag}
+                      </span>
+                    ) : null}
 
-                    <div className="flex flex-wrap items-center gap-2">
-                      {selected?.brochureHref ? (
-                        <PrimaryButton href={selected.brochureHref}>Fiche Technique</PrimaryButton>
-                      ) : null}
-                      
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="grid gap-6 lg:grid-cols-12">
-                <div className="lg:col-span-8">
-                  <div className="rounded-2xl border border-white/10 bg-white/4 p-4 ring-1 ring-white/5 backdrop-blur">
-                    <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.28em] text-white/45">
-                      Galerie
-                    </p>
-                    <div
-                      className="mt-3 flex gap-3 overflow-x-auto pb-2 kp-hide-scrollbar"
-                      onMouseEnter={() => setIsHoveringGallery(true)}
-                      onMouseLeave={() => setIsHoveringGallery(false)}
-                    >
-                      {filteredGallery.map((g, idx) => {
-                        const isActive = idx === safeIndex;
-                        return (
-                          <button
-                            key={`${g.src}-${idx}`}
-                            type="button"
-                            onClick={() => setActiveIndex(idx)}
-                            className={`relative h-[74px] w-[118px] shrink-0 overflow-hidden rounded-xl border transition sm:h-[82px] sm:w-[132px] lg:h-[88px] lg:w-[148px] ${
-                              isActive
-                                ? "border-kp-gold/55 ring-2 ring-kp-gold/20"
-                                : "border-white/10 hover:border-white/22"
-                            }`}
-                            aria-label={`Voir image ${idx + 1}`}
-                          >
-                            <Image
-                              src={g.src}
-                              alt=""
-                              fill
-                              sizes="120px"
-                              loading={isActive ? "eager" : "lazy"}
-                              className="object-cover object-center"
-                            />
-                            <div className="pointer-events-none absolute inset-0 bg-linear-to-b from-black/0 to-black/45" />
-                            {g.tag ? (
-                              <span className="absolute bottom-2 left-2 rounded-full border border-white/12 bg-black/55 px-2 py-1 text-[9px] font-semibold uppercase tracking-[0.18em] text-white/70">
-                                {g.tag}
-                              </span>
-                            ) : null}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="lg:col-span-4">
-                  <div className="relative h-full overflow-hidden rounded-2xl border border-white/10 bg-kp-elevated/55 p-5 shadow-[0_28px_90px_-38px_rgba(0,0,0,0.95)] ring-1 ring-white/5 backdrop-blur">
-                    <div
-                      aria-hidden
-                      className="pointer-events-none absolute inset-0 bg-[radial-gradient(700px_280px_at_20%_12%,rgba(201,169,98,0.16),transparent_60%),linear-gradient(to_bottom,rgba(255,255,255,0.06),transparent_55%)]"
-                    />
-                    <div aria-hidden className="kp-grain pointer-events-none absolute inset-0 opacity-[0.12]" />
-
-                    <div className="relative">
-                      <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.28em] text-white/45">
-                        Points forts
-                      </p>
-                      <h2 className="mt-2 font-serif text-2xl font-medium tracking-[-0.02em] text-kp-accent">
-                        {selected?.name}
-                      </h2>
-                      <ul className="mt-4 space-y-3 text-[13px] text-white/55">
-                        {(selected?.highlights ?? []).map((h) => (
-                          <li key={h} className="flex gap-3">
-                            <span
-                              className="mt-2 size-1.5 shrink-0 rounded-full bg-kp-gold/70 shadow-[0_0_12px_rgba(201,169,98,0.35)]"
-                              aria-hidden
-                            />
-                            <span>{h}</span>
-                          </li>
-                        ))}
-                      </ul>
-
-                      <div className="mt-6 grid gap-2">
-                        <PrimaryButton href="/service-apres-vente">Prenez rendez-vous</PrimaryButton>
-                        <Link
-                          href="/"
-                          className="inline-flex items-center justify-center rounded-full border border-white/12 bg-white/4 px-6 py-3 font-sans text-[11px] font-semibold uppercase tracking-[0.2em] text-white/75 transition hover:border-white/22 hover:bg-white/6 hover:text-white"
+                    {hasMultiple ? (
+                      <div className="absolute inset-x-0 top-1/2 z-20 flex -translate-y-1/2 justify-between px-3 sm:px-4">
+                        <IconButton
+                          label="Image précédente"
+                          onClick={() => goTo(-1)}
                         >
-                          Retour à l&apos;accueil
-                        </Link>
+                          <ChevronIcon direction="left" />
+                        </IconButton>
+                        <IconButton label="Image suivante" onClick={() => goTo(1)}>
+                          <ChevronIcon direction="right" />
+                        </IconButton>
                       </div>
-                    </div>
+                    ) : null}
+
+                    {hasMultiple ? (
+                      <div className="absolute bottom-4 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2 rounded-full border border-white/10 bg-black/50 px-3 py-2 backdrop-blur-md">
+                        <span className="font-sans text-[10px] font-semibold tabular-nums tracking-widest text-white/70">
+                          {safeIndex + 1} / {filteredGallery.length}
+                        </span>
+                        <div className="flex gap-1.5" role="tablist" aria-label="Miniatures">
+                          {filteredGallery.map((_, idx) => (
+                            <button
+                              key={idx}
+                              type="button"
+                              aria-label={`Image ${idx + 1}`}
+                              aria-current={idx === safeIndex}
+                              onClick={() => {
+                                setActiveIndex(idx);
+                                scrollThumbStrip(idx, true);
+                              }}
+                              className={`size-1.5 shrink-0 rounded-full transition-colors ${
+                                idx === safeIndex
+                                  ? "bg-kp-gold"
+                                  : "bg-white/35 hover:bg-white/55"
+                              }`}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    ) : null}
+                  </div>
+
+                  <div className="border-t border-white/10 bg-black/40 px-4 py-4 sm:px-5 sm:py-4">
+                    <p className="font-serif text-lg leading-snug text-kp-accent sm:text-xl">
+                      {selected?.tagline}
+                    </p>
+                    <p
+                      className="kp-clamp-2 mt-1 min-h-10 text-sm leading-snug text-white/55 sm:min-h-11 sm:text-[15px]"
+                      aria-live="polite"
+                    >
+                      {active?.alt ?? "\u00a0"}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="rounded-2xl border border-white/10 bg-white/4 p-3 ring-1 ring-white/5 backdrop-blur sm:p-4">
+                  <p className="px-1 font-sans text-[10px] font-semibold uppercase tracking-[0.28em] text-white/45">
+                    Galerie
+                  </p>
+                  <div
+                    ref={thumbsRef}
+                    className="mt-3 flex snap-x snap-mandatory gap-2.5 overflow-x-auto overscroll-x-contain pb-1 kp-hide-scrollbar sm:gap-3"
+                    onMouseEnter={() => setIsHoveringGallery(true)}
+                    onMouseLeave={() => setIsHoveringGallery(false)}
+                  >
+                    {filteredGallery.map((g, idx) => {
+                      const isActive = idx === safeIndex;
+                      return (
+                        <button
+                          key={`${g.src}-${idx}`}
+                          type="button"
+                          data-thumb={idx}
+                          onClick={() => {
+                            setActiveIndex(idx);
+                            scrollThumbStrip(idx, true);
+                          }}
+                          className={`relative h-[72px] w-[108px] shrink-0 snap-center overflow-hidden rounded-xl border-2 transition sm:h-[80px] sm:w-[128px] md:h-[88px] md:w-[148px] ${
+                            isActive
+                              ? "border-kp-gold/55"
+                              : "border-transparent opacity-80 hover:border-white/22 hover:opacity-100"
+                          }`}
+                          aria-label={`Voir image ${idx + 1}`}
+                          aria-current={isActive}
+                        >
+                          <Image
+                            src={g.src}
+                            alt=""
+                            fill
+                            sizes="(max-width: 640px) 108px, 148px"
+                            loading={isActive ? "eager" : "lazy"}
+                            className="object-cover object-center"
+                          />
+                          <div className="pointer-events-none absolute inset-0 bg-linear-to-b from-black/0 to-black/50" />
+                          {g.tag ? (
+                            <span className="absolute bottom-1.5 left-1.5 rounded-full border border-white/12 bg-black/55 px-1.5 py-0.5 text-[8px] font-semibold uppercase tracking-[0.14em] text-white/70 sm:text-[9px]">
+                              {g.tag}
+                            </span>
+                          ) : null}
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
             </motion.div>
           </div>
-        </Reveal>
       </div>
 
-      <div className="mt-14 border-t border-white/6 bg-kp-bg/70 py-14">
-        <div className="w-full max-w-none px-3 sm:px-5 lg:px-8 xl:px-10">
-          <Reveal>
-            <div className="grid gap-8 md:grid-cols-12 md:items-center">
-              <div className="md:col-span-7">
-                <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.38em] text-kp-muted">
-                  Besoin d’aide ?
+      <div className="mt-12 border-t border-white/6 bg-kp-bg/70 py-12 sm:mt-14 sm:py-14">
+        <div className="mx-auto w-full max-w-[1440px] px-4 sm:px-6 lg:px-10">
+            <div className="grid gap-8 opacity-0-start animate-fade-up animation-delay-300 lg:grid-cols-12 lg:items-center lg:gap-10">
+              <div className="lg:col-span-7">
+                <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.32em] text-kp-muted sm:tracking-[0.38em]">
+                  Besoin d&apos;aide ?
                 </p>
-                <h3 className="mt-3 font-serif text-3xl font-medium tracking-[-0.02em] text-kp-accent">
+                <h3 className="mt-3 font-serif text-[clamp(1.6rem,4.5vw,2rem)] font-medium tracking-[-0.02em] text-kp-accent">
                   Un conseiller vous guide
                 </h3>
-                <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/52 md:text-[15px]">
-                  Pour une disponibilité, un conseil sur la configuration ou l’entretien, notre
-                  équipe S.A.V. peut vous orienter rapidement.
+                <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/52 sm:text-[15px]">
+                  Pour une disponibilité, un conseil sur la configuration ou l&apos;entretien,
+                  notre équipe S.A.V. peut vous orienter rapidement.
                 </p>
               </div>
-              <div className="md:col-span-5 md:justify-self-end">
-                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end">
-                  <PrimaryButton href="/service-apres-vente">Contactez le S.A.V. ou le Conseiller</PrimaryButton>
-                  {selected?.brochureHref ? (
-                    <Link
-                      href={selected.brochureHref}
-                      className="inline-flex items-center justify-center rounded-full border border-white/14 bg-white/5 px-6 py-3 font-sans text-[11px] font-semibold uppercase tracking-[0.2em] text-white/75 transition hover:border-white/24 hover:bg-white/7 hover:text-white"
-                    >
-                      Télécharger la fiche
-                    </Link>
-                  ) : null}
-                </div>
+              <div className="flex flex-col gap-3 sm:flex-row lg:col-span-5 lg:justify-end">
+                <PrimaryButton href="/service-apres-vente">
+                  Contactez le S.A.V.
+                </PrimaryButton>
+                {selected?.brochureHref ? (
+                  <Link
+                    href={selected.brochureHref}
+                    className="inline-flex min-h-11 w-full items-center justify-center rounded-full border border-white/14 bg-white/5 px-6 py-3 font-sans text-[11px] font-semibold uppercase tracking-[0.18em] text-white/75 transition hover:border-white/24 hover:bg-white/7 hover:text-white sm:w-auto"
+                  >
+                    Télécharger la fiche
+                  </Link>
+                ) : null}
               </div>
             </div>
-          </Reveal>
         </div>
       </div>
     </section>
+    </LazyMotion>
   );
 }
-

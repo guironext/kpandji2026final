@@ -215,7 +215,7 @@ const PILLARS: { code: string; label: string; detail: string }[] = [
 	},
 	{
 		code: "04",
-		label: "Garantie 3 ans",
+		label: "Garantie 3 ans ou 100 000 km",
 		detail: "Sérénité totale et service après-vente premium.",
 	},
 ];

@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import "./globals.css";
 import { KpHeader } from "@/components/kp/KpHeader";
 import { KpFooter } from "@/components/kp/KpFooter";
+import { KpInstantScroll } from "@/components/kp/KpInstantScroll";
 import { KpClerkProvider } from "@/components/providers/KpClerkProvider";
 
 function HeaderFallback() {
@@ -60,7 +61,7 @@ export default function RootLayout({
     <html
       lang="fr"
       className={`relative h-full antialiased ${dmSans.variable} ${cormorant.variable}`}
-      data-scroll-behavior="smooth"
+      data-scroll-behavior="auto"
       suppressHydrationWarning
     >
       <body
@@ -68,6 +69,7 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <KpClerkProvider>
+          <KpInstantScroll />
           <Suspense fallback={<HeaderFallback />}>
             <KpHeader />
           </Suspense>

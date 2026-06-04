@@ -6,6 +6,8 @@ import {
   getUserRoleFromSessionClaims,
 } from "@/lib/auth/roles";
 
+
+
 const isAdminRoute = createRouteMatcher(["/admin(.*)"]);
 const isVisitorRoute = createRouteMatcher(["/visitor(.*)"]);
 

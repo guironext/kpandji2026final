@@ -2,8 +2,46 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 import { MODELES } from "@/data/modeles";
 import { Reveal } from "./Reveal";
+
+/** Loads and autoplays only when near the viewport — keeps the section fast. */
+function LazyAutoplayVideo({ src, className }: { src: string; className?: string }) {
+	const ref = useRef<HTMLVideoElement>(null);
+	const [active, setActive] = useState(false);
+
+	useEffect(() => {
+		const node = ref.current;
+		if (!node || active) return;
+
+		const observer = new IntersectionObserver(
+			([entry]) => {
+				if (entry?.isIntersecting) {
+					setActive(true);
+					observer.disconnect();
+				}
+			},
+			{ rootMargin: "160px 0px" },
+		);
+		observer.observe(node);
+		return () => observer.disconnect();
+	}, [active]);
+
+	return (
+		<video
+			ref={ref}
+			className={className}
+			src={active ? src : undefined}
+			autoPlay={active}
+			muted
+			loop
+			playsInline
+			controls
+			preload={active ? "metadata" : "none"}
+		/>
+	);
+}
 
 function ModeleSpecChips({ items }: { items: string[] }) {
 	const top = items.slice(0, 4);
@@ -65,10 +103,9 @@ function ModeleRow({
 	const priorityTopImage = index < 3;
 
 	return (
-		<Reveal delayMs={index * 70} className="w-full">
-			<section
-				aria-label={`Modèle ${item.name}`}
-				className="relative w-full border-t border-white/6 bg-kp-bg py-10 md:py-14">
+		<section
+			aria-label={`Modèle ${item.name}`}
+			className="relative w-full scroll-mt-28 border-t border-white/6 bg-kp-bg py-10 md:py-14">
 				<div
 					aria-hidden
 					className="pointer-events-none absolute inset-0 bg-[radial-gradient(900px_360px_at_20%_20%,rgba(201,169,98,0.10),transparent_60%),radial-gradient(900px_360px_at_80%_70%,rgba(255,255,255,0.05),transparent_58%)]"
@@ -116,15 +153,9 @@ function ModeleRow({
 											<div className="aspect-video md:col-span-2 md:aspect-auto md:h-full">
 												<div className="h-full w-full rounded-[22px] bg-kp-bg/80 p-1.5 ring-1 ring-white/6">
 													<div className="group relative h-full w-full overflow-hidden rounded-2xl border border-white/10 bg-black/30 shadow-[0_24px_70px_-30px_rgba(0,0,0,0.9)]">
-														<video
-															className="h-full w-full object-cover"
+														<LazyAutoplayVideo
 															src={item.media.topVideo}
-															autoPlay
-															muted
-															loop
-															playsInline
-															controls
-															preload={index === 0 ? "auto" : "metadata"}
+															className="h-full w-full object-cover"
 														/>
 														<div className="pointer-events-none absolute inset-0 bg-linear-to-b from-black/15 via-transparent to-black/40" />
 														<div className="pointer-events-none absolute inset-0 ring-1 ring-white/6" />
@@ -152,15 +183,9 @@ function ModeleRow({
 											<div className="aspect-video md:col-span-2 md:aspect-auto md:h-full">
 												<div className="h-full w-full rounded-[22px] bg-kp-bg/80 p-1.5 ring-1 ring-white/6">
 													<div className="group relative h-full w-full overflow-hidden rounded-2xl border border-white/10 bg-black/30 shadow-[0_24px_70px_-30px_rgba(0,0,0,0.9)]">
-														<video
-															className="h-full w-full object-cover"
+														<LazyAutoplayVideo
 															src={item.media.topVideo}
-															autoPlay
-															muted
-															loop
-															playsInline
-															controls
-															preload={index === 0 ? "auto" : "metadata"}
+															className="h-full w-full object-cover"
 														/>
 														<div className="pointer-events-none absolute inset-0 bg-linear-to-b from-black/15 via-transparent to-black/40" />
 														<div className="pointer-events-none absolute inset-0 ring-1 ring-white/6" />
@@ -245,8 +270,7 @@ function ModeleRow({
 						</aside>
 					</div>
 				</div>
-			</section>
-		</Reveal>
+		</section>
 	);
 }
 
@@ -255,7 +279,7 @@ export default function Modeles() {
 		<section
 			id="modeles"
 			aria-label="Modèles"
-			className="w-full scroll-mt-24 border-t border-white/6 bg-kp-bg">
+			className="w-full scroll-mt-28 border-t border-white/6 bg-kp-bg">
 			<div className="mx-auto max-w-[1600px] px-5 pt-14 md:px-10 md:pt-18">
 				<Reveal>
 					<header className="mx-auto max-w-3xl text-center">

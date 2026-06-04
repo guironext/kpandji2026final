@@ -79,7 +79,7 @@ export const MODELES: Modele[] = [
 			"Moteur Diesel : 2.3T + boîte manuelle 6 vitesses",
 			"Puissance : 120 kW / 163 ch, Couple : 380 Nm",
 			"Essence : 2.0GDI + boîte automatique 8 vitesses",
-			"vision panoramique à 360°, allumage automatique des phares, essuie-glaces à induction",
+			"vision panoramique à 360°, allumage automatique des phares",
 		],
 		media: {
 			topImage: "/models/plus/pic1.jpg",

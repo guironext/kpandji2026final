@@ -101,7 +101,7 @@ function ModelCard({
             <h3 className="mt-2 font-serif text-[clamp(1.75rem,6vw,2.75rem)] font-medium leading-none tracking-[-0.03em] text-white drop-shadow-[0_2px_20px_rgba(0,0,0,0.65)] md:text-[clamp(2rem,3.5vw,3rem)]">
               {item.name}
             </h3>
-            <p className="kp-clamp-2 font-thin pt-2.5 text-[10px] uppercase tracking-[0.32em] text-white/75 md:text-[11px] italic">
+            <p className="kp-clamp-2 font-thin pt-2.5 text-[8px] uppercase tracking-[0.32em] text-white/75 md:text-[10px] italic">
               {item.tagline}
             </p>
           </div>

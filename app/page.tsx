@@ -16,9 +16,7 @@ export default function Home() {
         <DernierSortie />
       </Reveal>
 
-      <Reveal from="bottom" distance="lg" amount={0.18} delayMs={60}>
-        <Modeles />
-      </Reveal>
+      <Modeles />
 
       <Reveal from="bottom" distance="lg" amount={0.14} delayMs={60}>
         <Parala />
