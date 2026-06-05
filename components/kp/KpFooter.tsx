@@ -211,7 +211,7 @@ export function KpFooter() {
               >
                 <Image
                   src="/logo.png"
-                  alt="KPANDJI Motors"
+                  alt="KPANDJI AUTOMOBILES"
                   width={200}
                   height={58}
                   className="h-11 w-auto opacity-95 md:h-[52px]"
@@ -326,7 +326,7 @@ export function KpFooter() {
         <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-white/8 to-transparent" />
         <div className="mx-auto flex max-w-[1600px] flex-col gap-6 px-5 py-8 md:flex-row md:items-center md:justify-between md:px-10 md:py-9">
           <p className="max-w-xl font-sans text-[12px] leading-relaxed text-white/38">
-            © {new Date().getFullYear()} KPANDJI Motors. Tous droits réservés.
+            © {new Date().getFullYear()} KPANDJI AUTOMOBILES. Tous droits réservés.
           </p>
           <a
             href="#accueil"

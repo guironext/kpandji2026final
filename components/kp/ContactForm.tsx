@@ -1,7 +1,6 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
 
 const CONTACT_EMAIL = "contact@kpandji.com";
 
@@ -38,7 +37,6 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
 }
 
 export function ContactForm() {
-  const reduceMotion = useReducedMotion();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -271,13 +269,11 @@ export function ContactForm() {
           ) : null}
 
           <div className="flex flex-col gap-5 border-t border-white/[0.07] pt-8 sm:flex-row sm:items-center sm:justify-between">
-            <motion.button
+            <button
               type="submit"
-              className="order-2 w-full rounded-full bg-kp-gold px-10 py-4 font-sans text-[11px] font-semibold uppercase tracking-[0.22em] text-black shadow-[0_16px_40px_-12px_rgba(201,169,98,0.45)] transition-colors duration-300 hover:bg-[#d4b56e] sm:order-1 sm:w-auto"
-              whileHover={reduceMotion ? undefined : { scale: 1.02 }}
-              whileTap={reduceMotion ? undefined : { scale: 0.98 }}>
+              className="order-2 w-full rounded-full bg-kp-gold px-10 py-4 font-sans text-[11px] font-semibold uppercase tracking-[0.22em] text-black shadow-[0_16px_40px_-12px_rgba(201,169,98,0.45)] transition-[transform,colors] duration-300 hover:scale-[1.02] hover:bg-[#d4b56e] active:scale-[0.98] motion-reduce:transform-none sm:order-1 sm:w-auto">
               Ouvrir l’e-mail
-            </motion.button>
+            </button>
             <p className="order-1 max-w-xs text-center text-[11px] leading-relaxed text-white/30 sm:order-2 sm:text-right">
               Destination :{" "}
               <span className="text-white/55">{CONTACT_EMAIL}</span>

@@ -1,18 +1,25 @@
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
 import Link from "next/link";
-import { ContactForm } from "@/components/kp/ContactForm";
+import { ContactFormSkeleton } from "@/components/kp/ContactFormSkeleton";
 import { ContactPageDecor } from "@/components/kp/ContactPageDecor";
-import { Reveal } from "@/components/kp/Reveal";
 
+const ContactForm = dynamic(
+  () =>
+    import("@/components/kp/ContactForm").then((m) => ({
+      default: m.ContactForm,
+    })),
+  { loading: () => <ContactFormSkeleton /> },
+);
 export const metadata: Metadata = {
-  title: "Contact — KPANDJI Motors",
+  title: "Contact — KPANDJI AUTOMOBILES",
   description:
-    "Écrivez à KPANDJI Motors : renseignements sur la gamme, disponibilité, partenariat ou service après-vente.",
+    "Écrivez à KPANDJI AUTOMOBILES : renseignements sur la gamme, disponibilité, partenariat ou service après-vente.",
   alternates: {
     canonical: "/contact",
   },
   openGraph: {
-    title: "Contact — KPANDJI Motors",
+    title: "Contact — KPANDJI AUTOMOBILES",
     description:
       "Contactez l’équipe KPANDJI pour toute question sur nos véhicules et services.",
     type: "website",
@@ -112,31 +119,28 @@ export default function ContactPage() {
         />
 
         <div className="relative z-10 mx-auto max-w-[1600px] px-5 pb-24 md:px-10 md:pb-32">
-          <Reveal>
-            <header className="mx-auto max-w-3xl text-center">
-              <div className="flex flex-col items-center">
-                <span
-                  className="h-px w-32 bg-linear-to-r from-transparent via-kp-gold/90 to-transparent md:w-48"
-                  aria-hidden
-                />
-                <p className="mt-6 font-sans text-[10px] font-semibold uppercase tracking-[0.42em] text-kp-muted md:text-[11px]">
-                  Relation constructeur
-                </p>
-                <h1 className="mt-5 max-w-[18ch] font-serif text-[clamp(2.15rem,5.4vw,3.5rem)] font-medium leading-[1.05] tracking-[-0.025em] text-kp-accent">
-                  Une équipe à votre écoute
-                </h1>
-                <p className="mx-auto mt-6 max-w-lg text-pretty text-sm leading-relaxed text-white/50 md:text-[15px] md:leading-[1.65]">
-                  Essai, disponibilité, entretien ou partenariat : décrivez votre besoin.
-                  Nous vous répondons avec la même exigence que sur nos chaînes d’assemblage.
-                </p>
-              </div>
-            </header>
-          </Reveal>
+          <header className="mx-auto max-w-3xl text-center opacity-0-start animate-fade-up">
+            <div className="flex flex-col items-center">
+              <span
+                className="h-px w-32 bg-linear-to-r from-transparent via-kp-gold/90 to-transparent md:w-48"
+                aria-hidden
+              />
+              <p className="mt-6 font-sans text-[10px] font-semibold uppercase tracking-[0.42em] text-kp-muted md:text-[11px]">
+                Relation constructeur
+              </p>
+              <h1 className="mt-5 max-w-[18ch] font-serif text-[clamp(2.15rem,5.4vw,3.5rem)] font-medium leading-[1.05] tracking-[-0.025em] text-kp-accent">
+                Une équipe à votre écoute
+              </h1>
+              <p className="mx-auto mt-6 max-w-lg text-pretty text-sm leading-relaxed text-white/50 md:text-[15px] md:leading-[1.65]">
+                Essai, disponibilité, entretien ou partenariat : décrivez votre besoin.
+                Nous vous répondons avec la même exigence que sur nos chaînes d’assemblage.
+              </p>
+            </div>
+          </header>
 
           <div className="mt-14 grid gap-12 lg:mt-20 lg:grid-cols-12 lg:items-start lg:gap-14 xl:gap-20">
             <div className="lg:col-span-5">
-              <Reveal>
-                <div className="relative lg:pl-8">
+              <div className="relative opacity-0-start animate-fade-up animation-delay-100 lg:pl-8">
                   <div
                     aria-hidden
                     className="absolute left-0 top-2 hidden h-[calc(100%-0.5rem)] w-px bg-linear-to-b from-kp-gold/70 via-white/12 to-transparent lg:block"
@@ -176,7 +180,7 @@ export default function ContactPage() {
                             Côte d&apos;Ivoire
                           </p>
                           <p className="mt-1.5 text-[13px] leading-relaxed text-white/42">
-                            KPANDJI Motors — constructeur automobile
+                            KPANDJI AUTOMOBILES — constructeur automobile
                           </p>
                         </div>
                       </div>
@@ -215,13 +219,10 @@ export default function ContactPage() {
                     </ul>
                   </div>
                 </div>
-              </Reveal>
             </div>
 
-            <div className="lg:col-span-7">
-              <Reveal delayMs={100} rootMargin="0px 0px -6% 0px">
-                <ContactForm />
-              </Reveal>
+            <div className="lg:col-span-7 opacity-0-start animate-fade-up animation-delay-200">
+              <ContactForm />
             </div>
           </div>
         </div>

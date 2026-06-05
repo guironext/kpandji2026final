@@ -4,12 +4,12 @@ import Link from "next/link";
 import { Reveal } from "@/components/kp/Reveal";
 
 export const metadata: Metadata = {
-  title: "ECO KPANDJI — Développement durable — KPANDJI Motors",
+  title: "ECO KPANDJI — Développement durable — KPANDJI AUTOMOBILES",
   description:
     "ECO KPANDJI : assemblage local, partenariats ONG pour le reboisement et éco-conception adaptée au Grand Abidjan.",
   alternates: { canonical: "/ecologie" },
   openGraph: {
-    title: "ECO KPANDJI — KPANDJI Motors",
+    title: "ECO KPANDJI — KPANDJI AUTOMOBILES",
     description:
       "Excellence technologique, responsabilité environnementale et progrès social au bénéfice de la jeunesse ivoirienne.",
     type: "website",
@@ -313,13 +313,13 @@ export default function EcologiePage() {
       <main>
         {/* HERO */}
         <section
-          aria-label="ECO KPANDJI — KPANDJI Motors"
+          aria-label="ECO KPANDJI — KPANDJI AUTOMOBILES"
           className="relative isolate flex min-h-svh items-end overflow-hidden pt-[100px] sm:pt-[110px] md:pt-[132px]"
         >
           <div className="absolute inset-0 -z-10">
             <Image
               src={HERO_BACKDROP}
-              alt="Engagement environnemental KPANDJI Motors"
+              alt="Engagement environnemental KPANDJI AUTOMOBILES"
               fill
               priority
               sizes="100vw"

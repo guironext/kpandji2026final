@@ -101,6 +101,72 @@ body {
   animation: fade-in 1.2s ease forwards;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-up,
+  .animate-fade-in {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* Contact page — ambient orbs (CSS-only, no framer-motion) */
+@keyframes kp-contact-orb-1 {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.55;
+  }
+  50% {
+    transform: translate3d(12px, 20px, 0);
+    opacity: 0.75;
+  }
+}
+
+@keyframes kp-contact-orb-2 {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translate3d(-10px, -18px, 0);
+    opacity: 0.6;
+  }
+}
+
+@keyframes kp-contact-orb-3 {
+  0%,
+  100% {
+    transform: translate3d(-50%, 33.333%, 0) scale(1);
+    opacity: 0.35;
+  }
+  50% {
+    transform: translate3d(-50%, 33.333%, 0) scale(1.06);
+    opacity: 0.5;
+  }
+}
+
+.kp-contact-orb-1 {
+  animation: kp-contact-orb-1 11s cubic-bezier(0.22, 1, 0.36, 1) infinite alternate;
+}
+
+.kp-contact-orb-2 {
+  animation: kp-contact-orb-2 12.5s cubic-bezier(0.22, 1, 0.36, 1) infinite alternate;
+}
+
+.kp-contact-orb-3 {
+  animation: kp-contact-orb-3 14s cubic-bezier(0.22, 1, 0.36, 1) infinite alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kp-contact-orb-1,
+  .kp-contact-orb-2,
+  .kp-contact-orb-3 {
+    animation: none !important;
+  }
+}
+
 .animation-delay-100 {
   animation-delay: 0.1s;
 }

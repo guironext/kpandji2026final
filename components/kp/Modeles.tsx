@@ -288,7 +288,7 @@ export default function Modeles() {
 							aria-hidden
 						/>
 						<p className="mt-6 font-sans text-[11px] font-semibold uppercase tracking-[0.38em] text-kp-muted">
-							Gamme KPANDJI Motors
+							Gamme KPANDJI AUTOMOBILES
 						</p>
 						<h2 className="mt-5 font-serif text-[clamp(2.1rem,5.4vw,3.35rem)] font-medium leading-[1.04] tracking-[-0.03em] text-kp-accent">
 							Des modèles conçus pour la route, le travail et l’aventure.

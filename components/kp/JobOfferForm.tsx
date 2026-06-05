@@ -103,7 +103,7 @@ export function JobOfferForm() {
     const lines = [
       "Bonjour,",
       "",
-      "Publication d’une offre d’emploi via le site KPANDJI Motors.",
+      "Publication d’une offre d’emploi via le site KPANDJI AUTOMOBILES.",
       "",
       "--- Fiche poste ---",
       `Intitulé : ${titleTrim}`,

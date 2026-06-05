@@ -30,20 +30,20 @@ const cormorant = Cormorant({
 });
 
 export const metadata: Metadata = {
-  title: "KPANDJI Motors — Constructeur automobile",
+  title: "KPANDJI AUTOMOBILES — Constructeur automobile",
   description:
-    "KPANDJI Motors conçoit, assemble et commercialise des véhicules. Ingénierie, qualité et mobilité durable.",
-  applicationName: "KPANDJI Motors",
+    "KPANDJI AUTOMOBILES conçoit, assemble et commercialise des véhicules. Ingénierie, qualité et mobilité durable.",
+  applicationName: "KPANDJI AUTOMOBILES",
   metadataBase: new URL("https://kpandji.com"),
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: "KPANDJI Motors — Constructeur automobile",
+    title: "KPANDJI AUTOMOBILES — Constructeur automobile",
     description:
       "Ingénierie automobile, assemblage et vente de véhicules neufs.",
     type: "website",
-    siteName: "KPANDJI Motors",
+    siteName: "KPANDJI AUTOMOBILES",
     locale: "fr_FR",
   },
 };

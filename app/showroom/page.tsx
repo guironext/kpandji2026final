@@ -9,14 +9,14 @@ const VirtualShowroom = dynamic(
 );
 
 export const metadata: Metadata = {
-  title: "Showroom — KPANDJI Motors",
+  title: "Showroom — KPANDJI AUTOMOBILES",
   description:
     "Explorez la gamme KPANDJI comme dans un showroom virtuel : photos, points forts et fiches modèles.",
   alternates: {
     canonical: "/showroom",
   },
   openGraph: {
-    title: "Showroom — KPANDJI Motors",
+    title: "Showroom — KPANDJI AUTOMOBILES",
     description:
       "Découvrez nos modèles KPANDJI dans un showroom virtuel : visuels, highlights et fiches.",
     type: "website",

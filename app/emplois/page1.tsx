@@ -6,16 +6,16 @@ import { JobOfferForm } from "@/components/kp/JobOfferForm";
 import { Reveal } from "@/components/kp/Reveal";
 
 export const metadata: Metadata = {
-  title: "Offres d’emploi — KPANDJI Motors",
+  title: "Offres d’emploi — KPANDJI AUTOMOBILES",
   description:
     "Publiez une offre d’emploi ou rejoignez l’écosystème KPANDJI : transmettez votre annonce à notre équipe par formulaire.",
   alternates: {
     canonical: "/emplois",
   },
   openGraph: {
-    title: "Offres d’emploi — KPANDJI Motors",
+    title: "Offres d’emploi — KPANDJI AUTOMOBILES",
     description:
-      "Diffusez une offre d’emploi auprès de KPANDJI Motors : formulaire structuré et envoi par e-mail.",
+      "Diffusez une offre d’emploi auprès de KPANDJI AUTOMOBILES : formulaire structuré et envoi par e-mail.",
     type: "website",
     locale: "fr_FR",
   },

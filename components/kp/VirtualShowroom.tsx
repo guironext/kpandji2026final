@@ -18,7 +18,7 @@ type ShowroomModel = {
   badge?: string;
   tagline: string;
   description: string;
-  brochureHref?: string;
+  brochureHref: string;
   highlights: string[];
   gallery: Array<{ src: string; alt: string; tag?: "Extérieur" | "Intérieur" }>;
 };
@@ -31,6 +31,7 @@ const MODELS: ShowroomModel[] = [
     tagline: "Pick-up premium, diesel ou essence, assistance niveau 2.",
     description:
       "Deux motorisations au choix : diesel 2.3T (163 ch, 380 Nm) ou essence 2.0 GDI (197 ch, 360 Nm). Régulateur adaptatif, alerte de ligne, collision frontale, vision 360° et équipements de confort haut de gamme.",
+    brochureHref: "/fiche_djetran.pdf",
     highlights: [
       "Diesel 2.3T — 163 ch / 380 Nm",
       "Essence 2.0 GDI — 197 ch / 360 Nm",
@@ -38,11 +39,15 @@ const MODELS: ShowroomModel[] = [
       "Vision panoramique 360°",
     ],
     gallery: [
-      { src: "/models/plus/pic1.jpg", alt: "DJETRAN PLUS — extérieur", tag: "Extérieur" },
-      { src: "/models/plus/pic2.jpg", alt: "DJETRAN PLUS — détail", tag: "Extérieur" },
-      { src: "/models/plus/plint1.jpg", alt: "DJETRAN PLUS — intérieur", tag: "Intérieur" },
-      { src: "/models/plus/plint2.jpg", alt: "DJETRAN PLUS — intérieur", tag: "Intérieur" },
-      { src: "/models/plus/pic3.jpg", alt: "DJETRAN PLUS — extérieur", tag: "Extérieur" },
+      { src: "/models/showcase/plusext0.jpg", alt: "DJETRAN PLUS", tag: "Extérieur" },
+      { src: "/models/showcase/plusext1.jpg", alt: "DJETRAN PLUS", tag: "Extérieur" },
+      { src: "/models/showcase/plusext2.jpg", alt: "DJETRAN PLUS", tag: "Extérieur" },
+      { src: "/models/showcase/plusext3.jpg", alt: "DJETRAN PLUS", tag: "Extérieur" },
+      { src: "/models/showcase/plusext4.jpg", alt: "DJETRAN PLUS", tag: "Extérieur" },
+      { src: "/models/showcase/plusext5.jpg", alt: "DJETRAN PLUS", tag: "Extérieur" },
+      { src: "/models/showcase/plusint1.jpg", alt: "DJETRAN PLUS", tag: "Intérieur" },
+      { src: "/models/showcase/plusint2.jpg", alt: "DJETRAN PLUS", tag: "Intérieur" },
+
     ],
   },
   {
@@ -50,19 +55,23 @@ const MODELS: ShowroomModel[] = [
     name: "DJETRAN",
     tagline: "4×4 robuste pour la route et le tout-terrain.",
     description:
-      "Turbo Diesel 2,3L (163 ch) et couple 340 Nm. Caméra 360°, contrôle de stabilité, ABS + EBD : un 4×4 pensé pour la route comme le tout-terrain.",
+      "Turbo Diesel 2,3L, développant 163 chevaux  avec un couple 340 Nm, offran puissance et souplesse pour la route comme le tout-terrain. Cockpit intelligent, caméra 360°, contrôle électronique de stabilité et ABS + EBD. ",
     brochureHref: "/fiche_djetran.pdf",
     highlights: [
-      "Turbo Diesel 2,3L — 163 ch",
-      "Transmission intégrale",
-      "Caméra 360°",
-      "Contrôle de stabilité",
+      "Moteur Turbo Diesel 2.3L",
+			"163 ch et 340 Nm de couple",
+			"Transmission intégrale",
+			"Caméra 360° et contrôle de stabilité",
     ],
     gallery: [
-      { src: "/models/djet/pic3.png", alt: "DJETRAN — extérieur", tag: "Extérieur" },
-      { src: "/models/djet/int/int1.jpg", alt: "DJETRAN — intérieur", tag: "Intérieur" },
-      { src: "/models/djet/arriere.jpg", alt: "DJETRAN — arrière", tag: "Extérieur" },
-      { src: "/models/djet/int/int3.jpg", alt: "DJETRAN — habitacle", tag: "Intérieur" },
+      { src: "/models/showcase/djetext1.jpg", alt: "DJETRAN", tag: "Extérieur" },
+      { src: "/models/showcase/djetext2.jpg", alt: "DJETRAN", tag: "Extérieur" },
+      { src: "/models/showcase/djetext3.jpg", alt: "DJETRAN", tag: "Extérieur" },
+      { src: "/models/showcase/djetext4.jpg", alt: "DJETRAN", tag: "Extérieur" },
+      { src: "/models/showcase/djetext5.jpg", alt: "DJETRAN", tag: "Extérieur" },
+      { src: "/models/showcase/djetint1.jpg", alt: "DJETRAN", tag: "Intérieur" },
+      { src: "/models/showcase/djetint2.jpg", alt: "DJETRAN", tag: "Intérieur" },
+      { src: "/models/showcase/djetint3.jpg", alt: "DJETRAN", tag: "Intérieur" },
     ],
   },
   {
@@ -70,19 +79,24 @@ const MODELS: ShowroomModel[] = [
     name: "LATHAYE",
     tagline: "SUV fluide, moderne et performant.",
     description:
-      "Moteur 2.0T GDI (165 kW) et transmission automatique CVT à 8 vitesses. Vitesse maximale 210 km/h : une conduite fluide, moderne et efficiente.",
-    brochureHref: "/Lathaye.pdf",
+      "Avec un moteur 2.0T GDI Turbo compressé de 165 Kw. Transmission automatique CVT à 8 vitesses pour une vitesse maximale de 210 km/h. C'est un véritable bilide qui redéfinit la performance à chaque voyage.",
+    brochureHref: "/fiche_lath.pdf",
     highlights: [
-      "2.0T GDI — 165 kW",
-      "Boîte CVT 8 vitesses",
-      "Vitesse max 210 km/h",
-      "Confort & efficience",
+    "Moteur 2.0T GDI Turbo",
+			"Puissance maximale de 165 kW",
+			"Boîte automatique CVT à 8 vitesses",
+			"Vitesse maximale de 210 km/h",
     ],
     gallery: [
-      { src: "/models/lath/pic3.jpg", alt: "LATHAYE — extérieur", tag: "Extérieur" },
-      { src: "/models/lath/pic1.jpg", alt: "LATHAYE — extérieur", tag: "Extérieur" },
-      { src: "/models/lath/pic2.jpeg", alt: "LATHAYE — intérieur", tag: "Intérieur" },
-      { src: "/models/lath/pic4.jpg", alt: "LATHAYE — détail", tag: "Extérieur" },
+      { src: "/models/showcase/latxt1.jpg", alt: "LATHAYE", tag: "Extérieur" },
+      { src: "/models/showcase/latxt2.jpg", alt: "LATHAYE", tag: "Extérieur" },
+      { src: "/models/showcase/latxt3.jpg", alt: "LATHAYE", tag: "Extérieur" },
+      { src: "/models/showcase/latxt4.jpg", alt: "LATHAYE", tag: "Extérieur" },
+      { src: "/models/showcase/latint1.jpg", alt: "LATHAYE", tag: "Intérieur" },
+      { src: "/models/showcase/latint2.jpg", alt: "LATHAYE", tag: "Intérieur" },
+      { src: "/models/showcase/latint3.jpg", alt: "LATHAYE", tag: "Intérieur" },
+      { src: "/models/showcase/latint4.jpg", alt: "LATHAYE", tag: "Intérieur" },
+     
     ],
   },
 ];
@@ -116,12 +130,32 @@ function Chip({
   );
 }
 
-function PrimaryButton({ href, children }: { href: string; children: React.ReactNode }) {
+const primaryButtonClassName =
+  "inline-flex min-h-11 w-full items-center justify-center rounded-full border border-kp-gold/45 bg-white/95 px-6 py-3 font-sans text-[11px] font-semibold uppercase tracking-[0.18em] text-zinc-950 shadow-[0_10px_26px_-14px_rgba(0,0,0,0.65)] transition duration-300 ease-out hover:scale-[1.02] hover:border-kp-gold/70 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-kp-gold/60 focus-visible:ring-offset-2 focus-visible:ring-offset-kp-bg active:scale-[0.98] sm:w-auto sm:tracking-[0.2em]";
+
+function brochureDownloadName(href: string) {
+  return href.split("/").pop() ?? "fiche-technique.pdf";
+}
+
+function PrimaryButton({
+  href,
+  children,
+  download,
+}: {
+  href: string;
+  children: React.ReactNode;
+  download?: boolean;
+}) {
+  if (download) {
+    return (
+      <a href={href} download={brochureDownloadName(href)} className={primaryButtonClassName}>
+        {children}
+      </a>
+    );
+  }
+
   return (
-    <Link
-      href={href}
-      className="inline-flex min-h-11 w-full items-center justify-center rounded-full border border-kp-gold/45 bg-white/95 px-6 py-3 font-sans text-[11px] font-semibold uppercase tracking-[0.18em] text-zinc-950 shadow-[0_10px_26px_-14px_rgba(0,0,0,0.65)] transition duration-300 ease-out hover:scale-[1.02] hover:border-kp-gold/70 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-kp-gold/60 focus-visible:ring-offset-2 focus-visible:ring-offset-kp-bg active:scale-[0.98] sm:w-auto sm:tracking-[0.2em]"
-    >
+    <Link href={href} className={primaryButtonClassName}>
       {children}
     </Link>
   );
@@ -415,11 +449,9 @@ export default function VirtualShowroom() {
                     </ul>
 
                     <div className="mt-6 grid gap-2.5 sm:grid-cols-2 lg:grid-cols-1">
-                      {selected?.brochureHref ? (
-                        <PrimaryButton href={selected.brochureHref}>
-                          Fiche technique
-                        </PrimaryButton>
-                      ) : null}
+                      <PrimaryButton href={selected.brochureHref} download>
+                        Fiche technique
+                      </PrimaryButton>
                       <PrimaryButton href="/service-apres-vente">
                         Prenez rendez-vous
                       </PrimaryButton>
@@ -625,14 +657,9 @@ export default function VirtualShowroom() {
                 <PrimaryButton href="/service-apres-vente">
                   Contactez le S.A.V.
                 </PrimaryButton>
-                {selected?.brochureHref ? (
-                  <Link
-                    href={selected.brochureHref}
-                    className="inline-flex min-h-11 w-full items-center justify-center rounded-full border border-white/14 bg-white/5 px-6 py-3 font-sans text-[11px] font-semibold uppercase tracking-[0.18em] text-white/75 transition hover:border-white/24 hover:bg-white/7 hover:text-white sm:w-auto"
-                  >
-                    Télécharger la fiche
-                  </Link>
-                ) : null}
+                <PrimaryButton href={selected.brochureHref} download>
+                  Télécharger la fiche
+                </PrimaryButton>
               </div>
             </div>
         </div>

@@ -3,7 +3,7 @@
 import { UserButton, useUser } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { KpClientLoginModal } from "@/components/kp/KpClientLoginModal";
@@ -273,7 +273,6 @@ export function KpHeader() {
   const [loginOpen, setLoginOpen] = useState(false);
   const { isSignedIn, isLoaded } = useUser();
   const pathname = usePathname();
-  const router = useRouter();
   const searchParams = useSearchParams();
   const searchId = useId();
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -327,10 +326,11 @@ export function KpHeader() {
     const nextSearch = params.toString();
     const nextUrl =
       pathname + (nextSearch ? `?${nextSearch}` : "") + window.location.hash;
-    router.replace(nextUrl, { scroll: false });
+    // History API avoids "Router action dispatched before initialization" during hydration/HMR.
+    window.history.replaceState(window.history.state, "", nextUrl);
 
     return () => window.cancelAnimationFrame(frame);
-  }, [isLoaded, isSignedIn, pathname, router, searchParams]);
+  }, [isLoaded, isSignedIn, pathname, searchParams]);
 
   const barSolid = scrolled || menuOpen || searchOpen || loginModalOpen;
 
@@ -450,7 +450,7 @@ export function KpHeader() {
               onClick={() => {
                 setMenuOpen((v) => !v);
               }}
-              className="relative flex h-11 w-11 flex-col items-center justify-center gap-[5px] rounded-full text-white/90 transition-colors hover:bg-white/10 xl:hidden"
+              className="relative flex h-11 w-11 flex-col items-center justify-center gap-[5px] rounded-full bg-white text-black transition-colors hover:bg-white/90 xl:hidden"
               aria-expanded={menuOpen}
               aria-label={menuOpen ? "Fermer le menu" : "Ouvrir le menu"}
             >

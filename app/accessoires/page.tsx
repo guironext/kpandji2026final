@@ -2,14 +2,14 @@ import type { Metadata } from "next";
 import { AccessoiresBoutique } from "@/components/kp/AccessoiresBoutique";
 
 export const metadata: Metadata = {
-  title: "Accessoires — KPANDJI Motors",
+  title: "Accessoires — KPANDJI AUTOMOBILES",
   description:
     "Accessoires d’origine et équipements KPANDJI : barres de toit, protections, housses et plus. Commande et devis en ligne par e-mail.",
   alternates: {
     canonical: "/accessoires",
   },
   openGraph: {
-    title: "Accessoires — KPANDJI Motors",
+    title: "Accessoires — KPANDJI AUTOMOBILES",
     description:
       "Boutique accessoires : demandez un devis ou passez commande par e-mail. Qualité constructeur.",
     type: "website",

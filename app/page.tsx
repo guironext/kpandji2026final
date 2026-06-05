@@ -2,9 +2,8 @@ import DernierSortie from "@/components/kp/DernierSortie";
 import { KpHero } from "@/components/kp/KpHero";
 import Modeles from "@/components/kp/Modeles";
 import Parala from "@/components/kp/Parala";
-import Poster from "@/components/kp/Poster";
 import { Reveal } from "@/components/kp/Reveal";
-import { ServiceApresVente } from "@/components/kp/ServiceApresVente";
+import Sav from "@/components/kp/Sav";
 import Turn from "@/components/kp/Turn";
 
 export default function Home() {
@@ -22,12 +21,8 @@ export default function Home() {
         <Parala />
       </Reveal>
 
-      <Reveal from="bottom" distance="lg" amount={0.14} delayMs={60}>
-        <Poster />
-      </Reveal>
-
       <Reveal from="bottom" distance="lg" amount={0.18} delayMs={60}>
-        <ServiceApresVente />
+        <Sav />
       </Reveal>
 
       <Reveal from="bottom" distance="lg" amount={0.18} delayMs={60}>

@@ -3,14 +3,14 @@ import { KpFooter } from "@/components/kp/KpFooter";
 import { ServiceApresVente } from "@/components/kp/ServiceApresVente";
 
 export const metadata: Metadata = {
-  title: "Service après vente — KPANDJI Motors",
+  title: "Service après vente — KPANDJI AUTOMOBILES",
   description:
     "Entretien, pièces d’origine, garantie et accompagnement S.A.V. pour votre véhicule KPANDJI. Contactez notre équipe en Côte d’Ivoire.",
   alternates: {
     canonical: "/service-apres-vente",
   },
   openGraph: {
-    title: "Service après vente — KPANDJI Motors",
+    title: "Service après vente — KPANDJI AUTOMOBILES",
     description:
       "Entretien, pièces d’origine et garantie. L’équipe S.A.V. KPANDJI à votre service.",
     type: "website",

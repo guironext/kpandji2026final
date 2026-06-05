@@ -116,7 +116,8 @@ export default async function ModeleDetailPage({ params }: Props) {
 
 	const { media, name, description, extern, intern, back } = modele;
 	const contactHref = `/contact?modele=${encodeURIComponent(modele.id)}`;
-	const ficheTechHref = `/contact?modele=${encodeURIComponent(modele.id)}&objet=fiche-technique`;
+	const brochureFilename =
+		modele.brochureHref.split("/").pop() ?? "fiche-technique.pdf";
 	const externBlocks = [
 		{ image: extern.desc1.ext1, text: extern.desc1.descDetail1 },
 		{ image: extern.desc2.ext2, text: extern.desc2.descDetail2 },
@@ -190,9 +191,12 @@ export default async function ModeleDetailPage({ params }: Props) {
 										<Link href={contactHref} className={btnGold}>
 											Nous contacter
 										</Link>
-										<Link href={ficheTechHref} className={btnGhost}>
+										<a
+											href={modele.brochureHref}
+											download={brochureFilename}
+											className={btnGhost}>
 											Fiche technique
-										</Link>
+										</a>
 									</div>
 								</div>
 							</div>
@@ -557,9 +561,12 @@ export default async function ModeleDetailPage({ params }: Props) {
 						<Link href={contactHref} className={btnGold}>
 							Contact
 						</Link>
-						<Link href={ficheTechHref} className={btnGhost}>
+						<a
+							href={modele.brochureHref}
+							download={brochureFilename}
+							className={btnGhost}>
 							Fiche
-						</Link>
+						</a>
 					</div>
 				</div>
 			</main>

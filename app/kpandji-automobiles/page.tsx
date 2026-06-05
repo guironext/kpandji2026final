@@ -4,16 +4,16 @@ import Link from "next/link";
 import { Reveal } from "@/components/kp/Reveal";
 
 export const metadata: Metadata = {
-  title: "Kpandji Automobiles — KPANDJI Motors",
+  title: "Kpandji Automobiles — KPANDJI AUTOMOBILES",
   description:
     "Découvrez KPANDJI Automobiles : notre histoire, notre vision et l’engagement d’une équipe au service de la mobilité en Côte d’Ivoire et en Afrique.",
   alternates: {
     canonical: "/kpandji-automobiles",
   },
   openGraph: {
-    title: "Kpandji Automobiles — KPANDJI Motors",
+    title: "Kpandji Automobiles — KPANDJI AUTOMOBILES",
     description:
-      "L’entreprise derrière KPANDJI Motors : ingénierie, assemblage et service client.",
+      "L’entreprise derrière KPANDJI AUTOMOBILES : ingénierie, assemblage et service client.",
     type: "website",
     locale: "fr_FR",
   },
@@ -204,7 +204,7 @@ export default function KpandjiAutomobilesPage() {
           <Reveal from="bottom" delayMs={200}>
             <p className="mt-6 max-w-2xl font-sans text-[15px] leading-relaxed text-white/72 sm:text-[16px] md:text-[17px]">
               Constructeur et distributeur engagé derrière la marque{" "}
-              <span className="text-white">KPANDJI Motors</span> — concevoir des
+              <span className="text-white">KPANDJI AUTOMOBILES</span> — concevoir des
               véhicules adaptés aux réalités locales, avec une exigence de
               qualité et un service de proximité.
             </p>
@@ -922,7 +922,7 @@ export default function KpandjiAutomobilesPage() {
 
           <Reveal from="bottom" delayMs={80}>
             <p className={eyebrow + " mt-7 justify-center"}>
-              Kpandji Motors — Côte d’Ivoire
+              Kpandji AUTOMOBILES — Côte d’Ivoire
             </p>
           </Reveal>
 

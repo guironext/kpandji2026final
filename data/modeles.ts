@@ -10,6 +10,7 @@
 export type Modele = {
 	id: string;
 	name: string;
+	brochureHref: string;
 	description: string;
 	characteristics: string[];
 	media: ModeleMedia;
@@ -73,11 +74,12 @@ export const MODELES: Modele[] = [
 	{
 		id: "djetranplus",
 		name: "DJETRAN PLUS",
+		brochureHref: "/fiche_djetran.pdf",
 		description:
-			"Diesel : 2.3T + boîte manuelle 6 vitesses (Puissance : 120 kW / 163 ch, Couple : 380 Nm) Essence : 2.0GDI + boîte automatique 8 vitesses (Puissance : 145 kW / 197 ch, Couple : 360 Nm) Systèmes d'assistance à la conduite intelligents de niveau 2 : régulateur de vitesse adaptatif, alerte de franchissement de ligne, avertisseur de collision frontale, vision panoramique à 360°, allumage automatique des phares, essuie-glaces à induction",
+			"Essence : 2.0GDI + boîte automatique 8 vitesses (Puissance : 145 kW / 197 ch, Couple : 360 Nm) Systèmes d'assistance à la conduite intelligents de niveau 2 : régulateur de vitesse adaptatif, alerte de franchissement de ligne, avertisseur de collision frontale, vision panoramique à 360°, allumage automatique des phares, essuie-glaces à induction",
 		characteristics: [
-			"Moteur Diesel : 2.3T + boîte manuelle 6 vitesses",
-			"Puissance : 120 kW / 163 ch, Couple : 380 Nm",
+			"Moteur Essence : 2.0GDI + boîte automatique 8 vitesses",
+			"Puissance : 145 kW / 197 ch, Couple : 360 Nm",
 			"Essence : 2.0GDI + boîte automatique 8 vitesses",
 			"vision panoramique à 360°, allumage automatique des phares",
 		],
@@ -147,10 +149,11 @@ export const MODELES: Modele[] = [
 	{
 		id: "djetran",
 		name: "DJETRAN",
+		brochureHref: "/fiche_djetran.pdf",
 		description:
-			"Turbo Diesel 2,3L, développant 163 chevaux  avec un couple 340 Nm, offran puissance et souplesse pour la route comme le tout-terrain. Cockpit intelligent, caméra 360°, contrôle électronique de stabilité et ABS + EBD. Se distingue par sa puissance et sa transmission intégrale. Il offre aussi un haut niveau de sécurité et de confort technologique.",
+			"Turbo Diesel et essence 2,3L, développant 163 chevaux  avec un couple 340 Nm, offran puissance et souplesse pour la route comme le tout-terrain. Cockpit intelligent, caméra 360°, contrôle électronique de stabilité et ABS + EBD. Se distingue par sa puissance et sa transmission intégrale. Il offre aussi un haut niveau de sécurité et de confort technologique.",
 		characteristics: [
-			"Moteur Turbo Diesel 2.3L",
+			"Moteur Turbo Diesel et essence 2.3L",
 			"163 ch et 340 Nm de couple",
 			"Transmission intégrale",
 			"Caméra 360° et contrôle de stabilité",
@@ -221,8 +224,9 @@ export const MODELES: Modele[] = [
 	{
 		id: "lathaye",
 		name: "LATHAYE",
+		brochureHref: "/fiche_lath.pdf",	
 		description:
-			"Avec un moteur 2.0T GDI Turbo compressé de 165 Kw. Transmission automatique CVT à 8 vitesses pour une vitesse maximale de 210 km/h. C'est un véritable bilide qui redéfinit la performance à chaque voyage.",
+			"Avec un moteur 2.0T GDI Turbo compressé de 165 Kw. Transmission automatique CVT à 8 rapports pour une vitesse maximale de 210 km/h. C'est un véritable bilide qui redéfinit la performance à chaque voyage.",
 		characteristics: [
 			"Moteur 2.0T GDI Turbo",
 			"Puissance maximale de 165 kW",
