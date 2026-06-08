@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { UserStatus } from "@/generated/prisma/client";
-import { prisma } from "@/lib/db";
+import { desc, eq } from "drizzle-orm";
+import { db, users, UserStatus } from "@/lib/db";
 import { requireAdminUserId } from "@/lib/auth/server";
 
 export const runtime = "nodejs";
@@ -20,11 +20,11 @@ export async function GET(request: Request) {
 
   const status = parseStatus(new URL(request.url).searchParams.get("status"));
 
-  const users = await prisma.user.findMany({
-    where: status ? { status } : undefined,
-    orderBy: { createdAt: "desc" },
-    take: 200,
+  const members = await db.query.users.findMany({
+    where: status ? eq(users.status, status) : undefined,
+    orderBy: desc(users.createdAt),
+    limit: 200,
   });
 
-  return NextResponse.json({ users });
+  return NextResponse.json({ users: members });
 }

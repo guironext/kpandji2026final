@@ -164,7 +164,7 @@ export const MODELES: Modele[] = [
 			bottomLeftImage: "/models/djet/front.jpg",
 			bottomRightImage: "/models/djet/back.jpg",
 			slideImage: "/models/djet/slide1.png",
-			bgSlideImage: "/models/djet/bgslide1.jpg",
+			bgSlideImage: "/models/djet/bgslide2.jpg",
 		},
 		extern: {
 			desc1: {

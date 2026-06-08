@@ -1,7 +1,13 @@
 import { NextResponse } from "next/server";
 import { auth, clerkClient } from "@clerk/nextjs/server";
-import { InvitationStatus, UserStatus } from "@/generated/prisma/client";
-import { prisma } from "@/lib/db";
+import { eq } from "drizzle-orm";
+import {
+  db,
+  invitations,
+  users,
+  InvitationStatus,
+  UserStatus,
+} from "@/lib/db";
 import {
   prismaRoleToKp,
   prismaStatusToApproval,
@@ -25,7 +31,9 @@ export async function POST(request: Request) {
   const email = clerkUser.primaryEmailAddress?.emailAddress?.toLowerCase() ?? null;
 
   // Already a member? Just report the current status.
-  const existing = await prisma.user.findUnique({ where: { clerkUserId: userId } });
+  const existing = await db.query.users.findFirst({
+    where: eq(users.clerkUserId, userId),
+  });
   if (existing) {
     return NextResponse.json({
       status: prismaStatusToApproval(existing.status),
@@ -53,7 +61,9 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Missing invitation token" }, { status: 400 });
   }
 
-  const invitation = await prisma.invitation.findUnique({ where: { token } });
+  const invitation = await db.query.invitations.findFirst({
+    where: eq(invitations.token, token),
+  });
   if (
     !invitation ||
     invitation.status !== InvitationStatus.PENDING ||
@@ -69,9 +79,10 @@ export async function POST(request: Request) {
     );
   }
 
-  const member = await prisma.$transaction(async (tx) => {
-    const created = await tx.user.create({
-      data: {
+  const member = await db.transaction(async (tx) => {
+    const [created] = await tx
+      .insert(users)
+      .values({
         clerkUserId: userId,
         email: email ?? invitation.email,
         fullName:
@@ -80,13 +91,13 @@ export async function POST(request: Request) {
         role: invitation.role,
         status: UserStatus.PENDING,
         invitationId: invitation.id,
-      },
-    });
+      })
+      .returning();
 
-    await tx.invitation.update({
-      where: { id: invitation.id },
-      data: { status: InvitationStatus.ACCEPTED, acceptedAt: new Date() },
-    });
+    await tx
+      .update(invitations)
+      .set({ status: InvitationStatus.ACCEPTED, acceptedAt: new Date() })
+      .where(eq(invitations.id, invitation.id));
 
     return created;
   });

@@ -3,10 +3,11 @@
 import { UserButton, useUser } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { KpClientLoginModal } from "@/components/kp/KpClientLoginModal";
+import { KpClientSignUpModal } from "@/components/kp/KpClientSignUpModal";
 import { kpClerkAppearance } from "@/components/kp/clerk-appearance";
 
 type NavItem = {
@@ -271,8 +272,11 @@ export function KpHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
+  const [loginPrefetch, setLoginPrefetch] = useState(false);
+  const [signupOpen, setSignupOpen] = useState(false);
   const { isSignedIn, isLoaded } = useUser();
   const pathname = usePathname();
+  const router = useRouter();
   const searchParams = useSearchParams();
   const searchId = useId();
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -281,9 +285,24 @@ export function KpHeader() {
     setMenuOpen(false);
     setSearchOpen(false);
     setLoginOpen(false);
+    setSignupOpen(false);
+  }, []);
+
+  const switchToSignup = useCallback(() => {
+    setLoginOpen(false);
+    router.push("/sign-up");
+  }, [router]);
+
+  const switchToLogin = useCallback(() => {
+    setSignupOpen(false);
+    setLoginOpen(true);
   }, []);
 
   const loginModalOpen = loginOpen && isLoaded && !isSignedIn;
+  const inviteToken = searchParams.get("token");
+  const signupModalOpen = signupOpen && !isSignedIn;
+  const signupPrefetch =
+    signupOpen && !!inviteToken && isLoaded && !isSignedIn;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 48);
@@ -294,11 +313,13 @@ export function KpHeader() {
 
   useEffect(() => {
     document.body.style.overflow =
-      menuOpen || searchOpen || loginModalOpen ? "hidden" : "";
+      menuOpen || searchOpen || loginModalOpen || signupModalOpen
+        ? "hidden"
+        : "";
     return () => {
       document.body.style.overflow = "";
     };
-  }, [menuOpen, searchOpen, loginModalOpen]);
+  }, [menuOpen, searchOpen, loginModalOpen, signupModalOpen]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -319,7 +340,10 @@ export function KpHeader() {
     if (!isLoaded || isSignedIn) return;
     if (searchParams.get("clientLogin") !== "1") return;
 
-    const frame = window.requestAnimationFrame(() => setLoginOpen(true));
+    const frame = window.requestAnimationFrame(() => {
+      setSignupOpen(false);
+      setLoginOpen(true);
+    });
 
     const params = new URLSearchParams(searchParams.toString());
     params.delete("clientLogin");
@@ -332,7 +356,26 @@ export function KpHeader() {
     return () => window.cancelAnimationFrame(frame);
   }, [isLoaded, isSignedIn, pathname, searchParams]);
 
-  const barSolid = scrolled || menuOpen || searchOpen || loginModalOpen;
+  useEffect(() => {
+    if (!isLoaded || isSignedIn) return;
+    if (searchParams.get("clientSignup") !== "1") return;
+
+    const token = searchParams.get("token");
+    if (token) {
+      router.replace(`/sign-up?token=${encodeURIComponent(token)}`);
+      return;
+    }
+
+    const frame = window.requestAnimationFrame(() => {
+      setLoginOpen(false);
+      setSignupOpen(true);
+    });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, [isLoaded, isSignedIn, router, searchParams]);
+
+  const barSolid =
+    scrolled || menuOpen || searchOpen || loginModalOpen || signupModalOpen;
 
   return (
     <>
@@ -346,7 +389,11 @@ export function KpHeader() {
         {/* Utility strip — Mercedes “Group / careers / language” rhythm */}
         <div
           className={`grid transition-[grid-template-rows] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-            scrolled && !menuOpen && !searchOpen && !loginModalOpen
+            scrolled &&
+            !menuOpen &&
+            !searchOpen &&
+            !loginModalOpen &&
+            !signupModalOpen
               ? "grid-rows-[0fr]"
               : "grid-rows-[1fr]"
           }`}
@@ -436,8 +483,12 @@ export function KpHeader() {
                 onClick={() => {
                   setSearchOpen(false);
                   setMenuOpen(false);
+                  setLoginPrefetch(true);
                   setLoginOpen(true);
                 }}
+                onMouseEnter={() => setLoginPrefetch(true)}
+                onFocus={() => setLoginPrefetch(true)}
+                onTouchStart={() => setLoginPrefetch(true)}
                 className="hidden h-11 w-11 items-center justify-center rounded-full text-white/85 transition-colors hover:bg-white/10 hover:text-white sm:flex"
                 aria-label="Ouvrir l'espace client"
                 aria-haspopup="dialog"
@@ -479,6 +530,25 @@ export function KpHeader() {
       <KpClientLoginModal
         open={loginModalOpen}
         onClose={() => setLoginOpen(false)}
+        onSwitchToSignup={switchToSignup}
+        prefetch={loginPrefetch && isLoaded && !isSignedIn}
+      />
+
+      <KpClientSignUpModal
+        open={signupModalOpen}
+        token={inviteToken}
+        onSwitchToLogin={switchToLogin}
+        onClose={() => {
+          setSignupOpen(false);
+          const params = new URLSearchParams(searchParams.toString());
+          params.delete("clientSignup");
+          params.delete("token");
+          const nextSearch = params.toString();
+          const nextUrl =
+            pathname + (nextSearch ? `?${nextSearch}` : "") + window.location.hash;
+          window.history.replaceState(window.history.state, "", nextUrl);
+        }}
+        prefetch={signupPrefetch}
       />
 
       {/* Search overlay — full-screen, Mercedes-style focus */}
@@ -595,8 +665,12 @@ export function KpHeader() {
                   type="button"
                   onClick={() => {
                     setMenuOpen(false);
+                    setLoginPrefetch(true);
                     setLoginOpen(true);
                   }}
+                  onMouseEnter={() => setLoginPrefetch(true)}
+                  onFocus={() => setLoginPrefetch(true)}
+                  onTouchStart={() => setLoginPrefetch(true)}
                   className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/15 px-6 py-3 font-sans text-[11px] font-semibold uppercase tracking-[0.22em] text-white/90 transition hover:border-white/30 hover:bg-white/5"
                 >
                   <IconUser className="h-4 w-4" />

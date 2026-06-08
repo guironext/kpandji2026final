@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { InvitationStatus } from "@/generated/prisma/client";
-import { prisma } from "@/lib/db";
+import { eq } from "drizzle-orm";
+import { db, invitations, InvitationStatus } from "@/lib/db";
 
 export const runtime = "nodejs";
 
@@ -11,7 +11,9 @@ export async function GET(request: Request) {
     return NextResponse.json({ valid: false, reason: "missing" }, { status: 400 });
   }
 
-  const invitation = await prisma.invitation.findUnique({ where: { token } });
+  const invitation = await db.query.invitations.findFirst({
+    where: eq(invitations.token, token),
+  });
 
   if (!invitation || invitation.status === InvitationStatus.REVOKED) {
     return NextResponse.json({ valid: false, reason: "invalid" }, { status: 404 });

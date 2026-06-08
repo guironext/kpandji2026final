@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
-import { prisma } from "@/lib/db";
+import { eq } from "drizzle-orm";
+import { db, users } from "@/lib/db";
 import { prismaRoleToKp, prismaStatusToApproval } from "@/lib/auth/server";
 
 export const runtime = "nodejs";
@@ -12,7 +13,9 @@ export async function GET() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const member = await prisma.user.findUnique({ where: { clerkUserId: userId } });
+  const member = await db.query.users.findFirst({
+    where: eq(users.clerkUserId, userId),
+  });
   if (!member) {
     return NextResponse.json({ status: null });
   }

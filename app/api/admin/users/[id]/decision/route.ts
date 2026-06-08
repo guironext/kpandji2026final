@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { UserStatus } from "@/generated/prisma/client";
-import { prisma } from "@/lib/db";
+import { eq } from "drizzle-orm";
+import { db, users, UserStatus } from "@/lib/db";
 import { requireAdminUserId, syncClerkMembership } from "@/lib/auth/server";
 
 export const runtime = "nodejs";
@@ -31,7 +31,7 @@ export async function POST(
     );
   }
 
-  const member = await prisma.user.findUnique({ where: { id } });
+  const member = await db.query.users.findFirst({ where: eq(users.id, id) });
   if (!member) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
@@ -39,14 +39,15 @@ export async function POST(
   const approve = body.decision === "approve";
   const nextStatus = approve ? UserStatus.APPROVED : UserStatus.REJECTED;
 
-  const updated = await prisma.user.update({
-    where: { id },
-    data: {
+  const [updated] = await db
+    .update(users)
+    .set({
       status: nextStatus,
       approvedAt: approve ? new Date() : null,
       approvedBy: approve ? adminId : null,
-    },
-  });
+    })
+    .where(eq(users.id, id))
+    .returning();
 
   await syncClerkMembership(updated.clerkUserId, updated.role, updated.status);
 

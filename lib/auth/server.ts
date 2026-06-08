@@ -1,5 +1,5 @@
 import { auth, clerkClient } from "@clerk/nextjs/server";
-import { UserRole, UserStatus } from "@/generated/prisma/client";
+import { UserRole, UserStatus } from "@/lib/db";
 import {
   ADMIN_ROLE,
   APPROVAL_APPROVED,
