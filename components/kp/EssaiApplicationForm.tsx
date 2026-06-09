@@ -6,8 +6,6 @@ import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { MODELES } from "@/data/modeles";
 
-const ESSAI_EMAIL = "contact@kpandji.com";
-
 const TIME_PRESETS = [
   "Matin (9h – 12h)",
   "Après-midi (14h – 17h)",
@@ -67,6 +65,8 @@ export function EssaiApplicationForm() {
   const [timeSlot, setTimeSlot] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
   function toggleModel(id: string) {
     setSelectedIds((prev) =>
@@ -75,7 +75,7 @@ export function EssaiApplicationForm() {
     if (error) setError(null);
   }
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError(null);
 
@@ -104,44 +104,38 @@ export function EssaiApplicationForm() {
       return;
     }
 
-    const selectedNames = selectedIds
-      .map((id) => MODELES.find((m) => m.id === id)?.name ?? id)
-      .join(", ");
+    setIsSubmitting(true);
 
-    const mailSubject = encodeURIComponent(
-      `[KPANDJI — Essai] ${selectedNames} — ${nameTrim}`
-    );
+    try {
+      const response = await fetch("/api/essai", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          modelIds: selectedIds,
+          name: nameTrim,
+          email: emailTrim,
+          phone: phoneTrim,
+          preferredDate: preferredDate.trim() || undefined,
+          timeSlot: timeSlot.trim() || undefined,
+          message: message.trim() || undefined,
+        }),
+      });
 
-    const lines = [
-      "Bonjour,",
-      "",
-      "Je souhaite réserver un essai routier pour le(s) modèle(s) suivant(s) :",
-      selectedNames,
-      "",
-      "--- Coordonnées ---",
-      `Nom : ${nameTrim}`,
-      `E-mail : ${emailTrim}`,
-      `Téléphone : ${phoneTrim}`,
-    ];
+      const data = (await response.json().catch(() => null)) as {
+        error?: string;
+      } | null;
 
-    if (preferredDate.trim()) {
-      lines.push(`Date souhaitée : ${preferredDate.trim()}`);
+      if (!response.ok) {
+        setError(data?.error ?? "Une erreur est survenue. Réessayez plus tard.");
+        return;
+      }
+
+      setIsSuccess(true);
+    } catch {
+      setError("Impossible d'envoyer la demande. Vérifiez votre connexion.");
+    } finally {
+      setIsSubmitting(false);
     }
-    if (timeSlot.trim()) {
-      lines.push(`Créneau : ${timeSlot.trim()}`);
-    }
-
-    if (message.trim()) {
-      lines.push("");
-      lines.push("Message :");
-      lines.push(message.trim());
-    }
-
-    lines.push("");
-    lines.push("Cordialement,");
-
-    const body = encodeURIComponent(lines.join("\n"));
-    window.location.href = `mailto:${ESSAI_EMAIL}?subject=${mailSubject}&body=${body}`;
   }
 
   return (
@@ -173,14 +167,28 @@ export function EssaiApplicationForm() {
             Choisissez vos modèles
           </p>
           <p className="mx-auto mt-3 max-w-md text-[13px] leading-relaxed text-white/40 lg:mx-0">
-            Sélectionnez un ou plusieurs véhicules. L&apos;envoi ouvre votre messagerie
-            avec un brouillon prêt à partir.
+            Sélectionnez un ou plusieurs véhicules. Notre équipe vous recontactera
+            pour confirmer votre essai.
           </p>
         </div>
 
+        {isSuccess ? (
+          <div
+            role="status"
+            className="relative mt-10 rounded-2xl border border-kp-gold/30 bg-kp-gold/8 px-6 py-10 text-center">
+            <p className="font-serif text-2xl font-medium text-kp-accent">
+              Demande envoyée
+            </p>
+            <p className="mx-auto mt-4 max-w-sm text-[14px] leading-relaxed text-white/50">
+              Merci. Nous avons bien reçu votre demande d&apos;essai et vous
+              recontacterons par e-mail ou téléphone pour fixer le rendez-vous.
+            </p>
+          </div>
+        ) : null}
+
         <form
           onSubmit={handleSubmit}
-          className="relative mt-10 space-y-10"
+          className={`relative mt-10 space-y-10 ${isSuccess ? "hidden" : ""}`}
           noValidate>
           <div>
             <SectionTitle>Modèles à essayer</SectionTitle>
@@ -394,15 +402,13 @@ export function EssaiApplicationForm() {
           <div className="flex flex-col gap-5 border-t border-white/[0.07] pt-8 sm:flex-row sm:items-center sm:justify-between">
             <motion.button
               type="submit"
-              className="order-2 w-full rounded-full bg-kp-gold px-10 py-4 font-sans text-[11px] font-semibold uppercase tracking-[0.22em] text-black shadow-[0_16px_40px_-12px_rgba(201,169,98,0.45)] transition-colors duration-300 hover:bg-[#d4b56e] sm:order-1 sm:w-auto"
-              whileHover={reduceMotion ? undefined : { scale: 1.02 }}
-              whileTap={reduceMotion ? undefined : { scale: 0.98 }}>
-              Demander un essai
+              disabled={isSubmitting}
+              className="order-2 w-full rounded-full bg-kp-gold px-10 py-4 font-sans text-[11px] font-semibold uppercase tracking-[0.22em] text-black shadow-[0_16px_40px_-12px_rgba(201,169,98,0.45)] transition-colors duration-300 hover:bg-[#d4b56e] disabled:cursor-not-allowed disabled:opacity-60 sm:order-1 sm:w-auto"
+              whileHover={reduceMotion || isSubmitting ? undefined : { scale: 1.02 }}
+              whileTap={reduceMotion || isSubmitting ? undefined : { scale: 0.98 }}>
+              {isSubmitting ? "Envoi en cours…" : "Demander un essai"}
             </motion.button>
             <p className="order-1 max-w-xs text-center text-[11px] leading-relaxed text-white/30 sm:order-2 sm:text-right">
-              Destination :{" "}
-              <span className="text-white/55">{ESSAI_EMAIL}</span>
-              <br />
               Notre équipe vous confirmera le créneau par retour d&apos;e-mail ou
               téléphone.
             </p>

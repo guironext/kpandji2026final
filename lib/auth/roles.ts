@@ -13,31 +13,55 @@ export type KpApprovalStatus =
   | typeof APPROVAL_REJECTED;
 
 export function isKpUserRole(value: unknown): value is KpUserRole {
-  return value === ADMIN_ROLE || value === PRESTIGE_USER_ROLE;
+  return normalizeKpUserRole(value) !== undefined;
 }
 
 export function isKpApprovalStatus(value: unknown): value is KpApprovalStatus {
-  return (
-    value === APPROVAL_PENDING ||
-    value === APPROVAL_APPROVED ||
-    value === APPROVAL_REJECTED
-  );
+  return normalizeKpApprovalStatus(value) !== undefined;
+}
+
+/** Accept Clerk metadata (`prestige-user`) and DB enum (`PRESTIGE_USER`) values. */
+export function normalizeKpUserRole(value: unknown): KpUserRole | undefined {
+  if (value === ADMIN_ROLE || value === "ADMIN" || value === "admin") {
+    return ADMIN_ROLE;
+  }
+  if (
+    value === PRESTIGE_USER_ROLE ||
+    value === "PRESTIGE_USER" ||
+    value === "prestige_user"
+  ) {
+    return PRESTIGE_USER_ROLE;
+  }
+  return undefined;
+}
+
+export function normalizeKpApprovalStatus(
+  value: unknown
+): KpApprovalStatus | undefined {
+  if (value === APPROVAL_PENDING || value === "PENDING" || value === "pending") {
+    return APPROVAL_PENDING;
+  }
+  if (value === APPROVAL_APPROVED || value === "APPROVED" || value === "approved") {
+    return APPROVAL_APPROVED;
+  }
+  if (value === APPROVAL_REJECTED || value === "REJECTED" || value === "rejected") {
+    return APPROVAL_REJECTED;
+  }
+  return undefined;
 }
 
 /** Role from Clerk user publicMetadata (Dashboard or Backend API). */
 export function getUserRoleFromMetadata(
   metadata: Record<string, unknown> | null | undefined
 ): KpUserRole | undefined {
-  const role = metadata?.role;
-  return isKpUserRole(role) ? role : undefined;
+  return normalizeKpUserRole(metadata?.role);
 }
 
 /** Approval status from Clerk user publicMetadata. */
 export function getApprovalStatusFromMetadata(
   metadata: Record<string, unknown> | null | undefined
 ): KpApprovalStatus | undefined {
-  const status = metadata?.approvalStatus;
-  return isKpApprovalStatus(status) ? status : undefined;
+  return normalizeKpApprovalStatus(metadata?.approvalStatus);
 }
 
 /**
@@ -51,10 +75,12 @@ export function getUserRoleFromSessionClaims(
   if (!sessionClaims) return undefined;
 
   const metadata = sessionClaims.metadata as { role?: unknown } | undefined;
-  if (isKpUserRole(metadata?.role)) return metadata.role;
+  const fromMeta = normalizeKpUserRole(metadata?.role);
+  if (fromMeta) return fromMeta;
 
   const publicMetadata = sessionClaims.publicMetadata as { role?: unknown } | undefined;
-  if (isKpUserRole(publicMetadata?.role)) return publicMetadata.role;
+  const fromPublic = normalizeKpUserRole(publicMetadata?.role);
+  if (fromPublic) return fromPublic;
 
   return getUserRoleFromMetadata(sessionClaims as Record<string, unknown>);
 }
@@ -66,14 +92,14 @@ export function getApprovalStatusFromSessionClaims(
   if (!sessionClaims) return undefined;
 
   const metadata = sessionClaims.metadata as { approvalStatus?: unknown } | undefined;
-  if (isKpApprovalStatus(metadata?.approvalStatus)) return metadata.approvalStatus;
+  const fromMeta = normalizeKpApprovalStatus(metadata?.approvalStatus);
+  if (fromMeta) return fromMeta;
 
   const publicMetadata = sessionClaims.publicMetadata as
     | { approvalStatus?: unknown }
     | undefined;
-  if (isKpApprovalStatus(publicMetadata?.approvalStatus)) {
-    return publicMetadata.approvalStatus;
-  }
+  const fromPublic = normalizeKpApprovalStatus(publicMetadata?.approvalStatus);
+  if (fromPublic) return fromPublic;
 
   return getApprovalStatusFromMetadata(sessionClaims as Record<string, unknown>);
 }
@@ -88,5 +114,13 @@ export function canAccessPrestigeRoute(
   status: KpApprovalStatus | undefined
 ): boolean {
   if (role === ADMIN_ROLE) return true;
+  return role === PRESTIGE_USER_ROLE && status === APPROVAL_APPROVED;
+}
+
+/** Client prestige layout: approved members with the PRESTIGE_USER role only. */
+export function canAccessClientPrestigeRoute(
+  role: KpUserRole | undefined,
+  status: KpApprovalStatus | undefined
+): boolean {
   return role === PRESTIGE_USER_ROLE && status === APPROVAL_APPROVED;
 }

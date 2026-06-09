@@ -2,7 +2,8 @@ import { Webhook } from "svix";
 import { headers } from "next/headers";
 import { WebhookEvent } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
-import { db, invitations, users, InvitationStatus } from "@/lib/db";
+import { db, invitations, users, InvitationStatus, UserRole } from "@/lib/db";
+import { syncClerkMembership } from "@/lib/auth/server";
 
 export async function POST(req: Request) {
   const WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET;
@@ -56,7 +57,7 @@ export async function POST(req: Request) {
         clerkUserId: id,
         email,
         fullName,
-        role: "PRESTIGE_USER",
+        role: UserRole.PRESTIGE_USER,
         invitationId: invitedByUserId ?? null,
       })
       .onConflictDoUpdate({
@@ -68,6 +69,8 @@ export async function POST(req: Request) {
         },
       })
       .returning();
+
+    await syncClerkMembership(newUser.clerkUserId, newUser.role, newUser.status);
 
     // Mark invitation link as used if created via invite
     const invitationToken = unsafeMetadata?.invitationToken as string | undefined;
@@ -89,13 +92,13 @@ export async function POST(req: Request) {
     const fullName =
       [first_name, last_name].filter(Boolean).join(" ") || null;
 
-    await db
+    const [upserted] = await db
       .insert(users)
       .values({
         clerkUserId: id,
         email,
         fullName,
-        role: "PRESTIGE_USER",
+        role: UserRole.PRESTIGE_USER,
         invitationId: invitedByUserId ?? null,
       })
       .onConflictDoUpdate({
@@ -105,7 +108,10 @@ export async function POST(req: Request) {
           fullName,
           ...(invitedByUserId && { invitationId: invitedByUserId }),
         },
-      });
+      })
+      .returning();
+
+    await syncClerkMembership(upserted.clerkUserId, upserted.role, upserted.status);
 
     // Mark invitation link as used if present (handles user.updated before user.created)
     const invitationToken = unsafeMetadata?.invitationToken as string | undefined;

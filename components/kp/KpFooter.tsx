@@ -243,12 +243,12 @@ export function KpFooter() {
               </div>
 
               <div className="mt-auto pt-10">
-                <a
-                  href="mailto:contact@kpandji.com"
+                <Link
+                  href="/contact"
                   className="inline-flex w-full items-center justify-center rounded-xl border border-kp-gold/35 bg-linear-to-br from-kp-gold/15 to-transparent px-8 py-4 font-sans text-[11px] font-semibold uppercase tracking-[0.24em] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] transition duration-300 hover:border-kp-gold/55 hover:from-kp-gold/25 hover:shadow-[0_0_0_1px_rgba(201,169,98,0.12),0_20px_50px_-24px_rgba(201,169,98,0.35)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-kp-gold/50 sm:w-auto"
                 >
                   Écrire au constructeur
-                </a>
+                </Link>
               </div>
             </div>
           </Reveal>

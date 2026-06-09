@@ -2,8 +2,6 @@
 
 import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 
-const CONTACT_EMAIL = "contact@kpandji.com";
-
 const btnPrimary =
   "group inline-flex items-center justify-center gap-2 rounded-full bg-white px-7 py-3.5 text-[12px] font-semibold uppercase tracking-[0.2em] text-black transition-all duration-300 hover:scale-[1.02] hover:bg-white/90 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-kp-gold/55";
 
@@ -25,6 +23,8 @@ export function PrestigeContactCTA() {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
 
   const close = useCallback(() => setOpen(false), []);
@@ -56,7 +56,7 @@ export function PrestigeContactCTA() {
     };
   }, [open]);
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError(null);
 
@@ -91,29 +91,49 @@ export function PrestigeContactCTA() {
       return;
     }
 
-    const mailSubject = encodeURIComponent("[Programme Prestige] Demande de contact");
-    const body = encodeURIComponent(
-      [
-        "Bonjour,",
-        "",
-        "Je souhaite en savoir plus sur le programme Prestige KPANDJI.",
-        "",
-        "---",
-        `Nom : ${nameTrim}`,
-        `Pays de résidence : ${countryTrim}`,
-        `Ville : ${cityTrim}`,
-        `Téléphone : ${phoneTrim}`,
-        `E-mail : ${emailTrim}`,
-      ].join("\n")
-    );
+    setIsSubmitting(true);
 
-    window.location.href = `mailto:${CONTACT_EMAIL}?subject=${mailSubject}&body=${body}`;
-    close();
+    try {
+      const response = await fetch("/api/privilege-contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: nameTrim,
+          country: countryTrim,
+          city: cityTrim,
+          phone: phoneTrim,
+          email: emailTrim,
+        }),
+      });
+
+      const data = (await response.json().catch(() => null)) as {
+        error?: string;
+      } | null;
+
+      if (!response.ok) {
+        setError(data?.error ?? "Une erreur est survenue. Réessayez plus tard.");
+        return;
+      }
+
+      setIsSuccess(true);
+    } catch {
+      setError("Impossible d'envoyer la demande. Vérifiez votre connexion.");
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
     <>
-      <button type="button" onClick={() => setOpen(true)} className={`${btnPrimary} w-full sm:w-auto`}>
+      <button
+        type="button"
+        onClick={() => {
+          setOpen(true);
+          setIsSuccess(false);
+          setError(null);
+        }}
+        className={`${btnPrimary} w-full sm:w-auto`}
+      >
         <span>Nous contacter</span>
         <svg
           viewBox="0 0 24 24"
@@ -167,7 +187,31 @@ export function PrestigeContactCTA() {
               </button>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-5 px-6 py-6 sm:space-y-6 sm:px-10 sm:py-8 lg:px-12" noValidate>
+            {isSuccess ? (
+              <div
+                role="status"
+                className="px-6 py-10 text-center sm:px-10 sm:py-12 lg:px-12"
+              >
+                <p className="font-serif text-2xl text-white">Demande envoyée</p>
+                <p className="mx-auto mt-4 max-w-sm text-[14px] leading-relaxed text-white/50">
+                  Merci. Nous avons bien reçu vos coordonnées et vous recontacterons
+                  depuis l&apos;étranger.
+                </p>
+                <button
+                  type="button"
+                  onClick={close}
+                  className="mt-8 rounded-full border border-white/15 px-8 py-3 font-sans text-[11px] font-semibold uppercase tracking-[0.22em] text-white/70 transition hover:border-white/25 hover:text-white"
+                >
+                  Fermer
+                </button>
+              </div>
+            ) : null}
+
+            <form
+              onSubmit={handleSubmit}
+              className={`space-y-5 px-6 py-6 sm:space-y-6 sm:px-10 sm:py-8 lg:px-12 ${isSuccess ? "hidden" : ""}`}
+              noValidate
+            >
               <div>
                 <label htmlFor="prestige-contact-name" className={labelClass}>
                   Nom <span className="text-kp-gold/90">*</span>
@@ -278,12 +322,13 @@ export function PrestigeContactCTA() {
               <div className="flex flex-col gap-4 border-t border-white/[0.07] pt-6 sm:flex-row sm:items-center sm:justify-between">
                 <button
                   type="submit"
-                  className="w-full rounded-full bg-kp-gold px-8 py-3.5 font-sans text-[11px] font-semibold uppercase tracking-[0.22em] text-black shadow-[0_16px_40px_-12px_rgba(201,169,98,0.45)] transition-colors duration-300 hover:bg-[#d4b56e] sm:w-auto"
+                  disabled={isSubmitting}
+                  className="w-full rounded-full bg-kp-gold px-8 py-3.5 font-sans text-[11px] font-semibold uppercase tracking-[0.22em] text-black shadow-[0_16px_40px_-12px_rgba(201,169,98,0.45)] transition-colors duration-300 hover:bg-[#d4b56e] disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
                 >
-                  Envoyer la demande
+                  {isSubmitting ? "Envoi en cours…" : "Envoyer la demande"}
                 </button>
                 <p className="text-center text-[11px] leading-relaxed text-white/30 sm:text-right">
-                  L’envoi ouvre votre messagerie avec un brouillon prêt à partir.
+                  Données utilisées uniquement pour vous recontacter.
                 </p>
               </div>
             </form>

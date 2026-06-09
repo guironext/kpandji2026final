@@ -1,0 +1,1 @@
+export { KpPageHeader as AdminPageHeader } from "@/components/kp/KpPageHeader";

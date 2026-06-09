@@ -1,15 +1,14 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-
-type AdminUser = {
-  id: string;
-  email: string;
-  fullName: string | null;
-  role: "ADMIN" | "PRESTIGE_USER";
-  status: "PENDING" | "APPROVED" | "REJECTED";
-  createdAt: string;
-};
+import {
+  adminCardClass,
+  adminCardGlow,
+  adminFieldClass,
+  adminPrimaryButtonClass,
+  adminSecondaryButtonClass,
+} from "@/components/kp/adminStyles";
+import type { AdminUser } from "@/components/kp/adminTypes";
 
 const STATUS_LABEL: Record<AdminUser["status"], string> = {
   PENDING: "En attente",
@@ -17,11 +16,9 @@ const STATUS_LABEL: Record<AdminUser["status"], string> = {
   REJECTED: "Refusé",
 };
 
-function fieldClass() {
-  return "w-full rounded-sm border border-white/15 bg-white/5 px-4 py-3 font-sans text-sm text-white placeholder:text-white/35 outline-none focus:border-white/30";
-}
+export type { AdminUser } from "@/components/kp/adminTypes";
 
-function InvitePanel() {
+export function InvitePanel() {
   const [email, setEmail] = useState("");
   const [role, setRole] = useState<"prestige-user" | "admin">("prestige-user");
   const [link, setLink] = useState<string | null>(null);
@@ -60,7 +57,8 @@ function InvitePanel() {
   };
 
   return (
-    <section className="rounded-sm border border-white/10 bg-white/2 p-7">
+    <section className={adminCardClass}>
+      <div className={adminCardGlow} aria-hidden />
       <h2 className="font-serif text-2xl text-white">Inviter un membre</h2>
       <p className="mt-2 font-sans text-sm text-white/50">
         Générez un lien d’invitation à transmettre au futur membre.
@@ -73,12 +71,12 @@ function InvitePanel() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="email@exemple.com"
-          className={fieldClass()}
+          className={adminFieldClass()}
         />
         <select
           value={role}
           onChange={(e) => setRole(e.target.value as "prestige-user" | "admin")}
-          className={fieldClass()}
+          className={adminFieldClass()}
         >
           <option value="prestige-user">Membre Prestige</option>
           <option value="admin">Administrateur</option>
@@ -86,7 +84,7 @@ function InvitePanel() {
         <button
           type="submit"
           disabled={busy}
-          className="inline-flex items-center justify-center rounded-full bg-white px-7 py-3 font-sans text-[11px] font-semibold uppercase tracking-[0.2em] text-black transition hover:bg-white/90 disabled:opacity-50"
+          className={adminPrimaryButtonClass}
         >
           {busy ? "Génération…" : "Générer le lien"}
         </button>
@@ -95,7 +93,7 @@ function InvitePanel() {
       {error && <p className="mt-4 font-sans text-sm text-[#e85d5d]">{error}</p>}
 
       {link && (
-        <div className="mt-5 rounded-sm border border-white/10 bg-black/40 p-4">
+        <div className="mt-5 rounded-xl border border-white/10 bg-black/40 p-4">
           <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-white/40">
             Lien d’invitation
           </p>
@@ -107,7 +105,7 @@ function InvitePanel() {
               setCopied(true);
               window.setTimeout(() => setCopied(false), 2000);
             }}
-            className="mt-3 inline-flex rounded-full border border-white/20 px-5 py-2 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-white/85 transition hover:border-white/40 hover:bg-white/5"
+            className={`mt-3 ${adminSecondaryButtonClass}`}
           >
             {copied ? "Copié" : "Copier"}
           </button>
@@ -117,7 +115,7 @@ function InvitePanel() {
   );
 }
 
-function MembersPanel() {
+export function MembersPanel() {
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [pendingId, setPendingId] = useState<string | null>(null);
@@ -152,13 +150,14 @@ function MembersPanel() {
   };
 
   return (
-    <section className="rounded-sm border border-white/10 bg-white/2 p-7">
-      <div className="flex items-center justify-between">
+    <section className={adminCardClass}>
+      <div className={adminCardGlow} aria-hidden />
+      <div className="flex items-center justify-between gap-4">
         <h2 className="font-serif text-2xl text-white">Membres</h2>
         <button
           type="button"
           onClick={load}
-          className="rounded-full border border-white/15 px-4 py-2 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-white/70 transition hover:border-white/30 hover:text-white"
+          className={adminSecondaryButtonClass}
         >
           Actualiser
         </button>
@@ -175,7 +174,7 @@ function MembersPanel() {
           {users.map((u) => (
             <li
               key={u.id}
-              className="flex flex-wrap items-center justify-between gap-4 py-4"
+              className="flex flex-wrap items-center justify-between gap-4 rounded-xl px-2 py-4 transition-colors hover:bg-white/2"
             >
               <div className="min-w-0">
                 <p className="truncate font-sans text-sm text-white/90">
@@ -206,7 +205,7 @@ function MembersPanel() {
                       type="button"
                       disabled={pendingId === u.id}
                       onClick={() => decide(u.id, "approve")}
-                      className="rounded-full bg-white px-5 py-2 font-sans text-[10px] font-semibold uppercase tracking-[0.18em] text-black transition hover:bg-white/90 disabled:opacity-50"
+                      className={adminPrimaryButtonClass}
                     >
                       Approuver
                     </button>
@@ -214,7 +213,7 @@ function MembersPanel() {
                       type="button"
                       disabled={pendingId === u.id}
                       onClick={() => decide(u.id, "reject")}
-                      className="rounded-full border border-white/20 px-5 py-2 font-sans text-[10px] font-semibold uppercase tracking-[0.18em] text-white/80 transition hover:border-white/40 disabled:opacity-50"
+                      className={adminSecondaryButtonClass}
                     >
                       Refuser
                     </button>

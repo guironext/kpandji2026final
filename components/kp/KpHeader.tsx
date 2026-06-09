@@ -1,6 +1,7 @@
 "use client";
 
-import { UserButton, useUser } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
+import { KpAccountButton } from "@/components/kp/KpAccountButton";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -8,7 +9,6 @@ import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { KpClientLoginModal } from "@/components/kp/KpClientLoginModal";
 import { KpClientSignUpModal } from "@/components/kp/KpClientSignUpModal";
-import { kpClerkAppearance } from "@/components/kp/clerk-appearance";
 
 type NavItem = {
   label: string;
@@ -298,7 +298,8 @@ export function KpHeader() {
     setLoginOpen(true);
   }, []);
 
-  const loginModalOpen = loginOpen && isLoaded && !isSignedIn;
+  const onSignUpRoute = pathname.startsWith("/sign-up");
+  const loginModalOpen = loginOpen && isLoaded && !isSignedIn && !onSignUpRoute;
   const inviteToken = searchParams.get("token");
   const signupModalOpen = signupOpen && !isSignedIn;
   const signupPrefetch =
@@ -475,7 +476,7 @@ export function KpHeader() {
             </button>
             {isLoaded && isSignedIn ? (
               <div className="hidden sm:flex sm:items-center sm:justify-center">
-                <UserButton appearance={kpClerkAppearance} />
+                <KpAccountButton />
               </div>
             ) : (
               <button
@@ -531,7 +532,7 @@ export function KpHeader() {
         open={loginModalOpen}
         onClose={() => setLoginOpen(false)}
         onSwitchToSignup={switchToSignup}
-        prefetch={loginPrefetch && isLoaded && !isSignedIn}
+        prefetch={loginPrefetch && isLoaded && !isSignedIn && !onSignUpRoute}
       />
 
       <KpClientSignUpModal
@@ -678,9 +679,10 @@ export function KpHeader() {
                 </button>
               )}
               {isLoaded && isSignedIn && (
-                <div className="flex justify-center py-1">
-                  <UserButton appearance={kpClerkAppearance} />
-                </div>
+                <KpAccountButton
+                  variant="menu"
+                  onNavigate={() => setMenuOpen(false)}
+                />
               )}
               <Link
                 href="/essai"

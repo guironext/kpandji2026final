@@ -2,8 +2,6 @@
 
 import { FormEvent, useState } from "react";
 
-const CONTACT_EMAIL = "contact@kpandji.com";
-
 const SUBJECT_PRESETS = [
   "Demande d’information",
   "Essai ou visite",
@@ -43,8 +41,10 @@ export function ContactForm() {
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError(null);
 
@@ -74,22 +74,36 @@ export function ContactForm() {
       return;
     }
 
-    const mailSubject = encodeURIComponent(`[Site KPANDJI] ${subjectTrim}`);
-    const bodyLines = [
-      "Bonjour,",
-      "",
-      messageTrim,
-      "",
-      "---",
-      `Nom : ${nameTrim}`,
-      `E-mail : ${emailTrim}`,
-    ];
-    if (phone.trim()) {
-      bodyLines.push(`Téléphone : ${phone.trim()}`);
-    }
-    const body = encodeURIComponent(bodyLines.join("\n"));
+    setIsSubmitting(true);
 
-    window.location.href = `mailto:${CONTACT_EMAIL}?subject=${mailSubject}&body=${body}`;
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: nameTrim,
+          email: emailTrim,
+          phone: phone.trim() || undefined,
+          subject: subjectTrim,
+          message: messageTrim,
+        }),
+      });
+
+      const data = (await response.json().catch(() => null)) as {
+        error?: string;
+      } | null;
+
+      if (!response.ok) {
+        setError(data?.error ?? "Une erreur est survenue. Réessayez plus tard.");
+        return;
+      }
+
+      setIsSuccess(true);
+    } catch {
+      setError("Impossible d'envoyer le message. Vérifiez votre connexion.");
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -125,14 +139,28 @@ export function ContactForm() {
             Votre message
           </p>
           <p className="mx-auto mt-3 max-w-md text-[13px] leading-relaxed text-white/40 lg:mx-0">
-            Les champs marqués d’un astérisque sont obligatoires. L’envoi ouvre votre
-            messagerie avec un brouillon prêt à partir.
+            Les champs marqués d’un astérisque sont obligatoires. Notre équipe
+            vous répondra dans les meilleurs délais.
           </p>
         </div>
 
+        {isSuccess ? (
+          <div
+            role="status"
+            className="relative mt-10 rounded-2xl border border-kp-gold/30 bg-kp-gold/8 px-6 py-10 text-center">
+            <p className="font-serif text-2xl font-medium text-kp-accent">
+              Message envoyé
+            </p>
+            <p className="mx-auto mt-4 max-w-sm text-[14px] leading-relaxed text-white/50">
+              Merci. Nous avons bien reçu votre message et vous recontacterons
+              par e-mail ou téléphone.
+            </p>
+          </div>
+        ) : null}
+
         <form
           onSubmit={handleSubmit}
-          className="relative mt-10 space-y-10"
+          className={`relative mt-10 space-y-10 ${isSuccess ? "hidden" : ""}`}
           noValidate>
           <div>
             <SectionTitle>Identité & coordonnées</SectionTitle>
@@ -271,13 +299,11 @@ export function ContactForm() {
           <div className="flex flex-col gap-5 border-t border-white/[0.07] pt-8 sm:flex-row sm:items-center sm:justify-between">
             <button
               type="submit"
-              className="order-2 w-full rounded-full bg-kp-gold px-10 py-4 font-sans text-[11px] font-semibold uppercase tracking-[0.22em] text-black shadow-[0_16px_40px_-12px_rgba(201,169,98,0.45)] transition-[transform,colors] duration-300 hover:scale-[1.02] hover:bg-[#d4b56e] active:scale-[0.98] motion-reduce:transform-none sm:order-1 sm:w-auto">
-              Ouvrir l’e-mail
+              disabled={isSubmitting}
+              className="order-2 w-full rounded-full bg-kp-gold px-10 py-4 font-sans text-[11px] font-semibold uppercase tracking-[0.22em] text-black shadow-[0_16px_40px_-12px_rgba(201,169,98,0.45)] transition-[transform,colors] duration-300 hover:scale-[1.02] hover:bg-[#d4b56e] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 motion-reduce:transform-none sm:order-1 sm:w-auto">
+              {isSubmitting ? "Envoi en cours…" : "Envoyer le message"}
             </button>
             <p className="order-1 max-w-xs text-center text-[11px] leading-relaxed text-white/30 sm:order-2 sm:text-right">
-              Destination :{" "}
-              <span className="text-white/55">{CONTACT_EMAIL}</span>
-              <br />
               Données utilisées uniquement pour vous répondre.
             </p>
           </div>

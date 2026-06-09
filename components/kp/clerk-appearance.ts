@@ -21,6 +21,10 @@ export const kpClerkAppearance = {
       "border border-white/15 bg-white/5 text-white hover:bg-white/10",
     formFieldInput:
       "border-white/15 bg-white/5 text-white placeholder:text-white/35",
+    otpCodeFieldInput:
+      "min-h-11 min-w-10 border border-white/25 bg-white/[0.08] text-white caret-white opacity-100",
+    otpCodeFieldInputs: "flex min-h-11 justify-center gap-2",
+    formResendCodeLink: "text-[#c9a962] hover:text-[#dfc88a]",
     formButtonPrimary:
       "bg-white text-black font-semibold uppercase tracking-[0.14em] text-[11px] hover:bg-white/90",
     footerActionLink: "text-[#c9a962] hover:text-[#dfc88a]",
@@ -28,6 +32,8 @@ export const kpClerkAppearance = {
     formFieldLabel: "text-white/60 uppercase text-[10px] tracking-[0.18em]",
     dividerLine: "bg-white/10",
     dividerText: "text-white/40 text-[10px] uppercase tracking-[0.2em]",
-    footer: "hidden",
+    alternativeMethodsBlockButton:
+      "border border-white/15 bg-white/5 text-white hover:bg-white/10",
+    formFieldAction: "text-[#c9a962] hover:text-[#dfc88a]",
   },
 } as const;

@@ -15,7 +15,7 @@ function SignInFlow() {
   }, [searchParams]);
 
   return (
-    <main className="mx-auto flex min-h-[70vh] max-w-md flex-col justify-center px-6 py-28">
+    <main className="mx-auto flex min-h-[70vh] max-w-md flex-col justify-center px-6 pb-28">
       <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.28em] text-white/45">
         KPANDJI — Espace privé
       </p>
