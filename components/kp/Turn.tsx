@@ -4,8 +4,6 @@ import { FormEvent, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Reveal } from "./Reveal";
 
-const CONTACT_EMAIL = "contact@kpandji.com";
-
 function isValidEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
 }
@@ -14,8 +12,10 @@ export default function Turn() {
   const reduceMotion = useReducedMotion();
   const [email, setEmail] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError(null);
     const trimmed = email.trim();
@@ -27,11 +27,31 @@ export default function Turn() {
       setError("Adresse e-mail invalide.");
       return;
     }
-    const subject = encodeURIComponent("Contact — site KPANDJI");
-    const body = encodeURIComponent(
-      `Bonjour,\n\nJe souhaite rester en contact avec KPANDJI.\n\nMon e-mail : ${trimmed}\n`
-    );
-    window.location.href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
+
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch("/api/visitor-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: trimmed }),
+      });
+
+      const data = (await response.json().catch(() => null)) as {
+        error?: string;
+      } | null;
+
+      if (!response.ok) {
+        setError(data?.error ?? "Une erreur est survenue. Réessayez plus tard.");
+        return;
+      }
+
+      setIsSuccess(true);
+    } catch {
+      setError("Impossible d'envoyer votre e-mail. Vérifiez votre connexion.");
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -120,9 +140,24 @@ export default function Turn() {
                     Laissez-nous votre e-mail
                   </p>
 
+                  {isSuccess ? (
+                    <div
+                      role="status"
+                      className="relative mt-8 rounded-2xl border border-kp-gold/30 bg-kp-gold/8 px-6 py-8 text-center lg:text-left"
+                    >
+                      <p className="font-serif text-xl text-kp-accent">
+                        Merci
+                      </p>
+                      <p className="mt-3 text-[14px] leading-relaxed text-white/50">
+                        Nous avons bien enregistré votre e-mail et vous
+                        recontacterons prochainement.
+                      </p>
+                    </div>
+                  ) : null}
+
                   <form
                     onSubmit={handleSubmit}
-                    className="relative mt-8 space-y-4"
+                    className={`relative mt-8 space-y-4 ${isSuccess ? "hidden" : ""}`}
                     noValidate>
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-2 sm:rounded-full sm:border sm:border-white/12 sm:bg-black/50 sm:p-1.5 sm:pl-2 sm:shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] sm:backdrop-blur-sm">
                       <div className="min-w-0 flex-1 sm:pl-3">
@@ -148,10 +183,11 @@ export default function Turn() {
                       </div>
                       <motion.button
                         type="submit"
-                        className="shrink-0 rounded-full bg-kp-gold px-8 py-3.5 font-sans text-[11px] font-semibold uppercase tracking-[0.2em] text-black transition-colors duration-300 hover:bg-[#d4b56e] sm:px-9"
+                        disabled={isSubmitting}
+                        className="shrink-0 rounded-full bg-kp-gold px-8 py-3.5 font-sans text-[11px] font-semibold uppercase tracking-[0.2em] text-black transition-colors duration-300 hover:bg-[#d4b56e] disabled:cursor-not-allowed disabled:opacity-60 sm:px-9"
                         whileHover={reduceMotion ? undefined : { scale: 1.02 }}
                         whileTap={reduceMotion ? undefined : { scale: 0.98 }}>
-                        Envoyer
+                        {isSubmitting ? "Envoi…" : "Envoyer"}
                       </motion.button>
                     </div>
 
@@ -164,9 +200,7 @@ export default function Turn() {
                     ) : null}
 
                     <p className="text-center text-[12px] leading-relaxed text-white/32 sm:text-left">
-                      En envoyant, votre client de messagerie s&apos;ouvre vers{" "}
-                      <span className="text-white/50">{CONTACT_EMAIL}</span>
-                      . Vos informations ne sont utilisées que pour vous répondre.
+                      Vos informations ne sont utilisées que pour vous répondre.
                     </p>
                   </form>
                 </div>

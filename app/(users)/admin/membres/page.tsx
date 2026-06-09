@@ -8,7 +8,7 @@ export default function AdminMembresPage() {
         title="Validation des membres"
         description="Approuvez ou refusez les nouvelles demandes d’accès à l’espace privé KPANDJI."
       />
-      <MembersPanel />
+      <MembersPanel pendingOnly />
     </div>
   );
 }

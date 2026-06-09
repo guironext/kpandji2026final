@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { db, essaiRequests } from "@/lib/db";
+import { prisma } from "@/lib/db";
 import { MODELES } from "@/data/modeles";
 
 export const runtime = "nodejs";
@@ -85,9 +85,8 @@ export async function POST(request: Request) {
       ? body.message.trim()
       : null;
 
-  const [row] = await db
-    .insert(essaiRequests)
-    .values({
+  const row = await prisma.essaiRequest.create({
+    data: {
       modelIds,
       name,
       email,
@@ -95,8 +94,8 @@ export async function POST(request: Request) {
       preferredDate,
       timeSlot,
       message,
-    })
-    .returning();
+    },
+  });
 
   return NextResponse.json({ id: row.id }, { status: 201 });
 }

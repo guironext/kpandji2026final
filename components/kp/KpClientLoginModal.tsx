@@ -1,10 +1,11 @@
 "use client";
 
-import { SignIn } from "@clerk/nextjs";
+import { SignIn, useAuth } from "@clerk/nextjs";
 import Image from "next/image";
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { kpClerkAppearance } from "@/components/kp/clerk-appearance";
+import { useAuthSync } from "@/components/kp/useAuthSync";
 import { useClerkAuthLinkInterceptor } from "@/components/kp/useClerkAuthLinkInterceptor";
 
 type KpClientLoginModalProps = {
@@ -27,6 +28,10 @@ export function KpClientLoginModal({
   const panelRef = useRef<HTMLDivElement>(null);
   const reduceMotion = useReducedMotion();
   const easeLux = [0.22, 1, 0.36, 1] as const;
+  const { isLoaded, isSignedIn } = useAuth();
+  const active = open || prefetch;
+
+  useAuthSync(active && isLoaded && isSignedIn);
 
   const loginAppearance = useMemo(
     () => ({
@@ -72,8 +77,6 @@ export function KpClientLoginModal({
     return () => window.clearTimeout(t);
   }, [open]);
 
-  // Keep the modal (and the Clerk widget inside it) mounted whenever it's open
-  // OR prefetched, so the heavy sign-in UI is ready before the user clicks.
   if (!open && !prefetch) return null;
 
   return (
@@ -86,7 +89,7 @@ export function KpClientLoginModal({
       aria-labelledby="kp-client-login-title"
       aria-hidden={!open}
       onClick={handleBackdropClick}
-      inert={!open}
+      {...(!open ? { inert: true } : {})}
     >
       <motion.div
         className="absolute inset-0 bg-black/82 backdrop-blur-md"
@@ -163,14 +166,20 @@ export function KpClientLoginModal({
         </div>
 
         <div className="relative kp-clerk-signin px-6 py-6 sm:px-8 sm:py-7">
-          <SignIn
-            appearance={loginAppearance}
-            routing="hash"
-            signInUrl="/?clientLogin=1"
-            signUpUrl="/sign-up"
-            fallbackRedirectUrl={returnTo}
-            forceRedirectUrl={returnTo}
-          />
+          {isLoaded && isSignedIn && open ? (
+            <p className="font-sans text-sm text-white/50">
+              Synchronisation de votre compte…
+            </p>
+          ) : (
+            <SignIn
+              appearance={loginAppearance}
+              routing="hash"
+              signInUrl="/?clientLogin=1"
+              signUpUrl="/sign-up"
+              fallbackRedirectUrl={returnTo}
+              forceRedirectUrl={returnTo}
+            />
+          )}
         </div>
       </motion.div>
     </div>

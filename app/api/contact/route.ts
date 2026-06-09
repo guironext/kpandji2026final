@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { db, visitorMessages } from "@/lib/db";
+import { prisma } from "@/lib/db";
 
 export const runtime = "nodejs";
 
@@ -58,16 +58,15 @@ export async function POST(request: Request) {
     );
   }
 
-  const [row] = await db
-    .insert(visitorMessages)
-    .values({
-      name,
+  const row = await prisma.message_Contact.create({
+    data: {
+      nom: name,
       email,
-      phone,
-      subject,
-      message,
-    })
-    .returning();
+      telephone: phone,
+      sujet: subject,
+      texte: message,
+    },
+  });
 
   return NextResponse.json({ id: row.id }, { status: 201 });
 }

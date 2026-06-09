@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
+import { EcrireSavModal } from "@/components/kp/EcrireSavModal";
 import { Reveal } from "@/components/kp/Reveal";
 
 const easeOut = [0.22, 1, 0.36, 1] as const;
@@ -685,12 +686,9 @@ export function ServiceApresVente() {
 									<a href={`tel:${SAV_TEL}`} className={`${btnPrimary} w-full sm:w-auto`}>
 										{SAV_PHONE}
 									</a>
-									<a
-										href="mailto:contact@kpandji.com?subject=Service%20apr%C3%A8s%20vente"
-										className={`${btnGhost} w-full sm:w-auto`}
-									>
+									<EcrireSavModal triggerClassName={`${btnGhost} w-full sm:w-auto`}>
 										Écrire au S.A.V.
-									</a>
+									</EcrireSavModal>
 									<Link
 										href="/contact"
 										className="inline-flex w-full min-h-11 items-center justify-center rounded-full border border-white/10 px-8 py-3.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/60 transition duration-300 hover:border-white/20 hover:text-white/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-kp-gold/55 sm:w-auto"

@@ -3,7 +3,7 @@
 import { FormEvent, useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useAuth, useUser } from "@clerk/nextjs";
+import { useAuth, useSession, useUser } from "@clerk/nextjs";
 import { motion, useReducedMotion } from "framer-motion";
 import {
   ADMIN_ROLE,
@@ -14,7 +14,8 @@ import {
   type KpApprovalStatus,
   type KpUserRole,
 } from "@/lib/auth/roles";
-import { homePathForRole } from "@/lib/auth/routes";
+import { homePathForRole, PRESTIGE_HOME_PATH } from "@/lib/auth/routes";
+import { useAuthSync } from "@/components/kp/useAuthSync";
 
 const inputClass =
   "w-full rounded-xl border border-white/[0.11] bg-black/40 px-4 py-3.5 font-sans text-[15px] text-kp-accent shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] placeholder:text-white/28 transition-[border-color,box-shadow] duration-200 focus:border-kp-gold/45 focus:outline-none focus:shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_0_0_1px_rgba(201,169,98,0.12)]";
@@ -41,6 +42,7 @@ const ROLE_OPTIONS = [
 ] as const;
 
 function postOnboardingPath(role: KpUserRole | null | undefined) {
+  if (role === PRESTIGE_USER_ROLE) return PRESTIGE_HOME_PATH;
   return homePathForRole(role);
 }
 
@@ -58,13 +60,72 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
   );
 }
 
+function PageIntro({
+  eyebrow,
+  title,
+  description,
+}: {
+  eyebrow: string;
+  title: string;
+  description: string;
+}) {
+  return (
+    <>
+      <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.28em] text-white/45">
+        {eyebrow}
+      </p>
+      <h1 className="mt-3 font-serif text-3xl text-white md:text-4xl">{title}</h1>
+      <p className="mt-2 font-sans text-sm text-white/50">{description}</p>
+    </>
+  );
+}
+
+function PendingApprovalMessage({
+  fullName,
+  role,
+}: {
+  fullName: string | null;
+  role: KpUserRole | null;
+}) {
+  const greeting = fullName?.trim() ? `Merci ${fullName.trim()}.` : "Merci.";
+  const spaceLabel =
+    role === ADMIN_ROLE ? "administration" : "prestige";
+
+  return (
+    <div className="mt-8 rounded-xl border border-white/8 bg-white/2 p-6 sm:p-8">
+      <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.28em] text-kp-gold/80">
+        Profil enregistré
+      </p>
+      <h2 className="mt-3 font-serif text-2xl text-white">
+        En attente de validation
+      </h2>
+      <p className="mt-3 font-sans text-sm leading-relaxed text-white/55">
+        {greeting} Votre profil a bien été enregistré. Un administrateur KPANDJI
+        doit maintenant approuver votre accès à l&apos;espace {spaceLabel}.
+        Veuillez patienter — vous serez redirigé automatiquement dès que votre
+        compte sera validé.
+      </p>
+      <div className="mt-6 flex items-center gap-3 font-sans text-sm text-white/40">
+        <span
+          className="inline-block h-2 w-2 animate-pulse rounded-full bg-kp-gold/70"
+          aria-hidden
+        />
+        En attente de l&apos;approbation de l&apos;administrateur…
+      </div>
+    </div>
+  );
+}
+
 export function OnboardingFlow() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
   const { isLoaded: authLoaded, isSignedIn } = useAuth();
+  const { session } = useSession();
   const { user } = useUser();
   const reduceMotion = useReducedMotion();
+
+  useAuthSync(authLoaded && isSignedIn);
 
   const [onboarding, setOnboarding] = useState<OnboardingState | null>(null);
   const [loading, setLoading] = useState(true);
@@ -112,6 +173,18 @@ export function OnboardingFlow() {
     };
   }, [authLoaded, isSignedIn, refreshStatus, user]);
 
+  const redirectAfterApproval = useCallback(
+    async (role: KpUserRole | null | undefined) => {
+      try {
+        await session?.reload();
+      } catch {
+        // Continue with redirect even if the session refresh fails.
+      }
+      router.replace(postOnboardingPath(role));
+    },
+    [router, session]
+  );
+
   useEffect(() => {
     if (!onboarding || onboarding.needsProfile) return;
     if (onboarding.role === ADMIN_ROLE) {
@@ -119,7 +192,7 @@ export function OnboardingFlow() {
       return;
     }
     if (onboarding.status === APPROVAL_APPROVED) {
-      router.replace(postOnboardingPath(onboarding.role));
+      void redirectAfterApproval(onboarding.role);
       return;
     }
     if (onboarding.status !== APPROVAL_PENDING) return;
@@ -127,12 +200,12 @@ export function OnboardingFlow() {
     const interval = window.setInterval(async () => {
       const data = await refreshStatus();
       if (data?.status === APPROVAL_APPROVED) {
-        router.replace(postOnboardingPath(data.role));
+        await redirectAfterApproval(data.role);
       }
     }, 5000);
 
     return () => window.clearInterval(interval);
-  }, [onboarding, refreshStatus, router]);
+  }, [onboarding, redirectAfterApproval, refreshStatus, router]);
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -174,7 +247,25 @@ export function OnboardingFlow() {
         setError(data.error ?? "Impossible d'enregistrer votre profil.");
         return;
       }
-      setOnboarding(data);
+
+      setOnboarding({
+        status: data.status,
+        role: data.role,
+        fullName: data.fullName,
+        phone: data.phone,
+        residenceCountry: data.residenceCountry,
+        needsProfile: data.needsProfile ?? false,
+      });
+
+      try {
+        await session?.reload();
+      } catch {
+        // Continue even if the session refresh fails.
+      }
+
+      if (data.status === APPROVAL_APPROVED) {
+        await redirectAfterApproval(data.role);
+      }
     } catch {
       setError("Impossible de joindre le serveur.");
     } finally {
@@ -184,71 +275,89 @@ export function OnboardingFlow() {
 
   if (!authLoaded || loading) {
     return (
-      <p className="font-sans text-sm text-white/50">Chargement…</p>
+      <>
+        <PageIntro
+          eyebrow="KPANDJI — Espace privé"
+          title="Finaliser votre profil"
+          description="Complétez vos informations pour accéder à votre espace membre."
+        />
+        <p className="mt-8 font-sans text-sm text-white/50">Chargement…</p>
+      </>
     );
   }
 
   if (!isSignedIn) {
     return (
-      <div>
-        <p className="font-sans text-sm text-white/60">
-          Connectez-vous pour finaliser votre inscription.
-        </p>
-        <Link
-          href={`/sign-in?redirect_url=${encodeURIComponent("/onboarding")}`}
-          className="mt-7 inline-flex rounded-full border border-white/20 px-7 py-3 font-sans text-[11px] font-semibold uppercase tracking-[0.2em] text-white/90 transition hover:border-white/40 hover:bg-white/5"
-        >
-          Se connecter
-        </Link>
-      </div>
+      <>
+        <PageIntro
+          eyebrow="KPANDJI — Espace privé"
+          title="Finaliser votre profil"
+          description="Connectez-vous pour finaliser votre inscription."
+        />
+        <div className="mt-8">
+          <Link
+            href={`/sign-in?redirect_url=${encodeURIComponent("/onboarding")}`}
+            className="inline-flex rounded-full border border-white/20 px-7 py-3 font-sans text-[11px] font-semibold uppercase tracking-[0.2em] text-white/90 transition hover:border-white/40 hover:bg-white/5"
+          >
+            Se connecter
+          </Link>
+        </div>
+      </>
     );
   }
 
   if (onboarding?.status === APPROVAL_REJECTED) {
     return (
-      <div>
-        <p className="font-sans text-sm text-white/60">
-          Votre demande d&apos;accès a été refusée. Contactez l&apos;administrateur
-          KPANDJI pour plus d&apos;informations.
-        </p>
-        <Link
-          href="/"
-          className="mt-7 inline-flex rounded-full border border-white/20 px-7 py-3 font-sans text-[11px] font-semibold uppercase tracking-[0.2em] text-white/90 transition hover:border-white/40 hover:bg-white/5"
-        >
-          Retour à l&apos;accueil
-        </Link>
-      </div>
+      <>
+        <PageIntro
+          eyebrow="KPANDJI — Espace privé"
+          title="Demande refusée"
+          description="Votre demande d'accès n'a pas été acceptée."
+        />
+        <div className="mt-8">
+          <p className="font-sans text-sm text-white/60">
+            Contactez l&apos;administrateur KPANDJI pour plus d&apos;informations.
+          </p>
+          <Link
+            href="/"
+            className="mt-7 inline-flex rounded-full border border-white/20 px-7 py-3 font-sans text-[11px] font-semibold uppercase tracking-[0.2em] text-white/90 transition hover:border-white/40 hover:bg-white/5"
+          >
+            Retour à l&apos;accueil
+          </Link>
+        </div>
+      </>
     );
   }
 
-  if (onboarding && !onboarding.needsProfile && onboarding.status === APPROVAL_PENDING) {
+  const showPendingApproval =
+    onboarding &&
+    !onboarding.needsProfile &&
+    onboarding.status === APPROVAL_PENDING;
+
+  if (showPendingApproval) {
     return (
-      <div className="rounded-xl border border-white/8 bg-white/2 p-6 sm:p-8">
-        <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.28em] text-kp-gold/80">
-          Profil enregistré
-        </p>
-        <h2 className="mt-3 font-serif text-2xl text-white">
-          En attente de validation
-        </h2>
-        <p className="mt-3 font-sans text-sm leading-relaxed text-white/55">
-          Merci {onboarding.fullName}. Un administrateur examine votre demande
-          d&apos;accès à l&apos;espace{" "}
-          {onboarding.role === ADMIN_ROLE ? "administration" : "prestige"}. Vous
-          serez redirigé automatiquement dès que votre compte sera approuvé.
-        </p>
-        <div className="mt-6 flex items-center gap-3 font-sans text-sm text-white/40">
-          <span
-            className="inline-block h-2 w-2 animate-pulse rounded-full bg-kp-gold/70"
-            aria-hidden
-          />
-          Vérification en cours…
-        </div>
-      </div>
+      <>
+        <PageIntro
+          eyebrow="KPANDJI — Espace privé"
+          title="Profil enregistré"
+          description="Votre demande est en cours d'examen par un administrateur."
+        />
+        <PendingApprovalMessage
+          fullName={onboarding?.fullName ?? fullName}
+          role={onboarding?.role ?? role}
+        />
+      </>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-8">
+    <>
+      <PageIntro
+        eyebrow="KPANDJI — Espace privé"
+        title="Finaliser votre profil"
+        description="Complétez vos informations pour accéder à votre espace membre."
+      />
+      <form onSubmit={handleSubmit} className="mt-8 space-y-8">
       <div>
         <SectionTitle>Identité</SectionTitle>
         <div className="space-y-5">
@@ -371,5 +480,6 @@ export function OnboardingFlow() {
         </p>
       </div>
     </form>
+    </>
   );
 }

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { db, privilegeContacts } from "@/lib/db";
+import { prisma } from "@/lib/db";
 
 export const runtime = "nodejs";
 
@@ -60,16 +60,15 @@ export async function POST(request: Request) {
     );
   }
 
-  const [row] = await db
-    .insert(privilegeContacts)
-    .values({
+  const row = await prisma.privilegeContact.create({
+    data: {
       name,
       country,
       city,
       phone,
       email,
-    })
-    .returning();
+    },
+  });
 
   return NextResponse.json({ id: row.id }, { status: 201 });
 }

@@ -1,6 +1,5 @@
 import { clerkClient } from "@clerk/nextjs/server";
-import { eq } from "drizzle-orm";
-import { db, users } from "@/lib/db";
+import { prisma } from "@/lib/db";
 import {
   prismaRoleToKp,
   prismaStatusToApproval,
@@ -22,23 +21,31 @@ export type Membership = {
   status: KpApprovalStatus | undefined;
 };
 
-/** Fast path: session JWT + Clerk publicMetadata (no database). */
+/** Session JWT + Clerk publicMetadata (no database). Prefers metadata over JWT. */
 export async function resolveMembershipFromClerk(
   userId: string,
   sessionClaims?: Record<string, unknown> | null
 ): Promise<Membership> {
-  let role = getUserRoleFromSessionClaims(sessionClaims);
-  let status = getApprovalStatusFromSessionClaims(sessionClaims);
-
-  if (role && status) return { role, status };
-
-  const clerkUser = await (await clerkClient()).users.getUser(userId);
-  const metadata = clerkUser.publicMetadata as Record<string, unknown>;
-
-  return {
-    role: role ?? getUserRoleFromMetadata(metadata),
-    status: status ?? getApprovalStatusFromMetadata(metadata),
+  const fromJwt = {
+    role: getUserRoleFromSessionClaims(sessionClaims),
+    status: getApprovalStatusFromSessionClaims(sessionClaims),
   };
+
+  try {
+    const clerkUser = await (await clerkClient()).users.getUser(userId);
+    const metadata = clerkUser.publicMetadata as Record<string, unknown>;
+    const fromMeta = {
+      role: getUserRoleFromMetadata(metadata),
+      status: getApprovalStatusFromMetadata(metadata),
+    };
+
+    return {
+      role: fromMeta.role ?? fromJwt.role,
+      status: fromMeta.status ?? fromJwt.status,
+    };
+  } catch {
+    return fromJwt;
+  }
 }
 
 /**
@@ -50,17 +57,16 @@ export async function resolveMembership(
   sessionClaims?: Record<string, unknown> | null
 ): Promise<Membership> {
   const fromClerk = await resolveMembershipFromClerk(userId, sessionClaims);
-  if (fromClerk.role && fromClerk.status) return fromClerk;
 
-  const member = await db.query.users.findFirst({
-    where: eq(users.clerkUserId, userId),
+  const member = await prisma.user.findFirst({
+    where: { clerkUserId: userId },
   });
   if (!member) return fromClerk;
 
-  const role = fromClerk.role ?? prismaRoleToKp(member.role);
-  const status = fromClerk.status ?? prismaStatusToApproval(member.status);
+  const role = prismaRoleToKp(member.role) ?? fromClerk.role;
+  const status = prismaStatusToApproval(member.status) ?? fromClerk.status;
 
-  if (!fromClerk.role || !fromClerk.status) {
+  if (fromClerk.role !== role || fromClerk.status !== status) {
     await syncClerkMembership(userId, member.role, member.status);
   }
 

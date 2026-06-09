@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
-import { eq } from "drizzle-orm";
 import { requireAdminUserId } from "@/lib/auth/server";
-import { db, visitorMessages } from "@/lib/db";
+import { prisma } from "@/lib/db";
 
 export const runtime = "nodejs";
 
@@ -17,16 +16,16 @@ export async function DELETE(
 
   const { id } = await params;
 
-  const existing = await db.query.visitorMessages.findFirst({
-    where: eq(visitorMessages.id, id),
-    columns: { id: true },
+  const existing = await prisma.visitorMessage.findFirst({
+    where: { id },
+    select: { id: true },
   });
 
   if (!existing) {
     return NextResponse.json({ error: "Message not found" }, { status: 404 });
   }
 
-  await db.delete(visitorMessages).where(eq(visitorMessages.id, id));
+  await prisma.visitorMessage.delete({ where: { id } });
 
   return NextResponse.json({ ok: true });
 }

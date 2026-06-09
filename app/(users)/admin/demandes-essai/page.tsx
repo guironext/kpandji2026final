@@ -1,9 +1,8 @@
-import { desc } from "drizzle-orm";
 import { AdminPageHeader } from "@/components/kp/AdminPageHeader";
 import { adminCardClass, adminCardGlow } from "@/components/kp/adminStyles";
 import { EssaiRequestsTable } from "./EssaiRequestsTable";
 import { getModeleById } from "@/data/modeles";
-import { db, essaiRequests } from "@/lib/db";
+import { prisma } from "@/lib/db";
 
 function formatModelNames(modelIds: string[]) {
   if (modelIds.length === 0) return "—";
@@ -14,8 +13,8 @@ function formatModelNames(modelIds: string[]) {
 }
 
 export default async function DemandesEssaiPage() {
-  const requests = await db.query.essaiRequests.findMany({
-    orderBy: desc(essaiRequests.createdAt),
+  const requests = await prisma.essaiRequest.findMany({
+    orderBy: { createdAt: "desc" },
   });
 
   const rows = requests.map((request) => ({
@@ -23,7 +22,7 @@ export default async function DemandesEssaiPage() {
     name: request.name,
     email: request.email,
     phone: request.phone,
-    models: formatModelNames(request.modelIds),
+    models: formatModelNames(request.modelIds as string[]),
     preferredDate: request.preferredDate ?? "",
     timeSlot: request.timeSlot ?? "",
     message: request.message ?? "",

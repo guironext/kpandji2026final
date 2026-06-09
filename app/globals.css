@@ -355,6 +355,64 @@ body {
   line-clamp: 3;
 }
 
+/* Clerk email/SMS verification code inputs (separate from formFieldInput) */
+.kp-clerk-signin [class*="otpCodeFieldInput"],
+.kp-clerk-signin input[inputmode="numeric"],
+.kp-clerk-signin input[autocomplete="one-time-code"] {
+  min-height: 2.75rem;
+  min-width: 2.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #f5f5f5 !important;
+  caret-color: #f5f5f5;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.kp-clerk-signin [class*="otpCodeFieldInputs"] {
+  display: flex !important;
+  gap: 0.5rem;
+  justify-content: center;
+  min-height: 2.75rem;
+}
+
+/* Clerk verify-email step — ensure all inline text stays readable on dark bg */
+.kp-clerk-verify [class*="formHeaderTitle"],
+.kp-clerk-verify [class*="headerTitle"] {
+  color: rgba(255, 255, 255, 0.92) !important;
+}
+
+.kp-clerk-verify [class*="formHeaderSubtitle"],
+.kp-clerk-verify [class*="headerSubtitle"] {
+  color: rgba(255, 255, 255, 0.55) !important;
+}
+
+.kp-clerk-verify [class*="identityPreviewText"] {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+.kp-clerk-verify [class*="formResendCodeLink"],
+.kp-clerk-verify [class*="footerActionLink"],
+.kp-clerk-verify [class*="formFieldAction"] {
+  color: #c9a962 !important;
+}
+
+.kp-clerk-verify [class*="footerActionText"],
+.kp-clerk-verify [class*="formFieldInfoText"] {
+  color: rgba(255, 255, 255, 0.45) !important;
+}
+
+.kp-clerk-verify [class*="formButtonPrimary"] {
+  color: #0a0a0a !important;
+}
+
+/* Clerk bot protection modal mount (managed by prebuilt SignUp) */
+#cl-modal-captcha-container {
+  display: block;
+  min-height: 4rem;
+  width: 100%;
+}
+
 /* KP header — Mercedes-style nav underline */
 .kp-header-link {
   position: relative;

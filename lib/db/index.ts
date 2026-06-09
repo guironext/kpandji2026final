@@ -1,19 +1,69 @@
-import { drizzle } from "drizzle-orm/node-postgres";
+import { PrismaNeon } from "@prisma/adapter-neon";
+import { PrismaPg } from "@prisma/adapter-pg";
+import { neonConfig } from "@neondatabase/serverless";
 import { Pool } from "pg";
-import * as schema from "./schema";
+import ws from "ws";
+import { PrismaClient, type Prisma } from "@/generated/prisma/client";
+import {
+  createPgPoolConfig,
+  getAppDatabaseUrl,
+  isNeonDatabase,
+} from "@/lib/db/connection";
 
-const globalForDb = globalThis as unknown as {
+const globalForPrisma = globalThis as unknown as {
+  prisma?: PrismaClient;
   pool?: Pool;
 };
 
-const pool =
-  globalForDb.pool ??
-  new Pool({ connectionString: process.env.DATABASE_URL });
+/** Models added after a dev server start won't exist on a cached client until it is recreated. */
+const REQUIRED_DELEGATES = ["ecrireSav", "message_Contact"] as const;
 
-if (process.env.NODE_ENV !== "production") {
-  globalForDb.pool = pool;
+function isStalePrismaClient(client: PrismaClient): boolean {
+  return REQUIRED_DELEGATES.some((key) => !(key in client));
 }
 
-export const db = drizzle(pool, { schema });
+function createPrismaClient(): PrismaClient {
+  const connectionString = getAppDatabaseUrl();
+  const log: Prisma.LogLevel[] =
+    process.env.NODE_ENV === "development" ? ["error", "warn"] : ["error"];
 
-export * from "./schema";
+  if (isNeonDatabase(connectionString)) {
+    neonConfig.webSocketConstructor = ws;
+    const adapter = new PrismaNeon({ connectionString });
+    return new PrismaClient({ adapter, log });
+  }
+
+  const pool =
+    globalForPrisma.pool ?? new Pool(createPgPoolConfig(connectionString));
+  globalForPrisma.pool = pool;
+
+  const adapter = new PrismaPg(pool);
+  return new PrismaClient({ adapter, log });
+}
+
+function getPrismaClient(): PrismaClient {
+  const cached = globalForPrisma.prisma;
+  if (cached && !isStalePrismaClient(cached)) {
+    return cached;
+  }
+
+  const client = createPrismaClient();
+  globalForPrisma.prisma = client;
+  return client;
+}
+
+export const prisma = new Proxy({} as PrismaClient, {
+  get(_target, prop, receiver) {
+    const client = getPrismaClient();
+    const value = Reflect.get(client, prop, receiver);
+    return typeof value === "function"
+      ? (value as (...args: unknown[]) => unknown).bind(client)
+      : value;
+  },
+});
+
+export {
+  InvitationStatus,
+  UserRole,
+  UserStatus,
+} from "@/generated/prisma/client";

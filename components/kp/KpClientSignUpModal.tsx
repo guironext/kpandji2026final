@@ -29,8 +29,8 @@ export function KpClientSignUpModal({
   token,
   prefetch = false,
 }: KpClientSignUpModalProps) {
-  const panelRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
+  const panelRef = useRef<HTMLDivElement>(null);
   const reduceMotion = useReducedMotion();
   const easeLux = [0.22, 1, 0.36, 1] as const;
   const active = open || prefetch;
@@ -42,8 +42,9 @@ export function KpClientSignUpModal({
 
   useEffect(() => {
     if (!open || !token || state.phase !== "valid") return;
-    router.replace(`/sign-up?token=${encodeURIComponent(token)}`);
-  }, [open, token, state.phase, router]);
+    onClose();
+    router.push(`/sign-up?token=${encodeURIComponent(token)}`);
+  }, [open, token, state.phase, onClose, router]);
 
   const handleBackdropClick = useCallback(
     (e: React.MouseEvent) => {
@@ -79,7 +80,7 @@ export function KpClientSignUpModal({
       aria-labelledby="kp-client-signup-title"
       aria-hidden={!open}
       onClick={handleBackdropClick}
-      inert={!open}
+      {...(!open ? { inert: true } : {})}
     >
       <motion.div
         className="absolute inset-0 bg-black/82 backdrop-blur-md"
@@ -220,11 +221,15 @@ export function KpClientSignUpModal({
           )}
 
           {state.phase === "valid" && (
-            <div className="kp-clerk-signin">
+            <>
               <p className="font-sans text-sm text-white/50">
-                Redirection vers le formulaire d’inscription…
+                Invitation confirmée pour{" "}
+                <span className="text-white/80">{state.email}</span>.
               </p>
-            </div>
+              <p className="mt-3 font-sans text-sm text-white/45">
+                Redirection vers le formulaire d&apos;inscription…
+              </p>
+            </>
           )}
         </div>
       </motion.div>

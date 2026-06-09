@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useId, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import {
   adminPrimaryButtonClass,
@@ -88,11 +88,11 @@ function VisitorMessageModal({
 }) {
   const panelRef = useRef<HTMLDivElement>(null);
   const titleId = useId();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  );
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {

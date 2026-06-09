@@ -5,6 +5,7 @@ import {
   APPROVAL_APPROVED,
   APPROVAL_PENDING,
   APPROVAL_REJECTED,
+  PRESTIGE_USER_ROLE,
   canAccessAdminRoute,
   canAccessPrestigeRoute,
   getApprovalStatusFromSessionClaims,
@@ -59,6 +60,24 @@ export default clerkMiddleware(async (auth, req) => {
     const membership = await resolveMembershipFromClerk(userId, claims);
     role = role ?? membership.role;
     status = status ?? membership.status;
+  }
+
+  // Approved prestige members leave the onboarding waiting room for their space.
+  if (
+    userId &&
+    isOnboardingRoute(req) &&
+    !pathname.startsWith("/onboarding/setup-mfa")
+  ) {
+    const membership = await resolveMembership(userId, claims);
+    role = membership.role ?? role;
+    status = membership.status ?? status;
+
+    if (
+      membership.role === PRESTIGE_USER_ROLE &&
+      membership.status === APPROVAL_APPROVED
+    ) {
+      return NextResponse.redirect(new URL(PRESTIGE_HOME_PATH, req.url));
+    }
   }
 
   // New/pending members always land in the onboarding waiting room.

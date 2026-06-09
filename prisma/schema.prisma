@@ -1,0 +1,144 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  ADMIN
+  PRESTIGE_USER
+}
+
+enum UserStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum InvitationStatus {
+  PENDING
+  ACCEPTED
+  REVOKED
+  EXPIRED
+}
+
+model Invitation {
+  id         String           @id @default(uuid())
+  email      String
+  role       UserRole         @default(PRESTIGE_USER)
+  token      String           @unique
+  status     InvitationStatus @default(PENDING)
+  invitedBy  String
+  acceptedAt DateTime?        @db.Timestamp(3)
+  expiresAt  DateTime         @db.Timestamp(3)
+  createdAt  DateTime         @default(now()) @db.Timestamp(3)
+  user       User?
+
+  @@index([email], map: "Invitation_email_idx")
+  @@index([status], map: "Invitation_status_idx")
+  @@map("Invitation")
+}
+
+model User {
+  id               String     @id @default(uuid())
+  clerkUserId      String     @unique
+  email            String     @unique
+  fullName         String?
+  phone            String?
+  residenceCountry String?
+  role             UserRole   @default(PRESTIGE_USER)
+  status           UserStatus @default(PENDING)
+  invitationId     String?    @unique
+  approvedAt       DateTime?  @db.Timestamp(3)
+  approvedBy       String?
+  createdAt        DateTime   @default(now()) @db.Timestamp(3)
+  updatedAt        DateTime   @updatedAt @db.Timestamp(3)
+  invitation       Invitation? @relation(fields: [invitationId], references: [id])
+
+  @@index([status], map: "User_status_idx")
+  @@map("User")
+}
+
+model EssaiRequest {
+  id            String   @id @default(uuid())
+  modelIds      Json
+  name          String
+  email         String
+  phone         String
+  preferredDate String?
+  timeSlot      String?
+  message       String?
+  createdAt     DateTime @default(now()) @db.Timestamp(3)
+
+  @@index([email], map: "EssaiRequest_email_idx")
+  @@index([createdAt], map: "EssaiRequest_createdAt_idx")
+  @@map("EssaiRequest")
+}
+
+model VisitorMessage {
+  id        String   @id @default(uuid())
+  name      String
+  email     String
+  phone     String?
+  subject   String
+  message   String
+  createdAt DateTime @default(now()) @db.Timestamp(3)
+
+  @@index([email], map: "VisitorMessage_email_idx")
+  @@index([createdAt], map: "VisitorMessage_createdAt_idx")
+  @@map("VisitorMessage")
+}
+
+model VisitorEmail {
+  id        String   @id @default(uuid())
+  email     String
+  createdAt DateTime @default(now()) @db.Timestamp(3)
+
+  @@index([email], map: "VisitorEmail_email_idx")
+  @@index([createdAt], map: "VisitorEmail_createdAt_idx")
+  @@map("VisitorEmail")
+}
+
+model PrivilegeContact {
+  id        String   @id @default(uuid())
+  name      String
+  country   String
+  city      String
+  phone     String
+  email     String
+  createdAt DateTime @default(now()) @db.Timestamp(3)
+
+  @@index([email], map: "PrivilegeContact_email_idx")
+  @@index([createdAt], map: "PrivilegeContact_createdAt_idx")
+  @@map("PrivilegeContact")
+}
+
+model EcrireSav {
+  id             String   @id @default(uuid())
+  name           String
+  contact        String
+  modeleVehicule String
+  panne          String
+  localisation   String
+  createdAt      DateTime @default(now()) @db.Timestamp(3)
+
+  @@index([createdAt], map: "EcrireSav_createdAt_idx")
+  @@map("EcrireSav")
+}
+
+model Message_Contact {
+  id         String   @id @default(uuid())
+  nom        String
+  email      String
+  telephone  String?
+  sujet      String
+  texte      String
+  createdAt  DateTime @default(now()) @db.Timestamp(3)
+
+  @@index([email], map: "Message_Contact_email_idx")
+  @@index([createdAt], map: "Message_Contact_createdAt_idx")
+  @@map("Message_Contact")
+}

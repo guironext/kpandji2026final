@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
-import { eq } from "drizzle-orm";
-import { db, users, UserStatus } from "@/lib/db";
+import { prisma, UserStatus } from "@/lib/db";
 import { requireAdminUserId, syncClerkMembership } from "@/lib/auth/server";
 
 export const runtime = "nodejs";
@@ -31,25 +30,39 @@ export async function POST(
     );
   }
 
-  const member = await db.query.users.findFirst({ where: eq(users.id, id) });
+  const member = await prisma.user.findFirst({ where: { id } });
   if (!member) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
+  }
+
+  if (member.status !== UserStatus.PENDING) {
+    return NextResponse.json(
+      { error: "Ce membre a déjà été traité." },
+      { status: 409 }
+    );
   }
 
   const approve = body.decision === "approve";
   const nextStatus = approve ? UserStatus.APPROVED : UserStatus.REJECTED;
 
-  const [updated] = await db
-    .update(users)
-    .set({
+  const updated = await prisma.user.update({
+    where: { id },
+    data: {
       status: nextStatus,
       approvedAt: approve ? new Date() : null,
       approvedBy: approve ? adminId : null,
-    })
-    .where(eq(users.id, id))
-    .returning();
+    },
+  });
 
-  await syncClerkMembership(updated.clerkUserId, updated.role, updated.status);
+  try {
+    await syncClerkMembership(updated.clerkUserId, updated.role, updated.status);
+  } catch (err) {
+    console.error("Failed to sync Clerk membership after decision:", err);
+    return NextResponse.json(
+      { error: "Membre mis à jour en base, mais la synchronisation Clerk a échoué." },
+      { status: 502 }
+    );
+  }
 
   return NextResponse.json({ user: updated });
 }

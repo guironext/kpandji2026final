@@ -18,6 +18,31 @@ const STATUS_LABEL: Record<AdminUser["status"], string> = {
 
 export type { AdminUser } from "@/components/kp/adminTypes";
 
+function normalizeInviteUrl(url: string, origin: string): string {
+  const trimmed = url.trim();
+  if (/^https?:\/\//i.test(trimmed)) return trimmed;
+  if (trimmed.startsWith("/")) return new URL(trimmed, origin).toString();
+  return `https://${trimmed.replace(/^\/+/, "")}`;
+}
+
+async function copyInviteLink(link: string): Promise<void> {
+  const html = `<a href="${link}">${link}</a>`;
+  if (typeof ClipboardItem !== "undefined" && navigator.clipboard?.write) {
+    try {
+      await navigator.clipboard.write([
+        new ClipboardItem({
+          "text/plain": new Blob([link], { type: "text/plain" }),
+          "text/html": new Blob([html], { type: "text/html" }),
+        }),
+      ]);
+      return;
+    } catch {
+      // Fall back to plain text if rich copy is blocked.
+    }
+  }
+  await navigator.clipboard?.writeText(link);
+}
+
 export function InvitePanel() {
   const [email, setEmail] = useState("");
   const [role, setRole] = useState<"prestige-user" | "admin">("prestige-user");
@@ -47,7 +72,9 @@ export function InvitePanel() {
         return;
       }
       const url = data.invitation?.url ?? null;
-      setLink(url ? new URL(url, window.location.origin).toString() : null);
+      setLink(
+        url ? normalizeInviteUrl(url, window.location.origin) : null
+      );
       setEmail("");
     } catch {
       setError("Impossible de joindre le serveur.");
@@ -97,11 +124,18 @@ export function InvitePanel() {
           <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-white/40">
             Lien d’invitation
           </p>
-          <p className="mt-2 break-all font-sans text-sm text-white/80">{link}</p>
+          <a
+            href={link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-2 block break-all font-sans text-sm text-[#c9a962] underline decoration-[#c9a962]/40 underline-offset-2 transition hover:text-[#d4b56e] hover:decoration-[#d4b56e]/60"
+          >
+            {link}
+          </a>
           <button
             type="button"
-            onClick={() => {
-              navigator.clipboard?.writeText(link);
+            onClick={async () => {
+              await copyInviteLink(link);
               setCopied(true);
               window.setTimeout(() => setCopied(false), 2000);
             }}
@@ -115,21 +149,30 @@ export function InvitePanel() {
   );
 }
 
-export function MembersPanel() {
+type MembersPanelProps = {
+  /** When true, only pending members are listed (validation queue). */
+  pendingOnly?: boolean;
+};
+
+export function MembersPanel({ pendingOnly = false }: MembersPanelProps) {
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [pendingId, setPendingId] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/admin/users");
+      const url = pendingOnly
+        ? "/api/admin/users?status=PENDING"
+        : "/api/admin/users";
+      const res = await fetch(url);
       const data = (await res.json().catch(() => ({}))) as { users?: AdminUser[] };
       setUsers(data.users ?? []);
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [pendingOnly]);
 
   useEffect(() => {
     load();
@@ -137,13 +180,40 @@ export function MembersPanel() {
 
   const decide = async (id: string, decision: "approve" | "reject") => {
     setPendingId(id);
+    setError(null);
     try {
-      await fetch(`/api/admin/users/${id}/decision`, {
+      const res = await fetch(`/api/admin/users/${id}/decision`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ decision }),
       });
-      await load();
+      const data = (await res.json().catch(() => ({}))) as {
+        user?: AdminUser;
+        error?: string;
+      };
+      if (!res.ok) {
+        setError(data.error ?? "Impossible de mettre à jour le membre.");
+        return;
+      }
+      if (data.user) {
+        setUsers((prev) => {
+          if (pendingOnly) {
+            return prev.filter((u) => u.id !== id);
+          }
+          return prev.map((u) =>
+            u.id === id
+              ? {
+                  ...u,
+                  status: data.user!.status,
+                }
+              : u
+          );
+        });
+      } else {
+        await load();
+      }
+    } catch {
+      setError("Impossible de joindre le serveur.");
     } finally {
       setPendingId(null);
     }
@@ -162,6 +232,10 @@ export function MembersPanel() {
           Actualiser
         </button>
       </div>
+
+      {error && (
+        <p className="mt-4 font-sans text-sm text-[#e85d5d]">{error}</p>
+      )}
 
       {loading ? (
         <p className="mt-6 font-sans text-sm text-white/50">Chargement…</p>
@@ -207,7 +281,7 @@ export function MembersPanel() {
                       onClick={() => decide(u.id, "approve")}
                       className={adminPrimaryButtonClass}
                     >
-                      Approuver
+                      {pendingId === u.id ? "Approbation…" : "Approuver"}
                     </button>
                     <button
                       type="button"

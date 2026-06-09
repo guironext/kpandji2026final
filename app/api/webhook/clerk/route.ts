@@ -1,9 +1,8 @@
 import { Webhook } from "svix";
 import { headers } from "next/headers";
 import { WebhookEvent } from "@clerk/nextjs/server";
-import { eq } from "drizzle-orm";
-import { db, invitations, users, InvitationStatus, UserRole } from "@/lib/db";
-import { syncClerkMembership } from "@/lib/auth/server";
+import { prisma } from "@/lib/db";
+import { syncClerkUserToDatabase } from "@/lib/auth/sync-user";
 
 export async function POST(req: Request) {
   const WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET;
@@ -40,93 +39,17 @@ export async function POST(req: Request) {
 
   const eventType = evt.type;
 
-  if (eventType === "user.created") {
-    const { id, email_addresses, first_name, last_name } = evt.data;
-    const email = email_addresses?.[0]?.email_address ?? "";
-
-    const unsafeMetadata = evt.data.unsafe_metadata as Record<string, unknown> | undefined;
-
-    const invitedByUserId = unsafeMetadata?.invitedByUserId as string | undefined;
-
-    const fullName =
-      [first_name, last_name].filter(Boolean).join(" ") || null;
-
-    const [newUser] = await db
-      .insert(users)
-      .values({
-        clerkUserId: id,
-        email,
-        fullName,
-        role: UserRole.PRESTIGE_USER,
-        invitationId: invitedByUserId ?? null,
-      })
-      .onConflictDoUpdate({
-        target: users.clerkUserId,
-        set: {
-          email,
-          fullName,
-          ...(invitedByUserId && { invitationId: invitedByUserId }),
-        },
-      })
-      .returning();
-
-    await syncClerkMembership(newUser.clerkUserId, newUser.role, newUser.status);
-
-    // Mark invitation link as used if created via invite
-    const invitationToken = unsafeMetadata?.invitationToken as string | undefined;
-    if (invitationToken && newUser.invitationId) {
-      await db
-        .update(invitations)
-        .set({ status: InvitationStatus.ACCEPTED, acceptedAt: new Date() })
-        .where(eq(invitations.token, invitationToken));
-    }
-  }
-
-  if (eventType === "user.updated") {
-    const { id, email_addresses, first_name, last_name } = evt.data;
-    const email = email_addresses?.[0]?.email_address ?? "";
-
-    const unsafeMetadata = evt.data.unsafe_metadata as Record<string, unknown> | undefined;
-    const invitedByUserId = unsafeMetadata?.invitedByUserId as string | undefined;
-
-    const fullName =
-      [first_name, last_name].filter(Boolean).join(" ") || null;
-
-    const [upserted] = await db
-      .insert(users)
-      .values({
-        clerkUserId: id,
-        email,
-        fullName,
-        role: UserRole.PRESTIGE_USER,
-        invitationId: invitedByUserId ?? null,
-      })
-      .onConflictDoUpdate({
-        target: users.clerkUserId,
-        set: {
-          email,
-          fullName,
-          ...(invitedByUserId && { invitationId: invitedByUserId }),
-        },
-      })
-      .returning();
-
-    await syncClerkMembership(upserted.clerkUserId, upserted.role, upserted.status);
-
-    // Mark invitation link as used if present (handles user.updated before user.created)
-    const invitationToken = unsafeMetadata?.invitationToken as string | undefined;
-    if (invitationToken && invitedByUserId) {
-      await db
-        .update(invitations)
-        .set({ status: InvitationStatus.ACCEPTED, acceptedAt: new Date() })
-        .where(eq(invitations.token, invitationToken));
+  if (eventType === "user.created" || eventType === "user.updated") {
+    const { id } = evt.data;
+    if (id) {
+      await syncClerkUserToDatabase(id);
     }
   }
 
   if (eventType === "user.deleted") {
     const { id } = evt.data;
     if (id) {
-      await db.delete(users).where(eq(users.clerkUserId, id));
+      await prisma.user.delete({ where: { clerkUserId: id } }).catch(() => null);
     }
   }
 

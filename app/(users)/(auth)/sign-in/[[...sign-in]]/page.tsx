@@ -1,18 +1,22 @@
 "use client";
 
-import { SignIn } from "@clerk/nextjs";
+import { SignIn, useAuth } from "@clerk/nextjs";
 import { Suspense, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
 import { kpClerkAppearance } from "@/components/kp/clerk-appearance";
+import { useAuthSync } from "@/components/kp/useAuthSync";
 
 function SignInFlow() {
   const searchParams = useSearchParams();
+  const { isLoaded, isSignedIn } = useAuth();
 
   const returnTo = useMemo(() => {
     const value = searchParams.get("returnTo");
     if (!value || !value.startsWith("/") || value.startsWith("//")) return "/";
     return value;
   }, [searchParams]);
+
+  useAuthSync(isLoaded && isSignedIn);
 
   return (
     <main className="mx-auto flex min-h-[70vh] max-w-md flex-col justify-center px-6 pb-28">
@@ -24,16 +28,22 @@ function SignInFlow() {
         Connectez-vous avec votre e-mail et votre mot de passe.
       </p>
 
-      <div className="kp-clerk-signin mt-7">
-        <SignIn
-          appearance={kpClerkAppearance}
-          routing="path"
-          path="/sign-in"
-          signUpUrl="/sign-up"
-          fallbackRedirectUrl={returnTo}
-          forceRedirectUrl={returnTo}
-        />
-      </div>
+      {isLoaded && isSignedIn ? (
+        <p className="mt-7 font-sans text-sm text-white/50">
+          Synchronisation de votre compte…
+        </p>
+      ) : (
+        <div className="kp-clerk-signin mt-7">
+          <SignIn
+            appearance={kpClerkAppearance}
+            routing="path"
+            path="/sign-in"
+            signUpUrl="/sign-up"
+            fallbackRedirectUrl={returnTo}
+            forceRedirectUrl={returnTo}
+          />
+        </div>
+      )}
     </main>
   );
 }

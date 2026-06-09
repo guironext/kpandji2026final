@@ -338,6 +338,12 @@ export function KpHeader() {
   }, [searchOpen]);
 
   useEffect(() => {
+    if (!pathname.startsWith("/sign-up")) return;
+    setLoginOpen(false);
+    setLoginPrefetch(false);
+  }, [pathname]);
+
+  useEffect(() => {
     if (!isLoaded || isSignedIn) return;
     if (searchParams.get("clientLogin") !== "1") return;
 
@@ -361,19 +367,20 @@ export function KpHeader() {
     if (!isLoaded || isSignedIn) return;
     if (searchParams.get("clientSignup") !== "1") return;
 
-    const token = searchParams.get("token");
-    if (token) {
-      router.replace(`/sign-up?token=${encodeURIComponent(token)}`);
-      return;
-    }
-
     const frame = window.requestAnimationFrame(() => {
       setLoginOpen(false);
       setSignupOpen(true);
     });
 
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete("clientSignup");
+    const nextSearch = params.toString();
+    const nextUrl =
+      pathname + (nextSearch ? `?${nextSearch}` : "") + window.location.hash;
+    window.history.replaceState(window.history.state, "", nextUrl);
+
     return () => window.cancelAnimationFrame(frame);
-  }, [isLoaded, isSignedIn, router, searchParams]);
+  }, [isLoaded, isSignedIn, pathname, searchParams]);
 
   const barSolid =
     scrolled || menuOpen || searchOpen || loginModalOpen || signupModalOpen;

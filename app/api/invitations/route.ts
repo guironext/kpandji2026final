@@ -1,7 +1,10 @@
 import { randomBytes } from "node:crypto";
 import { NextResponse } from "next/server";
-import { and, desc, eq } from "drizzle-orm";
-import { db, invitations, users, InvitationStatus, UserRole } from "@/lib/db";
+import {
+  InvitationStatus,
+  prisma,
+  UserRole,
+} from "@/lib/db";
 import { requireAdminUserId } from "@/lib/auth/server";
 
 export const runtime = "nodejs";
@@ -12,7 +15,9 @@ function inviteUrl(token: string): string {
   const base =
     process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") ?? "";
   const path = `/sign-up?token=${token}`;
-  return base ? `${base}${path}` : path;
+  if (!base) return path;
+  if (/^https?:\/\//i.test(base)) return `${base}${path}`;
+  return `https://${base}${path}`;
 }
 
 export async function GET() {
@@ -21,9 +26,9 @@ export async function GET() {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
-  const rows = await db.query.invitations.findMany({
-    orderBy: desc(invitations.createdAt),
-    limit: 100,
+  const rows = await prisma.invitation.findMany({
+    orderBy: { createdAt: "desc" },
+    take: 100,
   });
 
   return NextResponse.json({
@@ -55,8 +60,8 @@ export async function POST(request: Request) {
 
   const role = body.role === "admin" ? UserRole.ADMIN : UserRole.PRESTIGE_USER;
 
-  const existingUser = await db.query.users.findFirst({
-    where: eq(users.email, email),
+  const existingUser = await prisma.user.findFirst({
+    where: { email },
   });
   if (existingUser) {
     return NextResponse.json(
@@ -65,30 +70,26 @@ export async function POST(request: Request) {
     );
   }
 
-  // Revoke any still-pending invitation for the same email before issuing a fresh one.
-  await db
-    .update(invitations)
-    .set({ status: InvitationStatus.REVOKED })
-    .where(
-      and(
-        eq(invitations.email, email),
-        eq(invitations.status, InvitationStatus.PENDING)
-      )
-    );
+  await prisma.invitation.updateMany({
+    where: {
+      email,
+      status: InvitationStatus.PENDING,
+    },
+    data: { status: InvitationStatus.REVOKED },
+  });
 
   const token = randomBytes(32).toString("hex");
   const expiresAt = new Date(Date.now() + INVITE_TTL_DAYS * 24 * 60 * 60 * 1000);
 
-  const [invitation] = await db
-    .insert(invitations)
-    .values({
+  const invitation = await prisma.invitation.create({
+    data: {
       email,
       role,
       token,
       invitedBy: adminId,
       expiresAt,
-    })
-    .returning();
+    },
+  });
 
   return NextResponse.json(
     { invitation: { ...invitation, url: inviteUrl(token) } },
