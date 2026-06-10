@@ -19,8 +19,8 @@ export const metadata: Metadata = {
   },
 };
 
-const FOUNDER_IMAGE = "/company/company.jpg";
-const GARAGE_IMAGES = ["/garage1.jpeg", "/garage2.jpg", "/garage3.jpg"];
+const FOUNDER_IMAGE = "/company/company3.jpg";
+const GARAGE_IMAGES = ["/garage5.jpeg", "/garage2.jpg", "/garage3.jpg"];
 const HERO_BACKDROP = "/models/para/pic.jpg";
 const CTA_BACKDROP = "/models/para/pic1.jpg";
 const PILLAR_FEATURE_IMAGE = "/models/para/pic2.jpg";

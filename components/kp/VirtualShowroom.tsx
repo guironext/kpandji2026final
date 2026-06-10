@@ -30,7 +30,7 @@ const MODELS: ShowroomModel[] = [
     badge: "Nouveau",
     tagline: "Pick-up premium, diesel ou essence, assistance niveau 2.",
     description:
-      "Deux motorisations au choix : diesel 2.3T (163 ch, 380 Nm) ou essence 2.0 GDI (197 ch, 360 Nm). Régulateur adaptatif, alerte de ligne, collision frontale, vision 360° et équipements de confort haut de gamme.",
+      "Motorisations essence 2.0 GDI (197 ch, 360 Nm). Régulateur adaptatif, alerte de ligne, collision frontale, vision 360° et équipements de confort haut de gamme.",
     brochureHref: "/fiche_djetran.pdf",
     highlights: [
       "Diesel 2.3T — 163 ch / 380 Nm",

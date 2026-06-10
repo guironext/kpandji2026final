@@ -1,20 +1,8 @@
 import type { Metadata } from "next";
 import { Cormorant, DM_Sans } from "next/font/google";
-import { Suspense } from "react";
 import "./globals.css";
-import { KpHeader } from "@/components/kp/KpHeader";
-import { KpFooter } from "@/components/kp/KpFooter";
-import { KpInstantScroll } from "@/components/kp/KpInstantScroll";
+import { KpAppShell } from "@/components/kp/KpAppShell";
 import { KpClerkProvider } from "@/components/providers/KpClerkProvider";
-
-function HeaderFallback() {
-  return (
-    <header
-      aria-hidden
-      className="kp-header-mount fixed inset-x-0 top-0 z-50 h-[110px] border-b border-transparent bg-linear-to-b from-black/55 via-black/20 to-transparent md:h-[132px]"
-    />
-  );
-}
 
 const dmSans = DM_Sans({
 	subsets: ["latin"],
@@ -69,12 +57,7 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <KpClerkProvider>
-          <KpInstantScroll />
-          <Suspense fallback={<HeaderFallback />}>
-            <KpHeader />
-          </Suspense>
-          {children}
-          <KpFooter />
+          <KpAppShell>{children}</KpAppShell>
         </KpClerkProvider>
       </body>
     </html>

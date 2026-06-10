@@ -72,7 +72,7 @@ const pillars = [
     title: "Assemblage local & empreinte carbone",
     body:
       "Pour la souveraineté et la réduction de l’empreinte carbone, l’assemblage local de nos modèles (DJETRAN, DJETRAN PLUS, LATHAYE, BANCO) réduit significativement les émissions de gaz à effet de serre générées par le transport maritime international de véhicules finis, renforçant ainsi notre indépendance industrielle.",
-    image: "/garage1.jpeg",
+    image: "/garage5.jpeg",
     alt: "Chaîne d’assemblage KPANDJI en Côte d’Ivoire",
     icon: (
       <>
@@ -587,7 +587,7 @@ export default function EcologiePage() {
                 <figure className="group relative overflow-hidden rounded-2xl border border-white/10 bg-kp-elevated/40 sm:col-span-2 lg:col-span-2 lg:row-span-2">
                   <div className="relative aspect-16/10 w-full sm:aspect-2/1 lg:aspect-auto lg:min-h-[min(52vh,520px)]">
                     <Image
-                      src="/garage1.jpeg"
+                      src="/garage5.jpeg"
                       alt="Infrastructure KPANDJI — montage et contrôle qualité"
                       fill
                       sizes="(max-width: 768px) 100vw, 66vw"

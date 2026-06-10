@@ -21,7 +21,7 @@ const Sav = () => {
         <div className="relative overflow-hidden rounded-3xl border border-white/10 ring-1 ring-white/5 shadow-[0_40px_120px_-48px_rgba(0,0,0,0.95)]">
           <div className="relative aspect-4/3 w-full">
             <Image
-              src="/garage1.jpeg"
+              src="/garage5.jpeg"
               alt="Atelier KPANDJI — service après vente"
               fill
               sizes="(max-width: 1024px) 100vw, 50vw"

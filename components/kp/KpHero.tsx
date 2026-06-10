@@ -2,17 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-/**
- * KpHero — cinematic, fully-responsive landing hero.
- *
- * Layered structure:
- *   1. Parallax video background (subtle scale + drift on scroll)
- *   2. Cinematic overlay stack (vignette, top dim, gold glow, grain)
- *   3. Top utility bar (location ↔ live scroll indicator)
- *   4. Editorial copy block (eyebrow + serif headline + sub + CTAs)
- *   5. Brand pillars strip (4 luxury attributes)
- *   6. Infinite marquee strip (model wordmarks)
- */
+
 export function KpHero() {
 	const wrapRef = useRef<HTMLDivElement>(null);
 	const [progress, setProgress] = useState(0);

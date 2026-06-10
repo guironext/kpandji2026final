@@ -100,7 +100,7 @@ export const MODELES: Modele[] = [
 			desc2: {
 				ext2: "/models/desc/plus/avant7.jpg",
 				descDetail2:
-					`Diesel : 2,3T + 6MT (Puissance : 120 KW/163 CV Couple : 380 N.m) Essence : 2,0 GDI + 8AT (Puissance : 145 KW/197 CV Couple : 360 N.m) Système d'aide à la conduite intelligent L2 : ACC/ LDWS/ FCW/ Moniteur de vision panoramique à 360°/ Phare automatique/ Essuie-glace à induction`,
+					`Essence : 2,0 GDI + 8AT (Puissance : 145 KW/197 CV Couple : 360 N.m) Système d'aide à la conduite intelligent L2 : ACC/ LDWS/ FCW/ Moniteur de vision panoramique à 360°/ Phare automatique/ Essuie-glace à induction`,
 			},
 			desc3: {
 				ext3: "/models/desc/plus/avant9.jpg",

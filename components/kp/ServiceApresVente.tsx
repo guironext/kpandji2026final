@@ -61,7 +61,7 @@ const pillarsContainer = {
 
 const garageImages = [
 	{
-		src: "/garage1.jpeg",
+		src: "/garage5.jpeg",
 		alt: "Atelier KPANDJI — espace d’entretien et de réparation",
 		tag: "01 — Réception",
 		title: "Réception & diagnostic",
