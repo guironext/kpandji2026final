@@ -224,7 +224,7 @@ function KpAnimatedLogo() {
 const nav: NavItem[] = [
   { label: "Accueil", href: "/" },
   { label: "ShowRoom", href: "/showroom" },   
-  { label: "Privilège", href: "/privilege" },
+  { label: "Privilège & Rent", href: "/privilege" },
   { label: "S.A.V.", href: "/sav" },
   { label: "Contact", href: "/contact" },
 ];
@@ -339,8 +339,13 @@ export function KpHeader() {
 
   useEffect(() => {
     if (!pathname.startsWith("/sign-up")) return;
-    setLoginOpen(false);
-    setLoginPrefetch(false);
+
+    const frame = window.requestAnimationFrame(() => {
+      setLoginOpen(false);
+      setLoginPrefetch(false);
+    });
+
+    return () => window.cancelAnimationFrame(frame);
   }, [pathname]);
 
   useEffect(() => {

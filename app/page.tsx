@@ -4,6 +4,7 @@ import Modeles from "@/components/kp/Modeles";
 import Parala from "@/components/kp/Parala";
 import { Reveal } from "@/components/kp/Reveal";
 import Sav from "@/components/kp/Sav";
+import Sira from "@/components/kp/Sira";
 import Turn from "@/components/kp/Turn";
 
 export default function Home() {
@@ -20,6 +21,11 @@ export default function Home() {
       <Reveal from="bottom" distance="lg" amount={0.14} delayMs={60}>
         <Parala />
       </Reveal>
+
+      <Reveal from="bottom" distance="lg" amount={0.14} delayMs={60}>
+        <Sira />
+      </Reveal>
+
 
       <Reveal from="bottom" distance="lg" amount={0.18} delayMs={60}>
         <Sav />

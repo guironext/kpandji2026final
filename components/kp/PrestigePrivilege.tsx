@@ -8,15 +8,13 @@ import { Reveal } from "@/components/kp/Reveal";
 
 const HERO_BACKDROP = "/derniers/djetran.jpeg";
 const FEATURE_IMAGE = "/models/para/pic2.jpg";
-const PATH_ARRIVAL_IMAGE = "/models/para/pic1.jpg";
 const PATH_RENTAL_IMAGE = "/models/prest.png";
-const CTA_BACKDROP = "/derniers/djetran.jpeg";
 
 const btnPrimary =
-  "group inline-flex items-center justify-center gap-2 rounded-full bg-white px-7 py-3.5 font-sans text-[12px] font-semibold uppercase tracking-[0.2em] text-black transition-all duration-300 hover:scale-[1.02] hover:bg-white/90 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-kp-gold/55";
+  "group inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-white px-7 py-3.5 font-sans text-[11px] font-semibold uppercase tracking-[0.18em] text-black transition-all duration-300 hover:scale-[1.02] hover:bg-white/90 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-kp-gold/55 sm:min-h-11 sm:w-auto sm:text-[12px] sm:tracking-[0.2em]";
 
-const btnGhost =
-  "group inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-white/5 px-7 py-3.5 font-sans text-[12px] font-semibold uppercase tracking-[0.2em] text-white/85 backdrop-blur-sm transition-all duration-300 hover:border-kp-gold/45 hover:bg-white/8 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-kp-gold/55";
+const btnGold =
+  "group inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-kp-gold px-7 py-3.5 font-sans text-[11px] font-semibold uppercase tracking-[0.18em] text-black shadow-[0_12px_40px_-12px_rgba(201,169,98,0.55)] transition-all duration-300 hover:bg-[#d4b56e] hover:scale-[1.02] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-kp-gold/55 sm:min-h-11 sm:w-auto sm:text-[12px]";
 
 const eyebrow =
   "inline-flex items-center gap-3 font-sans text-[11px] font-semibold uppercase tracking-[0.28em] text-kp-gold/95";
@@ -24,14 +22,8 @@ const eyebrow =
 const bodyText =
   "font-sans text-[14px] leading-relaxed text-white/55 md:text-[15px]";
 
-const bodyTextMuted =
-  "font-sans text-[13px] leading-relaxed text-white/60 sm:text-[14px]";
-
 const bodyTextLg =
   "font-sans text-[15px] leading-relaxed text-white/72 sm:text-[16px] md:text-[17px]";
-
-const labelCaps =
-  "font-sans text-[10px] font-semibold uppercase tracking-[0.22em]";
 
 const statLabel =
   "font-sans text-[11px] uppercase tracking-[0.18em] text-white/55";
@@ -39,13 +31,13 @@ const statLabel =
 const pageMax = "mx-auto w-full max-w-[1680px]";
 
 const sectionPad =
-  `${pageMax} px-5 py-20 sm:px-8 sm:py-24 md:py-32 lg:px-12 lg:py-36 xl:px-16 xl:py-40`;
+  `${pageMax} px-4 py-16 sm:px-8 sm:py-20 md:py-28 lg:px-12 lg:py-32 xl:px-16 xl:py-36`;
 
 const sectionTitle =
   "font-serif text-[clamp(1.75rem,4.2vw,3rem)] font-normal leading-[1.1] tracking-tight text-white";
 
 const INTRO =
-  "Acquérez votre véhicule neuf en toute sérénité, où que vous soyez. Vous vivez à l’étranger (Diaspora) ou en Côte d’Ivoire ? Kpandji Automobiles facilite votre accès à l’automobile de luxe avec un service sur mesure — robuste, élégant, conçu pour nos routes.";
+  "Acquérez votre véhicule neuf en toute sérénité, où que vous soyez. Vous vivez à l’étranger (Diaspora) ou en Côte d’Ivoire ? Kpandji Automobiles facilite votre accès à l’automobile de luxe. Profitez d’un service sur mesure pour acquérir un véhicule robuste et élégant, conçu pour nos routes.";
 
 const WHATSAPP_COMMERCIAL = "https://wa.me/2250707201553?text=INFOS";
 const WHATSAPP_FLOTTE = "https://wa.me/2250707201553?text=FLOTTE";
@@ -67,14 +59,14 @@ const models = [
   },
   {
     name: "DJETRAN",
-    tagline: "Le sommet du prestige",
-    body: "Raffinement absolu et élégance VIP pour les déplacements les plus exigeants.",
+    tagline: "Le sommet du prestige et du raffinement",
+    body: "L’élégance VIP pour les déplacements les plus exigeants.",
     href: "/modeles/djetran",
     image: "/models/showcase/djetext1.jpg",
   },
   {
     name: "DJETRAN PLUS",
-    tagline: "Prestige & équipements supérieurs",
+    tagline: "Le sommet du prestige et du raffinement",
     body: "L’élégance robuste avec des finitions et technologies de pointe.",
     href: "/modeles/djetranplus",
     image: "/models/showcase/plusext0.jpg",
@@ -85,13 +77,13 @@ const paymentOptions = [
   {
     title: "Paiement Cash",
     subtitle: "Achat direct",
-    body: "Règlement intégral à la signature — livraison dès finalisation et mise en activité prioritaire pour la flotte élite.",
+    body: "Livraison immédiate dès la finalisation de votre acquisition.",
     highlight: "Immédiat",
   },
   {
     title: "Paiement Échelonné",
     subtitle: "Kpandji Privilège",
-    body: "Devenez propriétaire à votre rythme : apport initial de 70 %, puis mensualités fixes sur 6, 12 ou 24 mois.",
+    body: "Devenez propriétaire en payant à votre rythme sur une période allant de 6 à 24 mois.",
     highlight: "6 à 24 mois",
   },
 ] as const;
@@ -127,19 +119,30 @@ const conciergeServices = [
 const fleetBenefits = [
   {
     title: "Mise en activité privilégiée",
-    body: "Intégrez votre LATHAYE, DJETRAN ou DJETRAN PLUS dans notre flotte de location premium.",
+    body: "Opportunité exclusive aux propriétaires de LATHAYE, DJETRAN et DJETRAN PLUS d’intégrer leur véhicule dans notre flotte de location Premium.",
   },
   {
     title: "Partenaires de prestige",
-    body: "Ambassades, multinationales, services VIP et délégations diplomatiques.",
+    body: "Votre véhicule sera mis à disposition de nos partenaires Elite : ambassades, multinationales, services VIP et délégations diplomatiques.",
   },
   {
     title: "Gestion 100 % sereine",
-    body: "Clients sélectifs, entretien constructeur rigoureux et suivi technique complet.",
+    body: "Kpandji Automobiles s’occupe de tout : recherche de clients sélectifs, entretien constructeur rigoureux et suivi technique complet.",
+  },
+] as const;
+
+const fleetRentability = [
+  {
+    title: "Transparence totale",
+    body: "Vous êtes informé en temps réel dès que votre véhicule est en mission.",
+  },
+  {
+    title: "Modèle gagnant-gagnant",
+    body: "Votre véhicule génère des revenus dès qu’il roule. S’il est à l’arrêt, vous n’avez aucun frais de gestion.",
   },
   {
     title: "Liberté absolue",
-    body: "Récupérez votre véhicule pour un usage personnel ou percevez vos dividendes tant qu’il est en activité.",
+    body: "Vous restez maître de votre bien : récupérez-le pour un usage personnel ou continuez à percevoir vos dividendes tant qu’il est en activité.",
   },
 ] as const;
 
@@ -164,9 +167,17 @@ const contacts = [
   {
     icon: "🌐",
     label: "Site web",
-    value: "www.kpandji.com",
-    href: "https://www.kpandji.com",
+    value: "www.kpandjiautomobiles.com",
+    href: "https://www.kpandjiautomobiles.com",
   },
+] as const;
+
+const socialLinks = [
+  { label: "Facebook", handle: "Kpandji" },
+  { label: "Instagram", handle: "Kpandji_Auto.ci" },
+  { label: "Twitter", handle: "Kpandji Automobiles" },
+  { label: "TikTok", handle: "Kpandji Automobiles" },
+  { label: "LinkedIn", handle: "Kpandji Automobiles" },
 ] as const;
 
 const benefits = [
@@ -252,49 +263,8 @@ const flowNodes = [
   },
 ];
 
-const paths = [
-  {
-    id: "privilege",
-    tag: "Option Privilège",
-    title: "Usage personnel & conciergerie",
-    body:
-      "Acquérez pour votre usage personnel : gardiennage sécurisé, livraison sur mesure et suivi digital jusqu’à votre prise en main du véhicule.",
-    bullets: [
-      "Gardiennage sécurisé spécial diaspora",
-      "Livraison partout en Côte d’Ivoire",
-      "Maintenance certifiée constructeur",
-    ],
-    image: PATH_ARRIVAL_IMAGE,
-    alt: "Véhicule KPANDJI prêt pour la récupération en Côte d’Ivoire",
-    reverse: false,
-  },
-  {
-    id: "flotte",
-    tag: "Option Rent · Flotte Élite",
-    title: "Transformez votre investissement en revenus",
-    body:
-      "Ne laissez pas votre véhicule perdre de la valeur au garage. Intégrez notre flotte premium et percevez 70 % des revenus locatifs — où que vous résidiez.",
-    bullets: [
-      "70 % pour vous · 30 % pour KPANDJI (entretien, assurance, clients)",
-      "Partenaires Elite : ambassades, VIP, multinationales",
-      "Liberté totale : récupérez votre véhicule à tout moment",
-    ],
-    image: PATH_RENTAL_IMAGE,
-    alt: "Flotte premium KPANDJI en Côte d’Ivoire",
-    reverse: true,
-  },
-] as const;
-
 const cardClass =
   "group relative overflow-hidden rounded-2xl border border-white/[0.07] bg-kp-elevated/30 shadow-[0_24px_80px_-40px_rgba(0,0,0,0.9)] backdrop-blur-md transition-all duration-500 hover:border-white/12 hover:bg-kp-elevated/40";
-
-const compareRows = [
-  { label: "Objectif", privilege: "Usage personnel & sérénité", flotte: "Revenus passifs & rentabilité" },
-  { label: "Gardiennage diaspora", privilege: "Inclus", flotte: "Inclus" },
-  { label: "Revenus locatifs", privilege: "—", flotte: "70 % pour vous" },
-  { label: "Flexibilité", privilege: "Récupération à tout moment", flotte: "Récupération ou dividendes" },
-  { label: "Idéal pour", privilege: "Retours au pays, famille", flotte: "Investisseurs, diaspora" },
-] as const;
 
 const marqueeValues = [
   "Kpandji Privilège",
@@ -368,16 +338,78 @@ function IconBox({ children }: { children: ReactNode }) {
   );
 }
 
+function SectionChapter({
+  part,
+  label,
+  title,
+  description,
+  accent = "gold",
+}: {
+  part: string;
+  label: string;
+  title: string;
+  description?: string;
+  accent?: "gold" | "emerald";
+}) {
+  const accentBorder = accent === "emerald" ? "border-emerald-500/25" : "border-kp-gold/25";
+  const accentText = accent === "emerald" ? "text-emerald-400/90" : "text-kp-gold/90";
+  const accentBg =
+    accent === "emerald"
+      ? "bg-[radial-gradient(900px_320px_at_20%_50%,rgba(16,185,129,0.12),transparent_60%)]"
+      : "bg-[radial-gradient(900px_320px_at_20%_50%,rgba(201,169,98,0.14),transparent_60%)]";
+
+  return (
+    <div className={`relative overflow-hidden border-y border-white/8 bg-kp-bg ${accentBg}`}>
+      <div
+        aria-hidden
+        className={`pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent ${accent === "emerald" ? "via-emerald-400/40" : "via-kp-gold/45"} to-transparent`}
+      />
+      <div className={`${pageMax} px-4 py-10 sm:px-8 sm:py-14 lg:px-12 lg:py-16`}>
+        <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between md:gap-12">
+          <div className="max-w-3xl">
+            <div className="flex flex-wrap items-center gap-3">
+              <span
+                className={`inline-flex items-center rounded-full border ${accentBorder} bg-white/5 px-3.5 py-1 text-[10px] font-semibold uppercase tracking-[0.28em] ${accentText}`}
+              >
+                Partie {part}
+              </span>
+              <span className="text-[10px] font-semibold uppercase tracking-[0.24em] text-white/40">
+                {label}
+              </span>
+            </div>
+            <h2 className="mt-4 font-serif text-[clamp(1.85rem,4.5vw,3.25rem)] font-medium leading-[1.05] tracking-tight text-white">
+              {title}
+            </h2>
+          </div>
+          {description ? (
+            <p className={`max-w-md ${bodyText} md:text-right`}>{description}</p>
+          ) : null}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function StepBadge({ num }: { num: string }) {
+  return (
+    <span className="font-serif text-5xl font-medium leading-none text-kp-gold/15 transition-colors duration-500 group-hover:text-kp-gold/30 sm:text-6xl">
+      {num}
+    </span>
+  );
+}
+
 export function PrestigePrivilege() {
   return (
     <div className="min-h-screen bg-kp-bg font-sans text-kp-accent">
       <PrivilegeSectionNav />
       <PrivilegeFloatingCTA />
       <main>
+        {/* ─── SECTION 1 : KPANDJI PRIVILÈGE ─── */}
+        <div id="kpandji-privilege" aria-label="Kpandji Privilège">
         {/* ─── HERO ─── */}
         <section
           aria-label="Kpandji Privilège — Offre exclusive"
-          className="relative isolate flex min-h-screen items-end overflow-hidden pt-[100px] sm:pt-[110px] md:min-h-[105svh] md:pt-[132px] lg:min-h-[108svh]"
+          className="relative isolate flex min-h-[88svh] items-end overflow-hidden pt-[88px] sm:min-h-[92svh] sm:pt-[100px] md:min-h-svh md:pt-[120px] lg:pt-[132px]"
         >
           <div className="absolute inset-0 -z-10">
             <Image
@@ -421,7 +453,7 @@ export function PrestigePrivilege() {
             </div>
           </div>
 
-          <div className={`relative z-10 ${pageMax} px-5 pb-28 sm:px-8 md:pb-36 lg:px-12 lg:pb-40 xl:px-16`}>
+          <div className={`relative z-10 ${pageMax} px-4 pb-32 sm:px-8 md:pb-36 lg:px-12 lg:pb-40 xl:px-16`}>
             <div className="lg:grid lg:grid-cols-[1fr_minmax(0,400px)] lg:items-end lg:gap-16 xl:grid-cols-[1fr_minmax(0,440px)] xl:gap-24">
               <div>
                 <Reveal from="bottom">
@@ -458,7 +490,19 @@ export function PrestigePrivilege() {
                   </p>
                 </Reveal>
 
-               
+                <Reveal from="bottom" delayMs={240}>
+                  <div className="mt-8 flex flex-col gap-3 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center">
+                    <a href={WHATSAPP_COMMERCIAL} target="_blank" rel="noopener noreferrer" className={btnPrimary}>
+                      <span>Recevoir la brochure · INFOS</span>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="size-3.5 transition-transform duration-300 group-hover:translate-x-0.5" aria-hidden>
+                        <path d="M5 12h14M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </a>
+                    <div className="w-full sm:w-auto [&_button]:w-full sm:[&_button]:w-auto">
+                      <PrestigeContactCTA />
+                    </div>
+                  </div>
+                </Reveal>
 
                 {/* Hero highlight card — mobile & tablet */}
                 <Reveal from="bottom" delayMs={320} className="mt-8 lg:hidden">
@@ -602,7 +646,7 @@ export function PrestigePrivilege() {
         <section
           id="modeles"
           aria-labelledby="modeles-heading"
-          className="relative isolate overflow-hidden border-b border-white/8 bg-kp-surface"
+          className="relative isolate scroll-mt-28 overflow-hidden border-b border-white/8 bg-kp-surface md:scroll-mt-32"
         >
           <div
             aria-hidden
@@ -619,12 +663,14 @@ export function PrestigePrivilege() {
               />
             </Reveal>
 
-            <div className="mt-16 grid gap-5 sm:gap-6 lg:mt-24 lg:grid-cols-12 lg:gap-8">
+            <div className="mt-12 lg:mt-16">
+              {/* Mobile & tablet: horizontal snap carousel */}
+              <div className="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 [scrollbar-width:none] sm:-mx-8 sm:px-8 lg:mx-0 lg:grid lg:grid-cols-12 lg:gap-8 lg:overflow-visible lg:px-0 lg:pb-0 [&::-webkit-scrollbar]:hidden">
               {/* Featured model — LATHAYE */}
-              <Reveal from="left" className="lg:col-span-7">
+              <Reveal from="left" className="w-[88vw] shrink-0 snap-center sm:w-[72vw] lg:col-span-7 lg:w-auto lg:shrink">
                 <Link
                   href={models[0].href}
-                  className={`${cardClass} flex h-full min-h-[420px] flex-col justify-end sm:min-h-[480px] lg:min-h-[560px]`}
+                  className={`${cardClass} flex h-full min-h-[360px] flex-col justify-end sm:min-h-[420px] lg:min-h-[560px]`}
                 >
                   <div className="absolute inset-0">
                     <Image
@@ -647,10 +693,10 @@ export function PrestigePrivilege() {
                 </Link>
               </Reveal>
 
-              <div className="grid gap-5 sm:gap-6 lg:col-span-5 lg:gap-8">
+              <div className="flex w-max shrink-0 snap-center gap-4 lg:col-span-5 lg:w-auto lg:flex lg:flex-col lg:gap-8">
                 {models.slice(1).map((model, i) => (
-                  <Reveal key={model.name} from="right" delayMs={i * 80}>
-                    <Link href={model.href} className={`${cardClass} flex h-full min-h-[200px] flex-col sm:min-h-[240px]`}>
+                  <Reveal key={model.name} from="right" delayMs={i * 80} className="w-[78vw] shrink-0 sm:w-[60vw] lg:w-auto">
+                    <Link href={model.href} className={`${cardClass} flex h-full min-h-[280px] flex-col sm:min-h-[240px] lg:min-h-[260px]`}>
                       <div className="absolute inset-0">
                         <Image
                           src={model.image}
@@ -672,6 +718,10 @@ export function PrestigePrivilege() {
                   </Reveal>
                 ))}
               </div>
+              </div>
+              <p className="mt-4 text-center text-[10px] uppercase tracking-[0.22em] text-white/35 lg:hidden">
+                Glissez pour découvrir la gamme
+              </p>
             </div>
           </div>
         </section>
@@ -696,10 +746,11 @@ export function PrestigePrivilege() {
               />
             </Reveal>
 
-            <div className="mt-16 grid gap-5 md:grid-cols-2 lg:mt-24 lg:gap-8">
+            <div className="mt-12 grid gap-4 sm:gap-5 md:grid-cols-2 lg:mt-16 lg:gap-8">
               {paymentOptions.map((opt, i) => (
                 <Reveal key={opt.title} from={i === 0 ? "left" : "right"} delayMs={i * 80}>
-                  <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-kp-elevated/20 p-8 transition-all duration-500 hover:border-kp-gold/28 hover:bg-kp-elevated/35 sm:p-10">
+                  <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-kp-elevated/20 p-6 transition-all duration-500 hover:border-kp-gold/28 hover:bg-kp-elevated/35 sm:p-8 md:p-10">
+                    <StepBadge num={String(i + 1).padStart(2, "0")} />
                     <div
                       aria-hidden
                       className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-kp-gold/40 to-transparent"
@@ -1032,136 +1083,57 @@ export function PrestigePrivilege() {
           </Reveal>
         </section>
 
-        {/* OPTIONS — editorial split */}
+        {/* PRIVILÈGE CTA */}
         <section
-          id="options"
-          aria-labelledby="options-heading"
+          id="privilege-cta"
+          aria-labelledby="privilege-cta-heading"
           className="relative isolate overflow-hidden border-t border-white/8 bg-kp-bg"
         >
           <div
             aria-hidden
-            className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(800px_480px_at_90%_20%,rgba(201,169,98,0.1),transparent_60%)]"
+            className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(800px_400px_at_50%_0%,rgba(201,169,98,0.1),transparent_70%)]"
           />
-          <div className={sectionPad}>
+          <div className={`${sectionPad} py-14! sm:py-18! md:py-22!`}>
             <Reveal from="bottom">
-              <SectionIntro
-                centered
-                label="Votre choix"
-                title="Privilège ou Flotte Élite"
-                titleId="options-heading"
-                description="Usage personnel avec conciergerie, ou transformation de votre investissement en source de revenus passifs."
-              />
-            </Reveal>
-
-            {/* Compare table */}
-            <Reveal from="bottom" delayMs={100}>
-              <div className="mt-20 overflow-hidden rounded-2xl border border-white/10 bg-kp-elevated/15 lg:mt-28">
-                <div className="grid grid-cols-[1fr_1fr_1fr] border-b border-white/8 bg-kp-elevated/25 text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45 sm:text-[11px]">
-                  <div className="p-4 sm:p-5" />
-                  <div className="border-l border-white/8 p-4 text-kp-gold sm:p-5">Option Privilège</div>
-                  <div className="border-l border-white/8 p-4 text-kp-gold sm:p-5">Flotte Élite</div>
+              <div className="relative mx-auto max-w-3xl overflow-hidden rounded-3xl border border-white/10 bg-kp-elevated/20 p-8 text-center shadow-[0_32px_100px_-48px_rgba(0,0,0,0.9)] backdrop-blur-md sm:p-10 md:p-12">
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-kp-gold/45 to-transparent"
+                />
+                <p className={`${eyebrow} justify-center`}>Prêt(e) à prendre le volant ?</p>
+                <h2 id="privilege-cta-heading" className={`mt-5 ${sectionTitle}`}>
+                  Faites le choix de la qualité et de la sérénité
+                </h2>
+                <p className={`mx-auto mt-5 max-w-2xl ${bodyText}`}>
+                  Répondez « INFOS » pour recevoir notre brochure détaillée et choisir votre plan de
+                  paiement de 6 à 24 mois.
+                </p>
+                <p className="mt-4 font-serif text-lg text-white/75">
+                  Kpandji Automobiles : votre partenaire de confiance en Afrique.
+                </p>
+                <div className="mt-10 flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center">
+                  <a href={WHATSAPP_COMMERCIAL} target="_blank" rel="noopener noreferrer" className={btnPrimary}>
+                    <span>WhatsApp · INFOS</span>
+                  </a>
+                  <div className="w-full sm:w-auto [&_button]:w-full sm:[&_button]:w-auto">
+                    <PrestigeContactCTA />
+                  </div>
                 </div>
-                {compareRows.map((row, i) => (
-                  <div
-                    key={row.label}
-                    className={`grid grid-cols-[1fr_1fr_1fr] text-[12px] sm:text-[13px] ${
-                      i < compareRows.length - 1 ? "border-b border-white/6" : ""
-                    }`}
-                  >
-                    <div className="p-4 font-medium text-white/55 sm:p-5">{row.label}</div>
-                    <div className="border-l border-white/6 p-4 text-white/75 sm:p-5">{row.privilege}</div>
-                    <div className="border-l border-white/6 p-4 text-white/75 sm:p-5">{row.flotte}</div>
-                  </div>
-                ))}
               </div>
             </Reveal>
-
-            <div className="relative mt-16 space-y-8 sm:space-y-10 lg:mt-24 lg:space-y-0">
-              <div
-                aria-hidden
-                className="pointer-events-none absolute left-1/2 top-1/2 z-20 hidden size-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-kp-gold/35 bg-kp-bg font-serif text-sm font-medium text-kp-gold shadow-[0_0_30px_rgba(201,169,98,0.2)] lg:flex"
-              >
-                ou
-              </div>
-
-              {paths.map((path, i) => (
-                <Reveal key={path.id} from={path.reverse ? "right" : "left"} delayMs={i * 90}>
-                  <div className={i > 0 ? "space-y-6 sm:space-y-8" : undefined}>
-                    {i > 0 ? (
-                      <div
-                        aria-hidden
-                        className="mx-auto flex size-10 items-center justify-center rounded-full border border-kp-gold/30 bg-kp-surface font-serif text-xs font-medium text-kp-gold shadow-[0_0_24px_rgba(201,169,98,0.15)] lg:hidden"
-                      >
-                        ou
-                      </div>
-                    ) : null}
-                    <article
-                    className={`group relative overflow-hidden rounded-2xl border border-white/10 bg-kp-elevated/15 transition-all duration-500 hover:border-kp-gold/28 lg:mb-8 lg:last:mb-0 ${
-                      i > 0 ? "lg:mt-8" : ""
-                    }`}
-                  >
-                    <div
-                      className={`grid lg:grid-cols-2 lg:items-stretch ${
-                        path.reverse ? "lg:[&>*:first-child]:order-2" : ""
-                      }`}
-                    >
-                      <div className="relative aspect-16/10 overflow-hidden sm:aspect-2/1 lg:aspect-auto lg:min-h-[400px] xl:min-h-[460px]">
-                        <Image
-                          src={path.image}
-                          alt={path.alt}
-                          fill
-                          sizes="(max-width: 1024px) 100vw, 50vw"
-                          className="object-cover transition-transform duration-1000 group-hover:scale-[1.04]"
-                        />
-                        <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent lg:bg-linear-to-r lg:from-black/70 lg:via-black/25 lg:to-transparent" />
-                        <span className="absolute left-4 top-4 inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/50 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.24em] text-white/90 backdrop-blur-md sm:left-6 sm:top-6">
-                          <span className="size-1.5 rounded-full bg-kp-gold shadow-[0_0_8px_rgba(201,169,98,0.6)]" />
-                          {path.tag}
-                        </span>
-                      </div>
-
-                      <div className="flex flex-col justify-center p-7 sm:p-9 md:p-11 lg:p-14 xl:p-16">
-                        <h3 className="font-serif text-[clamp(1.5rem,3.5vw,2.25rem)] tracking-tight text-white">
-                          {path.title}
-                        </h3>
-                        <p className="mt-4 font-sans text-[14px] leading-relaxed text-white/60 sm:text-[15px] md:text-[16px]">
-                          {path.body}
-                        </p>
-                        <ul className="mt-8 flex flex-col gap-3 border-t border-white/8 pt-8">
-                          {path.bullets.map((bullet) => (
-                            <li
-                              key={bullet}
-                              className="flex items-start gap-3 font-sans text-[13px] text-white/75 sm:text-[14px]"
-                            >
-                              <svg
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                className="mt-0.5 size-4 shrink-0 text-kp-gold"
-                                aria-hidden
-                              >
-                                <path
-                                  d="M5 12l4 4L19 6"
-                                  stroke="currentColor"
-                                  strokeWidth="2"
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                />
-                              </svg>
-                              {bullet}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
-                  </article>
-                  </div>
-                </Reveal>
-              ))}
-            </div>
           </div>
         </section>
+        </div>
 
-        {/* FLOTTE ÉLITE */}
+        {/* ─── SECTION 2 : KPANDJI RENT ─── */}
+        <SectionChapter
+          part="02"
+          label="Investissement locatif"
+          title="Kpandji Rent"
+          description="Transformez votre véhicule premium en source de revenus passifs."
+          accent="emerald"
+        />
+        <div id="kpandji-rent" aria-label="Kpandji Rent" className="scroll-mt-28 md:scroll-mt-32">
         <section
           id="flotte-elite"
           aria-labelledby="flotte-heading"
@@ -1174,27 +1146,26 @@ export function PrestigePrivilege() {
           <div className={sectionPad}>
             <Reveal from="bottom">
               <SectionIntro
-                label="Flotte élite · Rent"
+                centered
+                label="Offre exclusive · Kpandji Rent"
                 title="Votre véhicule de luxe devient un actif rentable"
                 titleId="flotte-heading"
-                description="Investissez aujourd’hui, encaissez demain. Ne laissez pas votre véhicule perdre de la valeur au garage."
+                description="Vous avez fait le choix de l’excellence en acquérant un véhicule chez Kpandji Automobiles. Que vous résidiez en Côte d’Ivoire ou à l’étranger, transformez votre investissement en source de revenus passifs."
               />
             </Reveal>
 
-            <div className="mt-16 grid gap-8 lg:mt-24 lg:grid-cols-[1fr_340px] lg:items-start lg:gap-12 xl:grid-cols-[1fr_380px]">
-              <div className="grid gap-4 sm:grid-cols-2 sm:gap-5">
-                {fleetBenefits.map((item, i) => (
-                  <Reveal key={item.title} from="bottom" delayMs={i * 50}>
-                    <article className="rounded-2xl border border-white/8 bg-kp-elevated/15 p-6 transition-colors duration-500 hover:border-kp-gold/25 sm:p-7">
-                      <h3 className="font-serif text-lg tracking-tight text-white sm:text-xl">{item.title}</h3>
-                      <p className="mt-2 font-sans text-[14px] leading-relaxed text-white/55">{item.body}</p>
-                    </article>
-                  </Reveal>
-                ))}
-              </div>
+            <Reveal from="bottom" delayMs={60}>
+              <p className={`mx-auto mt-10 max-w-3xl text-center ${bodyText}`}>
+                <strong className="text-white/80">Le concept : intégrez notre flotte élite.</strong>{" "}
+                Ne laissez pas votre véhicule perdre de la valeur au garage. Profitez de notre réseau
+                pour rentabiliser votre bien en toute sécurité.
+              </p>
+            </Reveal>
 
-              <Reveal from="right" delayMs={100}>
-                <aside className="relative overflow-hidden rounded-2xl border border-kp-gold/25 bg-linear-to-br from-kp-gold/15 via-kp-elevated/40 to-kp-elevated/20 p-8 shadow-[0_28px_90px_-42px_rgba(201,169,98,0.35)] sm:p-10">
+            <div className="mt-12 flex flex-col gap-8 lg:mt-16 lg:grid lg:grid-cols-[1fr_340px] lg:items-start lg:gap-12 xl:grid-cols-[1fr_380px]">
+              {/* Revenue card — first on mobile for immediate impact */}
+              <Reveal from="bottom" delayMs={80} className="order-first lg:order-last lg:col-start-2 lg:row-span-2">
+                <aside className="relative overflow-hidden rounded-2xl border border-kp-gold/25 bg-linear-to-br from-kp-gold/15 via-kp-elevated/40 to-kp-elevated/20 p-6 shadow-[0_28px_90px_-42px_rgba(201,169,98,0.35)] sm:p-8 lg:sticky lg:top-32 lg:p-10">
                   <div
                     aria-hidden
                     className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-kp-gold/60 to-transparent"
@@ -1220,7 +1191,7 @@ export function PrestigePrivilege() {
                     href={WHATSAPP_FLOTTE}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`${btnPrimary} mt-8 w-full`}
+                    className={`${btnGold} mt-8`}
                   >
                     <span>Simuler mes revenus</span>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="size-3.5" aria-hidden>
@@ -1229,73 +1200,108 @@ export function PrestigePrivilege() {
                   </a>
                 </aside>
               </Reveal>
+
+              <div className="order-last space-y-8 lg:order-first lg:col-start-1">
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 xl:gap-5">
+                  {fleetBenefits.map((item, i) => (
+                    <Reveal key={item.title} from="bottom" delayMs={i * 50}>
+                      <article className="group h-full rounded-2xl border border-white/8 bg-kp-elevated/15 p-6 transition-all duration-500 hover:-translate-y-0.5 hover:border-kp-gold/25 sm:p-7">
+                        <span className="font-serif text-2xl text-kp-gold/25 transition-colors group-hover:text-kp-gold/40">
+                          {String(i + 1).padStart(2, "0")}
+                        </span>
+                        <h3 className="mt-3 font-serif text-lg tracking-tight text-white sm:text-xl">{item.title}</h3>
+                        <p className="mt-2 font-sans text-[14px] leading-relaxed text-white/55">{item.body}</p>
+                      </article>
+                    </Reveal>
+                  ))}
+                </div>
+
+                <Reveal from="bottom" delayMs={120}>
+                  <div>
+                    <p className={eyebrow}>
+                      <span aria-hidden className="h-px w-8 bg-kp-gold/60" />
+                      Votre rentabilité garantie
+                    </p>
+                    <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-3 xl:gap-5">
+                      {fleetRentability.map((item, i) => (
+                        <article
+                          key={item.title}
+                          className="rounded-2xl border border-white/8 bg-kp-elevated/15 p-6 sm:p-7"
+                        >
+                          <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-kp-gold/70">
+                            {String(i + 1).padStart(2, "0")}
+                          </span>
+                          <h3 className="mt-2 font-serif text-lg tracking-tight text-white">{item.title}</h3>
+                          <p className="mt-2 font-sans text-[14px] leading-relaxed text-white/55">{item.body}</p>
+                        </article>
+                      ))}
+                    </div>
+                  </div>
+                </Reveal>
+
+                <Reveal from="bottom" delayMs={160}>
+                  <p className={`${bodyText} rounded-2xl border border-white/8 bg-kp-elevated/10 p-6 sm:p-7`}>
+                    En rejoignant la flotte Kpandji, vous participez à l’essor économique du continent
+                    tout en faisant fructifier votre patrimoine avec le partenaire de référence à Abidjan.
+                  </p>
+                </Reveal>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* CTA */}
+        {/* RENT CTA */}
         <section
-          id="contact-prestige"
-          aria-labelledby="prestige-cta"
+          id="rent-cta"
+          aria-labelledby="rent-cta-heading"
           className="relative isolate overflow-hidden bg-kp-bg pb-12 md:pb-16"
         >
           <div className="absolute inset-0 -z-10">
-            <Image src={CTA_BACKDROP} alt="" fill sizes="100vw" className="object-cover object-center opacity-25" />
+            <Image src={PATH_RENTAL_IMAGE} alt="" fill sizes="100vw" className="object-cover object-center opacity-20" />
           </div>
-          <div className="absolute inset-0 -z-10 bg-linear-to-b from-kp-bg via-kp-bg/90 to-kp-bg" />
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(900px_520px_at_50%_40%,rgba(201,169,98,0.16),transparent_60%)]"
-          />
+          <div className="absolute inset-0 -z-10 bg-linear-to-b from-kp-bg via-kp-bg/92 to-kp-bg" />
 
-          <div className={`${sectionPad} pb-28! sm:pb-32!`}>
+          <div className={`${sectionPad} pb-20! sm:pb-24!`}>
             <Reveal from="bottom">
-              <div className="relative overflow-hidden rounded-3xl border border-kp-gold/20 bg-black/40 p-10 shadow-[0_40px_120px_-48px_rgba(0,0,0,0.95),inset_0_1px_0_rgba(255,255,255,0.06)] ring-1 ring-white/8 backdrop-blur-xl sm:p-12 md:p-16 lg:p-20">
-                <div
-                  aria-hidden
-                  className="pointer-events-none absolute inset-0 bg-[radial-gradient(600px_320px_at_50%_0%,rgba(201,169,98,0.12),transparent_70%)]"
-                />
-                <div
-                  aria-hidden
-                  className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-kp-gold/50 to-transparent"
-                />
-
+              <div className="relative overflow-hidden rounded-3xl border border-kp-gold/20 bg-black/40 p-10 shadow-[0_40px_120px_-48px_rgba(0,0,0,0.95)] backdrop-blur-xl sm:p-12 md:p-16">
                 <div className="relative text-center">
-                  <p className={`${eyebrow} justify-center`}>Prêt(e) à prendre le volant ?</p>
+                  <p className={`${eyebrow} justify-center`}>Kpandji Rent</p>
                   <h2
-                    id="prestige-cta"
-                    className="mt-5 font-serif text-[clamp(1.85rem,4.5vw,3.25rem)] font-normal leading-[1.08] tracking-tight text-white"
+                    id="rent-cta-heading"
+                    className="mt-5 font-serif text-[clamp(1.85rem,4.5vw,3rem)] font-normal leading-[1.08] tracking-tight text-white"
                   >
-                    Faites le choix de la qualité
-                    <span className="block bg-linear-to-r from-amber-200 via-kp-gold to-white/85 bg-clip-text text-transparent">
-                      et de la sérénité
-                    </span>
+                    Faites passer votre investissement à la vitesse supérieure
                   </h2>
-                  <p className="mx-auto mt-6 max-w-2xl text-pretty text-[15px] leading-relaxed text-white/65 md:text-[16px]">
-                    Recevez notre brochure détaillée, choisissez votre plan de paiement de 6 à 24 mois
-                    et découvrez l’option Flotte Élite. Notre équipe vous accompagne depuis la diaspora ou en Côte d’Ivoire.
+                  <p className="mx-auto mt-6 max-w-2xl text-pretty text-[15px] leading-relaxed text-white/65">
+                    Intéressé(e) ? Répondez « FLOTTE » pour recevoir les modalités d’intégration et une
+                    simulation des revenus locatifs selon votre modèle.
                   </p>
-
-                 
-
-                  <div className="mt-12 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-[10px] uppercase tracking-[0.28em] text-white/38">
-                    <span>Paiement flexible</span>
-                    <span aria-hidden className="size-1 rounded-full bg-kp-gold/40" />
-                    <span>Conciergerie diaspora</span>
-                    <span aria-hidden className="size-1 rounded-full bg-kp-gold/40" />
-                    <span>Flotte élite 70/30</span>
-                  </div>
+                  <p className="mt-4 font-serif text-lg text-white/75">
+                    Kpandji Automobiles : investissez aujourd’hui, encaissez demain.
+                  </p>
+                  <a
+                    href={WHATSAPP_FLOTTE}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`${btnGold} mx-auto mt-10`}
+                  >
+                    <span>WhatsApp · FLOTTE</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="size-3.5" aria-hidden>
+                      <path d="M5 12h14M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </a>
                 </div>
               </div>
             </Reveal>
           </div>
         </section>
+        </div>
 
-        {/* CONTACT */}
+        {/* COORDONNÉES & CONTACTS */}
         <section
           id="contact"
           aria-labelledby="contact-heading"
-          className="relative isolate overflow-hidden border-t border-white/8 bg-kp-surface pb-16 md:pb-20"
+          className="relative isolate scroll-mt-28 overflow-hidden border-t border-white/8 bg-kp-surface pb-12 md:scroll-mt-32 md:pb-20"
         >
           <div
             aria-hidden
@@ -1306,55 +1312,96 @@ export function PrestigePrivilege() {
               <SectionIntro
                 centered
                 label="Coordonnées & contacts"
-                title="Votre partenaire de confiance en Afrique"
+                title="Retrouvez Kpandji Automobiles"
                 titleId="contact-heading"
-                description="Kpandji Automobiles — la force d’une racine, l’élan d’une nation."
+                description="Kpandji Automobiles : la force d’une racine, l’élan d’une nation."
               />
             </Reveal>
 
-            <div className="mt-16 grid gap-4 sm:grid-cols-2 lg:mt-20 lg:grid-cols-3 lg:gap-5">
-              {contacts.map((item, i) => (
-                <Reveal key={item.label} from="bottom" delayMs={i * 40}>
-                  <div className={`${cardClass} p-5 sm:p-6`}>
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-kp-gold/75">
-                      {item.label}
-                    </p>
-                    {"href" in item && item.href ? (
-                      <a
-                        href={item.href}
-                        target={item.href.startsWith("http") ? "_blank" : undefined}
-                        rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                        className="mt-2 block text-[14px] leading-relaxed text-white/80 transition-colors hover:text-kp-gold sm:text-[15px]"
-                      >
-                        {item.value}
-                        {"note" in item && item.note ? (
-                          <span className="ml-2 text-[11px] uppercase tracking-[0.16em] text-kp-gold/80">
-                            · {item.note}
-                          </span>
-                        ) : null}
-                      </a>
-                    ) : (
-                      <p className="mt-2 text-[14px] leading-relaxed text-white/80 sm:text-[15px]">{item.value}</p>
-                    )}
+            <div className="mt-12 grid gap-6 lg:mt-16 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-10">
+              <Reveal from="left">
+                <div className="relative overflow-hidden rounded-2xl border border-kp-gold/20 bg-linear-to-br from-kp-gold/10 via-kp-elevated/30 to-kp-elevated/10 p-7 sm:p-9 lg:sticky lg:top-32">
+                  <div
+                    aria-hidden
+                    className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-kp-gold/50 to-transparent"
+                  />
+                  <p className="text-3xl" aria-hidden>
+                    📍
+                  </p>
+                  <p className="mt-4 text-[10px] font-semibold uppercase tracking-[0.24em] text-kp-gold/85">
+                    Siège social
+                  </p>
+                  <p className="mt-2 font-serif text-xl leading-snug text-white sm:text-2xl">
+                    Abidjan, Riviera Palmeraie
+                  </p>
+                  <p className="mt-1 text-[14px] text-white/55">Côte d&apos;Ivoire</p>
+                  <div className="mt-8 space-y-3 border-t border-white/10 pt-8">
+                    <a
+                      href="tel:+2252723279567"
+                      className="flex items-center gap-3 rounded-xl border border-white/8 bg-black/20 px-4 py-3 text-[14px] text-white/80 transition hover:border-kp-gold/30 hover:text-kp-gold"
+                    >
+                      <span aria-hidden>📞</span>
+                      +225 27 23 27 95 67
+                    </a>
+                    <a
+                      href="mailto:contact@kpandji.com"
+                      className="flex items-center gap-3 rounded-xl border border-white/8 bg-black/20 px-4 py-3 text-[14px] text-white/80 transition hover:border-kp-gold/30 hover:text-kp-gold"
+                    >
+                      <span aria-hidden>📧</span>
+                      contact@kpandji.com
+                    </a>
+                    <a
+                      href="https://www.kpandjiautomobiles.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-3 rounded-xl border border-white/8 bg-black/20 px-4 py-3 text-[14px] text-white/80 transition hover:border-kp-gold/30 hover:text-kp-gold"
+                    >
+                      <span aria-hidden>🌐</span>
+                      www.kpandjiautomobiles.com
+                    </a>
                   </div>
-                </Reveal>
-              ))}
+                  <p className="mt-8 font-serif text-base italic leading-relaxed text-white/70">
+                    La force d&apos;une racine, l&apos;élan d&apos;une nation.
+                  </p>
+                </div>
+              </Reveal>
+
+              <div className="grid gap-4 sm:grid-cols-2">
+                {contacts.slice(1).map((item, i) => (
+                  <Reveal key={item.label} from="bottom" delayMs={i * 40}>
+                    <div className={`${cardClass} flex h-full flex-col p-5 sm:p-6`}>
+                      <span className="text-xl" aria-hidden>
+                        {item.icon}
+                      </span>
+                      <p className="mt-3 text-[10px] font-semibold uppercase tracking-[0.22em] text-kp-gold/75">
+                        {item.label}
+                      </p>
+                      {"href" in item && item.href ? (
+                        <a
+                          href={item.href}
+                          target={item.href.startsWith("http") ? "_blank" : undefined}
+                          rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                          className="mt-2 block flex-1 text-[14px] leading-relaxed text-white/80 transition-colors hover:text-kp-gold sm:text-[15px]"
+                        >
+                          {item.value}
+                          {"note" in item && item.note ? (
+                            <span className="mt-1 block text-[11px] uppercase tracking-[0.16em] text-kp-gold/80">
+                              {item.note}
+                            </span>
+                          ) : null}
+                        </a>
+                      ) : (
+                        <p className="mt-2 flex-1 text-[14px] leading-relaxed text-white/80 sm:text-[15px]">
+                          {item.value}
+                        </p>
+                      )}
+                    </div>
+                  </Reveal>
+                ))}
+              </div>
             </div>
 
-            <Reveal from="bottom" delayMs={80}>
-              <div className={`${cardClass} mt-8 p-6 sm:p-8`}>
-                <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-kp-gold/75">
-                  Réseaux sociaux
-                </p>
-                <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-[14px] text-white/65">
-                  <span>Facebook · Kpandji</span>
-                  <span>Instagram · Kpandji_Auto.ci</span>
-                  <span>Twitter · Kpandji Automobiles</span>
-                  <span>TikTok · Kpandji Automobiles</span>
-                  <span>LinkedIn · Kpandji Automobiles</span>
-                </div>
-              </div>
-            </Reveal>
+            
           </div>
         </section>
       </main>

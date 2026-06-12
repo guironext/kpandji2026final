@@ -7,7 +7,7 @@ const links = [
   { href: "#paiement", label: "Paiement" },
   { href: "#conciergerie", label: "Conciergerie" },
   { href: "#parcours", label: "Parcours" },
-  { href: "#options", label: "Options" },
+  { href: "#kpandji-rent", label: "Rent" },
   { href: "#flotte-elite", label: "Flotte" },
   { href: "#contact", label: "Contact" },
 ] as const;
@@ -45,9 +45,9 @@ export function PrivilegeSectionNav() {
         visible ? "translate-y-0 opacity-100" : "pointer-events-none -translate-y-2 opacity-0"
       }`}
     >
-      <div className="mx-auto flex max-w-[1680px] items-center gap-1 overflow-x-auto px-4 py-2.5 sm:gap-2 sm:px-8 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        <span className="mr-2 hidden shrink-0 text-[9px] font-semibold uppercase tracking-[0.28em] text-kp-gold/80 sm:inline">
-          Privilège
+      <div className="mx-auto flex max-w-[1680px] items-center gap-1.5 overflow-x-auto px-3 py-3 sm:gap-2 sm:px-8 sm:py-2.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <span className="mr-1 hidden shrink-0 text-[9px] font-semibold uppercase tracking-[0.28em] text-kp-gold/80 sm:mr-2 sm:inline">
+          Nav
         </span>
         {links.map((link) => {
           const id = link.href.slice(1);
@@ -56,7 +56,7 @@ export function PrivilegeSectionNav() {
             <a
               key={link.href}
               href={link.href}
-              className={`shrink-0 rounded-full px-3.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] transition-all duration-300 sm:px-4 sm:py-2 sm:text-[11px] ${
+              className={`shrink-0 rounded-full px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.16em] transition-all duration-300 sm:px-4 sm:py-2 sm:text-[11px] sm:tracking-[0.18em] ${
                 isActive
                   ? "bg-kp-gold/15 text-kp-gold ring-1 ring-kp-gold/35"
                   : "text-white/45 hover:bg-white/5 hover:text-white/75"
