@@ -5,13 +5,14 @@ import { KpAppShell } from "@/components/kp/KpAppShell";
 import { KpClerkProvider } from "@/components/providers/KpClerkProvider";
 
 const dmSans = DM_Sans({
-	subsets: ["latin"],
+	subsets: ["latin", "latin-ext"],
 	variable: "--font-dm-sans",
 	display: "swap",
+	weight: ["400", "500", "600", "700"],
 });
 
 const cormorant = Cormorant({
-	subsets: ["latin"],
+	subsets: ["latin", "latin-ext"],
 	variable: "--font-cormorant",
 	display: "swap",
 	weight: ["400", "500", "600"],

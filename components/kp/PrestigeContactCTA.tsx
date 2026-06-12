@@ -166,7 +166,7 @@ export function PrestigeContactCTA() {
             <div className="flex items-start justify-between gap-4 border-b border-white/10 px-6 py-5 sm:px-10 sm:py-6 lg:px-12">
               <div>
                 <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.28em] text-kp-gold/85">
-                  Programme Prestige
+                  Kpandji Privilège
                 </p>
                 <h2 id="prestige-contact-title" className="mt-1 font-serif text-2xl text-white">
                   Nous contacter

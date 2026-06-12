@@ -1,0 +1,72 @@
+"use client";
+
+import { useEffect, useState } from "react";
+
+const links = [
+  { href: "#modeles", label: "Modèles" },
+  { href: "#paiement", label: "Paiement" },
+  { href: "#conciergerie", label: "Conciergerie" },
+  { href: "#parcours", label: "Parcours" },
+  { href: "#options", label: "Options" },
+  { href: "#flotte-elite", label: "Flotte" },
+  { href: "#contact", label: "Contact" },
+] as const;
+
+export function PrivilegeSectionNav() {
+  const [active, setActive] = useState("");
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const sectionIds = links.map((l) => l.href.slice(1));
+
+    const onScroll = () => {
+      setVisible(window.scrollY > window.innerHeight * 0.55);
+
+      const offset = 160;
+      let current = "";
+      for (const id of sectionIds) {
+        const el = document.getElementById(id);
+        if (el && el.getBoundingClientRect().top <= offset) {
+          current = id;
+        }
+      }
+      setActive(current);
+    };
+
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  return (
+    <nav
+      aria-label="Navigation Kpandji Privilège"
+      className={`fixed inset-x-0 top-[72px] z-40 border-b border-white/8 bg-kp-bg/80 font-sans backdrop-blur-xl transition-all duration-500 md:top-[88px] ${
+        visible ? "translate-y-0 opacity-100" : "pointer-events-none -translate-y-2 opacity-0"
+      }`}
+    >
+      <div className="mx-auto flex max-w-[1680px] items-center gap-1 overflow-x-auto px-4 py-2.5 sm:gap-2 sm:px-8 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <span className="mr-2 hidden shrink-0 text-[9px] font-semibold uppercase tracking-[0.28em] text-kp-gold/80 sm:inline">
+          Privilège
+        </span>
+        {links.map((link) => {
+          const id = link.href.slice(1);
+          const isActive = active === id;
+          return (
+            <a
+              key={link.href}
+              href={link.href}
+              className={`shrink-0 rounded-full px-3.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] transition-all duration-300 sm:px-4 sm:py-2 sm:text-[11px] ${
+                isActive
+                  ? "bg-kp-gold/15 text-kp-gold ring-1 ring-kp-gold/35"
+                  : "text-white/45 hover:bg-white/5 hover:text-white/75"
+              }`}
+            >
+              {link.label}
+            </a>
+          );
+        })}
+      </div>
+    </nav>
+  );
+}

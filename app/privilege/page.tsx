@@ -2,14 +2,14 @@ import type { Metadata } from "next";
 import { PrestigePrivilege } from "@/components/kp/PrestigePrivilege";
 
 export const metadata: Metadata = {
-  title: "Prestige — Programme diaspora — KPANDJI AUTOMOBILES",
+  title: "Kpandji Privilège — Programme diaspora & investissement — KPANDJI AUTOMOBILES",
   description:
-    "Programme Prestige : achetez votre véhicule KPANDJI depuis l’étranger, récupérez-le à votre arrivée en Côte d’Ivoire ou confiez sa location à KPANDJI et percevez les revenus.",
+    "Offre exclusive Kpandji Privilège : acquérez votre véhicule neuf depuis la diaspora ou en Côte d'Ivoire. Paiement flexible, conciergerie, flotte élite et revenus locatifs.",
   alternates: { canonical: "/privilege" },
   openGraph: {
-    title: "Prestige — KPANDJI AUTOMOBILES",
+    title: "Kpandji Privilège — KPANDJI AUTOMOBILES",
     description:
-      "La diaspora au volant : investir dans un véhicule KPANDJI depuis l’étranger, avec deux options d’usage à distance.",
+      "Véhicule premium, paiement échelonné 6 à 24 mois, gardiennage diaspora et option flotte élite rentable.",
     type: "website",
     locale: "fr_FR",
   },
