@@ -172,13 +172,7 @@ const contacts = [
   },
 ] as const;
 
-const socialLinks = [
-  { label: "Facebook", handle: "Kpandji" },
-  { label: "Instagram", handle: "Kpandji_Auto.ci" },
-  { label: "Twitter", handle: "Kpandji Automobiles" },
-  { label: "TikTok", handle: "Kpandji Automobiles" },
-  { label: "LinkedIn", handle: "Kpandji Automobiles" },
-] as const;
+
 
 const benefits = [
   {

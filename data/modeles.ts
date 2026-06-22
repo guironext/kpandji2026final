@@ -74,7 +74,7 @@ export const MODELES: Modele[] = [
 	{
 		id: "djetranplus",
 		name: "DJETRAN PLUS",
-		brochureHref: "/fiche_djetran.pdf",
+		brochureHref: "/fiche_tech/djetran_plus.pdf",
 		description:
 			"Essence : 2.0GDI + boîte automatique 8 vitesses (Puissance : 145 kW / 197 ch, Couple : 360 Nm) Systèmes d'assistance à la conduite intelligents de niveau 2 : régulateur de vitesse adaptatif, alerte de franchissement de ligne, avertisseur de collision frontale, vision panoramique à 360°, allumage automatique des phares, essuie-glaces à induction",
 		characteristics: [
@@ -149,7 +149,7 @@ export const MODELES: Modele[] = [
 	{
 		id: "djetran",
 		name: "DJETRAN",
-		brochureHref: "/fiche_djetran.pdf",
+		brochureHref: "/fiche_tech/djetran_bva.pdf",
 		description:
 			"Turbo Diesel et essence 2,3L, développant 163 chevaux  avec un couple 340 Nm, offran puissance et souplesse pour la route comme le tout-terrain. Cockpit intelligent, caméra 360°, contrôle électronique de stabilité et ABS + EBD. Se distingue par sa puissance et sa transmission intégrale. Il offre aussi un haut niveau de sécurité et de confort technologique.",
 		characteristics: [
@@ -224,7 +224,7 @@ export const MODELES: Modele[] = [
 	{
 		id: "lathaye",
 		name: "LATHAYE",
-		brochureHref: "/fiche_lath.pdf",	
+		brochureHref: "/fiche_tech/lathaye_pro.pdf",	
 		description:
 			"Avec un moteur 2.0T GDI Turbo compressé de 165 Kw. Transmission automatique CVT à 8 rapports pour une vitesse maximale de 210 km/h. C'est un véritable bilide qui redéfinit la performance à chaque voyage.",
 		characteristics: [
