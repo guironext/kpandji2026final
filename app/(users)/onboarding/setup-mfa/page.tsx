@@ -3,6 +3,7 @@
 import { TaskSetupMFA } from "@clerk/nextjs";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
+import { ClerkMounted } from "@/components/kp/ClerkMounted";
 import { kpClerkAppearance } from "@/components/kp/clerk-appearance";
 
 function SetupMfaFlow() {
@@ -26,10 +27,18 @@ function SetupMfaFlow() {
       </p>
 
       <div className="kp-clerk-signin mt-7">
-        <TaskSetupMFA
-          appearance={kpClerkAppearance}
-          redirectUrlComplete={redirectUrlComplete}
-        />
+        <ClerkMounted
+          fallback={
+            <p className="font-sans text-sm text-white/45">
+              Chargement de la sécurité…
+            </p>
+          }
+        >
+          <TaskSetupMFA
+            appearance={kpClerkAppearance}
+            redirectUrlComplete={redirectUrlComplete}
+          />
+        </ClerkMounted>
       </div>
     </main>
   );

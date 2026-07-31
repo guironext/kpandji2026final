@@ -171,8 +171,11 @@ const PHONE_CONTACTS = [
 ] as const;
 
 const RESOURCE_LINKS = [
-  ["Fiche technique", "/fiche_djetran.pdf"],
-  ["Brochure", "/Lathaye.pdf"],
+  ["Fiche technique Djetran auto", "/djetranbva.pdf"],
+  ["Fiche technique Djetran manuel", "/djetranbvm.pdf"],
+  ["Fiche technique Djetran Plus", "/djetranplus.pdf"],
+  ["Fiche technique Lathaye", "/lathaye.pdf"],
+  ["Fiche technique Souralai", "/souralai.pdf"],
 ] as const;
 
 export function KpFooter() {

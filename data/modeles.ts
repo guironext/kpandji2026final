@@ -74,7 +74,7 @@ export const MODELES: Modele[] = [
 	{
 		id: "djetranplus",
 		name: "DJETRAN PLUS",
-		brochureHref: "/fiche_tech/djetran_plus.pdf",
+		brochureHref: "/djetranplus.pdf",
 		description:
 			"Essence : 2.0GDI + boîte automatique 8 vitesses (Puissance : 145 kW / 197 ch, Couple : 360 Nm) Systèmes d'assistance à la conduite intelligents de niveau 2 : régulateur de vitesse adaptatif, alerte de franchissement de ligne, avertisseur de collision frontale, vision panoramique à 360°, allumage automatique des phares, essuie-glaces à induction",
 		characteristics: [
@@ -84,11 +84,11 @@ export const MODELES: Modele[] = [
 			"vision panoramique à 360°, allumage automatique des phares",
 		],
 		media: {
-			topImage: "/models/plus/pic1.jpg",
+			topImage: "/models/plus/pic4.jpg",
 			topVideo: "/models/plus/djetplus.mp4",
 			bottomLeftImage: "/models/plus/plint2.png",
 			bottomRightImage: "/models/plus/pic3.png",
-			slideImage: "/derniers/djetranplus.png",
+			slideImage: "/derniers/djetranplus1.png",
 			bgSlideImage: "/models/plus/back.jpg",
 		},
 		extern: {
@@ -149,7 +149,7 @@ export const MODELES: Modele[] = [
 	{
 		id: "djetran",
 		name: "DJETRAN",
-		brochureHref: "/fiche_tech/djetran_bva.pdf",
+		brochureHref: "/djetranbva.pdf",
 		description:
 			"Turbo Diesel et essence 2,3L, développant 163 chevaux  avec un couple 340 Nm, offran puissance et souplesse pour la route comme le tout-terrain. Cockpit intelligent, caméra 360°, contrôle électronique de stabilité et ABS + EBD. Se distingue par sa puissance et sa transmission intégrale. Il offre aussi un haut niveau de sécurité et de confort technologique.",
 		characteristics: [
@@ -161,7 +161,7 @@ export const MODELES: Modele[] = [
 		media: {
 			topImage: "/models/djet/int2.jpg",
 			topVideo: "/video.mp4",
-			bottomLeftImage: "/models/djet/front.jpg",
+			bottomLeftImage: "/models/djet/front1.jpg",
 			bottomRightImage: "/models/djet/back.jpg",
 			slideImage: "/models/djet/slide1.png",
 			bgSlideImage: "/models/djet/bgslide2.jpg",
@@ -224,7 +224,7 @@ export const MODELES: Modele[] = [
 	{
 		id: "lathaye",
 		name: "LATHAYE",
-		brochureHref: "/fiche_tech/lathaye_pro.pdf",	
+		brochureHref: "/lathaye.pdf",	
 		description:
 			"Avec un moteur 2.0T GDI Turbo compressé de 165 Kw. Transmission automatique CVT à 8 rapports pour une vitesse maximale de 210 km/h. C'est un véritable bilide qui redéfinit la performance à chaque voyage.",
 		characteristics: [
@@ -278,17 +278,17 @@ export const MODELES: Modele[] = [
 		},
 		back: {
 			desc1: {
-				ext1: "/models/desc/djetext1.jpg",
+				ext1: "/models/desc/lat/bak1.jpg",
 				descDetail1:
 					"Conçu aussi bien pour un usage professionnel que personnel, ce véhicule se distingue par des dimensions supérieures à celles des modèles concurrents de sa catégorie, offrant ainsi le plus grand volume de chargement arrière. Son habitacle spacieux garantit un confort de conduite optimal, tandis que la capote modulable permet de le transformer en SUV selon vos besoins. Les sièges arrière inclinables viennent renforcer cette sensation de confort et de flexibilité.",
 			},
 			desc2: {
-				ext2: "/models/desc/djetext2.jpg",
+				ext2: "/models/desc/lat/bak2.jpg",
 				descDetail2:
 					"Grâce à un système avancé de surveillance de la pression et de la température des pneus, vous roulez en toute sérénité. Son design captivant allie élégance raffinée et robustesse, avec des finitions soignées et des matériaux de haute qualité qui soulignent son caractère premium.",
 			},
 			desc3: {
-				ext3: "/models/desc/pic2.jpg",
+				ext3: "/models/desc/lat/bak3.jpg",
 				descDetail3:
 					"Pensé pour l’aventure comme pour le travail, ce véhicule offre une excellente capacité de franchissement ainsi qu’une grande capacité de chargement. Son châssis tout-terrain haute performance, développé selon les normes internationales les plus strictes, assure solidité et fiabilité, soutenues par une garantie de 5 ans ou 150 000 km. Sa structure élargie et renforcée, associée à une direction précise, garantit une maîtrise optimale sur tous les terrains.Côté sécurité et confort, rien n’a été laissé au hasard : équipé de série des systèmes ESC et TCS, ainsi que de l’assistance au freinage (EBA) et au démarrage en côte (HAC), il offre une protection maximale pour une conduite à la fois dynamique et sécurisée.",
 			},

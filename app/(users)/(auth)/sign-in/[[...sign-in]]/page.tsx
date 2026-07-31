@@ -3,6 +3,7 @@
 import { SignIn, useAuth } from "@clerk/nextjs";
 import { Suspense, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
+import { ClerkMounted } from "@/components/kp/ClerkMounted";
 import { kpClerkAppearance } from "@/components/kp/clerk-appearance";
 import { useAuthSync } from "@/components/kp/useAuthSync";
 
@@ -34,14 +35,22 @@ function SignInFlow() {
         </p>
       ) : (
         <div className="kp-clerk-signin mt-7">
-          <SignIn
-            appearance={kpClerkAppearance}
-            routing="path"
-            path="/sign-in"
-            signUpUrl="/sign-up"
-            fallbackRedirectUrl={returnTo}
-            forceRedirectUrl={returnTo}
-          />
+          <ClerkMounted
+            fallback={
+              <p className="font-sans text-sm text-white/45">
+                Chargement de la connexion…
+              </p>
+            }
+          >
+            <SignIn
+              appearance={kpClerkAppearance}
+              routing="path"
+              path="/sign-in"
+              signUpUrl="/sign-up"
+              fallbackRedirectUrl={returnTo}
+              forceRedirectUrl={returnTo}
+            />
+          </ClerkMounted>
         </div>
       )}
     </main>

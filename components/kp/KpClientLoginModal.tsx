@@ -4,17 +4,19 @@ import { SignIn, useAuth } from "@clerk/nextjs";
 import Image from "next/image";
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import { motion, useReducedMotion } from "framer-motion";
+import { ClerkMounted } from "@/components/kp/ClerkMounted";
 import { kpClerkAppearance } from "@/components/kp/clerk-appearance";
 import { useAuthSync } from "@/components/kp/useAuthSync";
 import { useClerkAuthLinkInterceptor } from "@/components/kp/useClerkAuthLinkInterceptor";
+import { useClerkUiWarmup } from "@/components/providers/useClerkUiWarmup";
 
 type KpClientLoginModalProps = {
   open: boolean;
   onClose: () => void;
   onSwitchToSignup?: () => void;
   /**
-   * When true, the Clerk <SignIn/> widget is mounted (but hidden) so it's fully
-   * initialized before the user opens the modal — making the open feel instant.
+   * When true, warm Clerk UI chunks (do not mount <SignIn/> yet — mounting
+   * starts Clerk's 10s renderer timer and races Turbopack on slow disks).
    */
   prefetch?: boolean;
 };
@@ -29,9 +31,9 @@ export function KpClientLoginModal({
   const reduceMotion = useReducedMotion();
   const easeLux = [0.22, 1, 0.36, 1] as const;
   const { isLoaded, isSignedIn } = useAuth();
-  const active = open || prefetch;
 
-  useAuthSync(active && isLoaded && isSignedIn);
+  useClerkUiWarmup(prefetch || open);
+  useAuthSync(open && isLoaded && isSignedIn);
 
   const loginAppearance = useMemo(
     () => ({
@@ -77,25 +79,21 @@ export function KpClientLoginModal({
     return () => window.clearTimeout(t);
   }, [open]);
 
-  if (!open && !prefetch) return null;
+  if (!open) return null;
 
   return (
     <div
-      className={`fixed inset-0 z-80 flex items-center justify-center p-4 sm:p-6 ${
-        open ? "" : "pointer-events-none"
-      }`}
+      className="fixed inset-0 z-80 flex items-center justify-center p-4 sm:p-6"
       role="dialog"
       aria-modal="true"
       aria-labelledby="kp-client-login-title"
-      aria-hidden={!open}
       onClick={handleBackdropClick}
-      {...(!open ? { inert: true } : {})}
     >
       <motion.div
         className="absolute inset-0 bg-black/82 backdrop-blur-md"
         aria-hidden
         initial={false}
-        animate={{ opacity: open ? 1 : 0 }}
+        animate={{ opacity: 1 }}
         transition={{ duration: reduceMotion ? 0 : 0.15, ease: "easeOut" }}
       />
 
@@ -104,14 +102,8 @@ export function KpClientLoginModal({
         tabIndex={-1}
         className="relative z-10 w-full max-w-md overflow-hidden rounded-sm border border-white/12 bg-[#080808] shadow-[0_32px_100px_rgba(0,0,0,0.65)] outline-none"
         onClick={(e) => e.stopPropagation()}
-        initial={false}
-        animate={
-          open
-            ? { opacity: 1, scale: 1, y: 0 }
-            : reduceMotion
-              ? { opacity: 0 }
-              : { opacity: 0, scale: 0.96, y: 8 }
-        }
+        initial={reduceMotion ? false : { opacity: 0, scale: 0.96, y: 8 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ duration: reduceMotion ? 0 : 0.18, ease: easeLux }}
       >
         <div className="relative flex items-start justify-between gap-4 overflow-hidden border-b border-white/10 px-6 py-8 sm:px-8">
@@ -166,19 +158,28 @@ export function KpClientLoginModal({
         </div>
 
         <div className="relative kp-clerk-signin px-6 py-6 sm:px-8 sm:py-7">
-          {isLoaded && isSignedIn && open ? (
+          {isLoaded && isSignedIn ? (
             <p className="font-sans text-sm text-white/50">
               Synchronisation de votre compte…
             </p>
           ) : (
-            <SignIn
-              appearance={loginAppearance}
-              routing="hash"
-              signInUrl="/?clientLogin=1"
-              signUpUrl="/sign-up"
-              fallbackRedirectUrl={returnTo}
-              forceRedirectUrl={returnTo}
-            />
+            <ClerkMounted
+              active={open}
+              fallback={
+                <p className="font-sans text-sm text-white/45">
+                  Chargement de la connexion…
+                </p>
+              }
+            >
+              <SignIn
+                appearance={loginAppearance}
+                routing="hash"
+                signInUrl="/?clientLogin=1"
+                signUpUrl="/sign-up"
+                fallbackRedirectUrl={returnTo}
+                forceRedirectUrl={returnTo}
+              />
+            </ClerkMounted>
           )}
         </div>
       </motion.div>

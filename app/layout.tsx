@@ -24,6 +24,15 @@ export const metadata: Metadata = {
     "KPANDJI AUTOMOBILES conçoit, assemble et commercialise des véhicules. Ingénierie, qualité et mobilité durable.",
   applicationName: "KPANDJI AUTOMOBILES",
   metadataBase: new URL("https://kpandji.com"),
+  icons: {
+    icon: [
+      { url: "/favicon-32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon-64.png", sizes: "64x64", type: "image/png" },
+      { url: "/icon.png", type: "image/png" },
+    ],
+    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
+    shortcut: "/favicon-32.png",
+  },
   alternates: {
     canonical: "/",
   },
@@ -34,6 +43,7 @@ export const metadata: Metadata = {
     type: "website",
     siteName: "KPANDJI AUTOMOBILES",
     locale: "fr_FR",
+    images: [{ url: "/logo.png", alt: "KPANDJI AUTOMOBILES" }],
   },
 };
 

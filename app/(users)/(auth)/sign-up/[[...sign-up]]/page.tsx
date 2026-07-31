@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useMemo } from "react";
+import { ClerkMounted } from "@/components/kp/ClerkMounted";
 import {
   kpClerkAppearance,
 } from "@/components/kp/clerk-appearance";
@@ -479,26 +480,32 @@ function SignUpFlow() {
                       isVerifyEmailStep ? "kp-clerk-verify" : ""
                     }`}
                   >
-                    <SignUp
-                      appearance={
-                        isVerifyEmailStep
-                          ? verifyEmailAppearance
-                          : signupAppearance
+                    <ClerkMounted
+                      fallback={
+                        <LoadingPulse message="Chargement de l’inscription…" />
                       }
-                      routing="path"
-                      path="/sign-up"
-                      signInUrl="/sign-in"
-                      forceRedirectUrl={onboardingRedirect(token)}
-                      fallbackRedirectUrl="/onboarding"
-                      initialValues={
-                        !isClerkSignUpStep && state.phase === "valid"
-                          ? { emailAddress: state.email }
-                          : undefined
-                      }
-                      unsafeMetadata={
-                        token ? { invitationToken: token } : undefined
-                      }
-                    />
+                    >
+                      <SignUp
+                        appearance={
+                          isVerifyEmailStep
+                            ? verifyEmailAppearance
+                            : signupAppearance
+                        }
+                        routing="path"
+                        path="/sign-up"
+                        signInUrl="/sign-in"
+                        forceRedirectUrl={onboardingRedirect(token)}
+                        fallbackRedirectUrl="/onboarding"
+                        initialValues={
+                          !isClerkSignUpStep && state.phase === "valid"
+                            ? { emailAddress: state.email }
+                            : undefined
+                        }
+                        unsafeMetadata={
+                          token ? { invitationToken: token } : undefined
+                        }
+                      />
+                    </ClerkMounted>
                   </div>
                 </>
               )}

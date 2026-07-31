@@ -544,7 +544,9 @@ export function KpHeader() {
         open={loginModalOpen}
         onClose={() => setLoginOpen(false)}
         onSwitchToSignup={switchToSignup}
-        prefetch={loginPrefetch && isLoaded && !isSignedIn && !onSignUpRoute}
+        prefetch={
+          loginPrefetch && isLoaded && !isSignedIn && !onSignUpRoute && !loginModalOpen
+        }
       />
 
       <KpClientSignUpModal

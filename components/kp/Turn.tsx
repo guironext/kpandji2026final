@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { Reveal } from "./Reveal";
 
@@ -71,7 +72,7 @@ export default function Turn() {
         className="pointer-events-none absolute left-1/2 top-0 h-px w-[min(280px,70vw)] -translate-x-1/2 bg-linear-to-r from-transparent via-kp-gold/45 to-transparent"
       />
 
-      <div className="relative mx-auto max-w-[1600px] px-5 md:px-10">
+      <div className="relative mx-auto max-w-400 px-5 md:px-10">
         <Reveal>
           <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-16 xl:gap-20">
             <div className="text-center lg:col-span-5 lg:text-left">
@@ -126,11 +127,11 @@ export default function Turn() {
                 <div className="relative overflow-hidden rounded-[28px] border border-white/9 bg-black/35 p-6 backdrop-blur-md md:p-9 lg:p-10">
                   <div
                     aria-hidden
-                    className="pointer-events-none absolute -right-24 -top-24 size-[280px] rounded-full bg-kp-gold/6 blur-3xl"
+                    className="pointer-events-none absolute -right-24 -top-24 size-70 rounded-full bg-kp-gold/6 blur-3xl"
                   />
                   <div
                     aria-hidden
-                    className="pointer-events-none absolute -bottom-32 -left-16 size-[240px] rounded-full bg-white/4 blur-3xl"
+                    className="pointer-events-none absolute -bottom-32 -left-16 size-60 rounded-full bg-white/4 blur-3xl"
                   />
 
                   <p className="relative text-center font-sans text-[10px] font-semibold uppercase tracking-[0.28em] text-white/40 md:text-[11px] lg:text-left">
@@ -205,9 +206,18 @@ export default function Turn() {
                   </form>
                 </div>
               </div>
+              
             </div>
           </div>
         </Reveal>
+        <div className="mt-14 flex justify-center md:mt-16">
+          <Link
+            href="/catalogue"
+            className="inline-flex min-h-11 items-center justify-center rounded-full bg-kp-gold px-8 py-3.5 font-sans text-[11px] font-semibold uppercase tracking-[0.18em] text-black shadow-[0_12px_40px_-12px_rgba(201,169,98,0.55)] transition duration-300 hover:bg-[#d4b56e] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-kp-gold/55"
+          >
+            Télécharger le catalogue
+          </Link>
+        </div>
       </div>
     </section>
   );
