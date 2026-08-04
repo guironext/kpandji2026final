@@ -9,6 +9,7 @@ const WHATSAPP_SIRA =
 const HERO_BACKDROP = "/models/para/pic2.jpg";
 
 const pageMax = "mx-auto w-full max-w-[1680px]";
+const sectionPad = "px-5 sm:px-8 lg:px-12 xl:px-16";
 
 const eyebrow =
   "inline-flex items-center gap-3 font-sans text-[11px] font-semibold uppercase tracking-[0.28em] text-kp-gold/95";
@@ -23,12 +24,13 @@ const bodyTextLg =
   "font-sans text-[15px] leading-relaxed text-white/72 sm:text-[16px] md:text-[17px]";
 
 const cardClass =
-  "group relative overflow-hidden rounded-2xl border border-white/[0.07] bg-kp-elevated/30 shadow-[0_24px_80px_-40px_rgba(0,0,0,0.9)] backdrop-blur-md transition-all duration-500 hover:-translate-y-0.5 hover:border-white/12 hover:bg-kp-elevated/40";
+  "group relative overflow-hidden rounded-2xl border border-white/[0.07] bg-kp-elevated/30 shadow-[0_24px_80px_-40px_rgba(0,0,0,0.9)] backdrop-blur-md transition-all duration-500 hover:border-white/12 hover:bg-kp-elevated/40 motion-safe:hover:-translate-y-0.5";
 
 const btnGold =
-  "group inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-kp-gold px-8 py-3.5 font-sans text-[11px] font-semibold uppercase tracking-[0.18em] text-black shadow-[0_12px_40px_-12px_rgba(201,169,98,0.55)] transition duration-300 hover:bg-[#d4b56e] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-kp-gold/55";
+  "group inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-kp-gold px-7 py-3.5 font-sans text-[11px] font-semibold uppercase tracking-[0.18em] text-black shadow-[0_12px_40px_-12px_rgba(201,169,98,0.55)] transition duration-300 hover:bg-[#d4b56e] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-kp-gold/55 sm:min-h-11 sm:w-auto sm:px-8";
 
-
+const btnGhost =
+  "inline-flex min-h-12 w-full items-center justify-center rounded-full border border-white/15 bg-white/5 px-7 py-3.5 font-sans text-[11px] font-semibold uppercase tracking-[0.18em] text-white/85 backdrop-blur-sm transition hover:border-white/25 hover:bg-white/10 sm:min-h-11 sm:w-auto sm:px-8";
 
 const exclusivityFeatures = [
   {
@@ -60,6 +62,8 @@ const tiers = [
     model: "BANCO",
     minVehicles: 28,
     image: "/derniers/banco.png",
+    brochureHref: "/fiche_tech/banco_bva.pdf",
+    brochureFilename: "KPANDJI-BANCO-BVA-Fiche-technique.pdf",
     metal: "#CD7F32",
     accent: "from-[#8B5A2B]/40 via-[#CD7F32]/18 to-transparent",
     ring: "border-[#CD7F32]/40",
@@ -72,6 +76,8 @@ const tiers = [
     model: "SOURALAI",
     minVehicles: 30,
     image: "/derniers/souralai.png",
+    brochureHref: "/fiche_tech/souralai_suv.pdf",
+    brochureFilename: "KPANDJI-SOURALAI-Fiche-technique.pdf",
     metal: "#C0C0C0",
     accent: "from-white/22 via-white/8 to-transparent",
     ring: "border-white/28",
@@ -84,23 +90,13 @@ const tiers = [
     model: "LATHAYE 1",
     minVehicles: 30,
     image: "/derniers/lathaye.png",
+    brochureHref: "/fiche_tech/lathaye_suv.pdf",
+    brochureFilename: "KPANDJI-LATHAYE-Fiche-technique.pdf",
     metal: "#C9A962",
     accent: "from-kp-gold/35 via-kp-gold/14 to-transparent",
     ring: "border-kp-gold/45",
     badge: "text-kp-gold",
     glow: "shadow-[0_0_48px_-14px_rgba(201,169,98,0.5)]",
-  },
-  {
-    name: "Platine",
-    fullName: "Sira Platine",
-    model: "LATHAYE 2 PRO",
-    minVehicles: 30,
-    image: "/derniers/latpro.png",
-    metal: "#E5E4E2",
-    accent: "from-sky-200/28 via-indigo-200/10 to-transparent",
-    ring: "border-sky-200/35",
-    badge: "text-sky-100/90",
-    glow: "shadow-[0_0_48px_-14px_rgba(186,230,253,0.28)]",
   },
 ] as const;
 
@@ -160,9 +156,6 @@ const engagements = [
   },
 ] as const;
 
-
-
-
 const stats = [
   { value: "120j", label: "Livraison max." },
   { value: "3 ans", label: "Garantie" },
@@ -194,23 +187,25 @@ function SectionChapter({
   return (
     <div className="relative overflow-hidden border-y border-white/8 bg-[radial-gradient(900px_320px_at_20%_50%,rgba(201,169,98,0.12),transparent_60%)]">
       <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-kp-gold/45 to-transparent" />
-      <div className={`${pageMax} px-5 py-10 sm:px-8 sm:py-12 lg:px-12 xl:px-16`}>
-        <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between md:gap-12">
+      <div className={`${pageMax} ${sectionPad} py-9 sm:py-11 md:py-12`}>
+        <div className="flex flex-col gap-4 sm:gap-5 md:flex-row md:items-end md:justify-between md:gap-12">
           <div className="max-w-3xl">
-            <div className="flex flex-wrap items-center gap-3">
-              <span className="inline-flex items-center rounded-full border border-kp-gold/30 bg-kp-gold/10 px-3.5 py-1 text-[10px] font-semibold uppercase tracking-[0.28em] text-kp-gold">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+              <span className="inline-flex items-center rounded-full border border-kp-gold/30 bg-kp-gold/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.28em] text-kp-gold">
                 Partie {part}
               </span>
               <span className="text-[10px] font-semibold uppercase tracking-[0.24em] text-white/40">
                 {label}
               </span>
             </div>
-            <h3 className="mt-4 font-serif text-[clamp(1.85rem,4.5vw,3rem)] font-medium leading-[1.05] tracking-tight text-white">
+            <h3 className="mt-3 font-serif text-[clamp(1.65rem,5vw,3rem)] font-medium leading-[1.08] tracking-tight text-white sm:mt-4">
               {title}
             </h3>
           </div>
           {description ? (
-            <p className={`max-w-md ${bodyText} md:text-right`}>{description}</p>
+            <p className={`max-w-md text-pretty ${bodyText} md:pb-1 md:text-right`}>
+              {description}
+            </p>
           ) : null}
         </div>
       </div>
@@ -218,145 +213,144 @@ function SectionChapter({
   );
 }
 
+function TierNode({ tier }: { tier: (typeof tiers)[number] }) {
+  return (
+    <span className="relative flex size-7 items-center justify-center">
+      <span
+        className="absolute inset-0 rounded-full border border-current/35 bg-kp-bg"
+        style={{ color: tier.metal }}
+      />
+      <span
+        className="absolute inset-[5px] rounded-full border border-current/25"
+        style={{ color: tier.metal }}
+      />
+      <span
+        className="relative size-2 rounded-full"
+        style={{
+          backgroundColor: tier.metal,
+          boxShadow: `0 0 14px -2px ${tier.metal}`,
+        }}
+      />
+    </span>
+  );
+}
+
 const Sira = () => {
   return (
     <section id="sira" className="relative overflow-hidden bg-kp-bg" aria-labelledby="sira-title">
-      {/* ─── Cinematic hero ─── */}
-      <div className="relative isolate flex min-h-[72svh] items-end overflow-hidden sm:min-h-[78svh] lg:min-h-[82svh]">
+      {/* ─── Hero ─── */}
+      <div className="relative isolate flex min-h-[min(88svh,760px)] items-end overflow-hidden sm:min-h-[min(82svh,820px)]">
         <div className="absolute inset-0 -z-10">
           <Image
             src={HERO_BACKDROP}
-            alt="KPANDJI Sira — programme flotte institutionnelle"
+            alt=""
             fill
             priority
             sizes="100vw"
-            className="object-cover object-[50%_40%] kp-hero-zoom"
+            className="object-cover object-[52%_38%] kp-hero-zoom sm:object-[50%_40%]"
           />
         </div>
-        <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 bg-linear-to-b from-amber-950/35 via-black/55 to-kp-bg" />
+        <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 bg-linear-to-b from-black/45 via-black/55 to-kp-bg" />
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(900px_520px_at_12%_18%,rgba(201,169,98,0.22),transparent_58%),radial-gradient(700px_500px_at_88%_35%,rgba(255,255,255,0.06),transparent_55%)]"
+          className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(780px_420px_at_18%_20%,rgba(201,169,98,0.18),transparent_58%)]"
         />
-        <div aria-hidden className="kp-grain pointer-events-none absolute inset-0 -z-10 opacity-[0.28] mix-blend-overlay" />
+        <div aria-hidden className="kp-grain pointer-events-none absolute inset-0 -z-10 opacity-[0.22] mix-blend-overlay" />
 
-        <div aria-hidden className="pointer-events-none absolute inset-5 hidden lg:block xl:inset-8">
-          <span className="absolute left-0 top-0 h-10 w-10 border-l border-t border-kp-gold/30" />
-          <span className="absolute right-0 top-0 h-10 w-10 border-r border-t border-kp-gold/30" />
-          <span className="absolute bottom-28 left-0 h-10 w-10 border-b border-l border-white/12" />
-          <span className="absolute bottom-28 right-0 h-10 w-10 border-b border-r border-white/12" />
-        </div>
+        <div className={`relative z-10 w-full ${pageMax} ${sectionPad} pb-12 pt-28 sm:pb-16 sm:pt-32 md:pb-20 lg:pb-24`}>
+          <Reveal from="bottom">
+            <p className={eyebrow}>
+              <span aria-hidden className="h-px w-8 bg-kp-gold/80 sm:w-12" />
+              Offre institutionnelle · Côte d&apos;Ivoire
+            </p>
+          </Reveal>
 
-        <div aria-hidden className="pointer-events-none absolute right-6 top-1/2 hidden -translate-y-1/2 lg:block xl:right-10">
-          <div className="flex flex-col items-center gap-4">
-            <span className="text-[10px] font-semibold uppercase tracking-[0.42em] text-kp-gold/70 [writing-mode:vertical-rl]">
-              S I R A
-            </span>
-            <span className="h-28 w-px bg-linear-to-b from-kp-gold/70 via-kp-gold/25 to-transparent" />
-          </div>
-        </div>
+          <Reveal from="bottom" delayMs={80}>
+            <h2
+              id="sira-title"
+              className="mt-4 max-w-[11ch] font-serif text-[clamp(2.75rem,12vw,5.5rem)] font-medium leading-[0.98] tracking-[-0.03em] text-white sm:mt-5 sm:max-w-none"
+            >
+              <span className="block">Kpandji</span>
+              <span className="block bg-linear-to-r from-[#CD7F32] via-kp-gold to-[#E8D5A3] bg-clip-text text-transparent">
+                Sira
+              </span>
+            </h2>
+          </Reveal>
 
-        <div className={`relative z-10 ${pageMax} px-5 pb-14 sm:px-8 sm:pb-16 md:pb-20 lg:px-12 lg:pb-24 xl:px-16`}>
-          <div className="lg:grid lg:grid-cols-[1fr_minmax(0,380px)] lg:items-end lg:gap-14 xl:gap-20">
-            <div>
-              <Reveal from="bottom">
-                <div className="flex flex-wrap items-center gap-3">
-                  <span className="inline-flex items-center gap-2 rounded-full border border-kp-gold/35 bg-kp-gold/10 px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.26em] text-kp-gold backdrop-blur-sm">
-                    <span aria-hidden className="size-1.5 rounded-full bg-kp-gold shadow-[0_0_10px_rgba(201,169,98,0.6)]" />
-                    Programme flotte
-                  </span>
-                  <span className="text-[11px] font-medium uppercase tracking-[0.22em] text-white/50">
-                    Côte d&apos;Ivoire · Institutions
-                  </span>
-                </div>
-              </Reveal>
+          <Reveal from="bottom" delayMs={140}>
+            <p className={`mt-5 max-w-lg text-pretty sm:mt-6 ${bodyTextLg}`}>
+            Pour répondre aux exigences de volume et de rentabilité des institutions, KPANDJI conçoit des modèles exclusifs, spécifiquement configurés pour l'offre SIRA. Ces véhicules (utilitaires, citadines, SUV optimisés) offrent le meilleur coût de possession du marché et sont réservés uniquement aux commandes de flottes.
+            </p>
+          </Reveal>
 
-              <Reveal from="bottom" delayMs={60}>
-                <p className={`${eyebrow} mt-5`}>
-                  <span aria-hidden className="h-px w-10 bg-kp-gold/80 sm:w-14" />
-                  Offre institutionnelle
-                </p>
-              </Reveal>
-
-              <Reveal from="bottom" delayMs={100}>
-                <h2
-                  id="sira-title"
-                  className="mt-5 max-w-[12ch] font-serif text-[clamp(2.4rem,7.5vw,5.25rem)] font-medium leading-[1.02] tracking-[-0.025em] text-white sm:max-w-none"
-                >
-                  <span className="block">Kpandji</span>
-                  <span className="block bg-linear-to-r from-[#CD7F32] via-kp-gold to-sky-100/90 bg-clip-text text-transparent">
-                    Sira
-                  </span>
-                </h2>
-              </Reveal>
-
-              <Reveal from="bottom" delayMs={160}>
-                <p className={`mt-6 max-w-xl text-pretty ${bodyTextLg}`}>
-                  Destiné à ceux qui désirent acquérir une flotte de véhicules KPANDJI.
-                  Un partenariat sur mesure, des tarifs préférentiels et un accompagnement
-                  complet de la conception à la livraison.
-                </p>
-              </Reveal>
-
-              <Reveal from="bottom" delayMs={220}>
-                <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-                  <a href={WHATSAPP_SIRA} target="_blank" rel="noopener noreferrer" className={btnGold}>
-                    <span>Demander une offre flotte</span>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="size-3.5 transition-transform duration-300 group-hover:translate-x-0.5" aria-hidden>
-                      <path d="M5 12h14M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  </a>
-                  <Link
-                    href="/contact"
-                    className="inline-flex min-h-11 items-center justify-center rounded-full border border-white/15 bg-white/5 px-8 py-3.5 font-sans text-[11px] font-semibold uppercase tracking-[0.18em] text-white/85 backdrop-blur-sm transition hover:border-white/25 hover:bg-white/10"
-                  >
-                    Nous contacter
-                  </Link>
-                </div>
-              </Reveal>
+          <Reveal from="bottom" delayMs={200}>
+            <div className="mt-8 flex flex-col gap-3 sm:mt-9 sm:flex-row sm:flex-wrap sm:items-center">
+              <a href={WHATSAPP_SIRA} target="_blank" rel="noopener noreferrer" className={btnGold}>
+                <span>Demander une offre flotte</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="size-3.5 transition-transform duration-300 group-hover:translate-x-0.5" aria-hidden>
+                  <path d="M5 12h14M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </a>
+              <Link href="/contact" className={btnGhost}>
+                Nous contacter
+              </Link>
             </div>
-
-            <Reveal from="bottom" delayMs={280} className="mt-10 lg:mt-0">
-              <aside className="relative overflow-hidden rounded-2xl border border-white/10 bg-black/45 p-5 shadow-[0_24px_80px_-40px_rgba(0,0,0,0.9)] backdrop-blur-xl sm:p-6">
-                <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-kp-gold/50 to-transparent" />
-                <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-kp-gold/90">
-                  En bref
-                </p>
-                <p className="mt-3 font-serif text-xl leading-snug tracking-tight text-white sm:text-2xl">
-                  Votre flotte,
-                  <span className="text-white/55"> votre identité.</span>
-                </p>
-                <div className="mt-5 grid grid-cols-2 gap-2.5">
-                  {stats.map((stat) => (
-                    <div key={stat.label} className="rounded-xl border border-white/8 bg-white/4 px-3 py-3">
-                      <p className="font-serif text-xl text-kp-gold">{stat.value}</p>
-                      <p className="mt-0.5 text-[9px] font-semibold uppercase tracking-[0.16em] text-white/45">
-                        {stat.label}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-                <ul className="mt-5 flex flex-col gap-2 border-t border-white/8 pt-4 text-[12px] leading-snug text-white/55">
-                  <li className="flex items-start gap-2">
-                    <span className="mt-1.5 size-1 shrink-0 rounded-full bg-kp-gold/70" aria-hidden />
-                    Personnalisation par adhérent
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="mt-1.5 size-1 shrink-0 rounded-full bg-kp-gold/70" aria-hidden />
-                    Financement &amp; assurance négociés
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="mt-1.5 size-1 shrink-0 rounded-full bg-kp-gold/70" aria-hidden />
-                    4 paliers Bronze → Platine
-                  </li>
-                </ul>
-              </aside>
-            </Reveal>
-          </div>
+          </Reveal>
         </div>
       </div>
 
-     
+      {/* ─── Stats strip ─── */}
+      <div className="relative border-b border-white/8">
+        <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-kp-gold/35 to-transparent" />
+        <div className={`${pageMax} ${sectionPad}`}>
+          <ul className="-mx-5 flex snap-x snap-mandatory gap-0 overflow-x-auto px-5 [scrollbar-width:none] sm:mx-0 sm:grid sm:grid-cols-4 sm:overflow-visible sm:px-0 [&::-webkit-scrollbar]:hidden">
+            {stats.map((stat, i) => (
+              <li
+                key={stat.label}
+                className={`min-w-[42%] shrink-0 snap-start border-white/8 py-5 sm:min-w-0 sm:border-t-0 sm:py-7 ${
+                  i > 0 ? "border-l sm:pl-6 lg:pl-8" : ""
+                } ${i < stats.length - 1 ? "pr-5 sm:pr-6 lg:pr-8" : ""}`}
+              >
+                <p className="font-serif text-[1.65rem] leading-none text-kp-gold sm:text-[1.85rem]">
+                  {stat.value}
+                </p>
+                <p className="mt-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/40">
+                  {stat.label}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      {/* ─── Intro ─── */}
+      <div className={`${pageMax} ${sectionPad} py-12 sm:py-14 md:py-16`}>
+        <Reveal from="bottom">
+          <div className="mx-auto max-w-3xl text-center">
+            <p className="font-serif text-[clamp(1.35rem,3.5vw,1.85rem)] leading-snug tracking-tight text-white">
+              Votre flotte, <span className="text-white/50">votre identité.</span>
+            </p>
+            <p className={`mx-auto mt-4 max-w-2xl text-pretty ${bodyText}`}>
+              Pour répondre aux exigences de volume et de rentabilité des institutions, KPANDJI
+              conçoit des modèles exclusifs Sira — utilitaires, citadines et SUV optimisés —
+              réservés uniquement aux commandes de flottes.
+            </p>
+            <ul className="mt-7 flex flex-col items-stretch gap-2.5 sm:mx-auto sm:max-w-xl sm:flex-row sm:flex-wrap sm:justify-center sm:gap-3">
+              {["Personnalisation par adhérent", "Financement & assurance", "3 paliers Bronze → Or"].map(
+                (item) => (
+                  <li
+                    key={item}
+                    className="inline-flex items-center justify-center gap-2 rounded-full border border-white/8 bg-white/[0.03] px-4 py-2 text-[11px] font-medium tracking-wide text-white/55 sm:justify-start"
+                  >
+                    <span className="size-1 shrink-0 rounded-full bg-kp-gold/70" aria-hidden />
+                    {item}
+                  </li>
+                ),
+              )}
+            </ul>
+          </div>
+        </Reveal>
+      </div>
 
       {/* ─── Partie I : Exclusivité ─── */}
       <SectionChapter
@@ -365,16 +359,20 @@ const Sira = () => {
         title="Le sur-mesure & la personnalisation"
         description="Chaque flotte Sira reflète l'identité de votre institution et les attentes de vos adhérents."
       />
-      <div className={`${pageMax} px-5 pb-14 sm:px-8 sm:pb-16 md:pb-20 lg:px-12 xl:px-16`}>
-        <div className="grid gap-5 lg:grid-cols-2 lg:gap-6">
+      <div className={`${pageMax} ${sectionPad} pb-12 sm:pb-16 md:pb-20`}>
+        <div className="grid gap-4 sm:gap-5 lg:grid-cols-2 lg:gap-6">
           {exclusivityFeatures.map((item, i) => (
             <Reveal key={item.title} from="bottom" delayMs={i * 80}>
-              <article className={`${cardClass} h-full p-6 md:p-8`}>
+              <article className={`${cardClass} flex h-full flex-col p-5 sm:p-6 md:p-8`}>
                 <div className="flex items-start justify-between gap-4">
                   <IconBox>{item.icon}</IconBox>
-                  <span className="font-serif text-4xl leading-none text-kp-gold/15">0{i + 1}</span>
+                  <span className="font-serif text-3xl leading-none text-kp-gold/15 sm:text-4xl">
+                    0{i + 1}
+                  </span>
                 </div>
-                <h4 className="mt-6 font-serif text-[clamp(1.25rem,2.5vw,1.5rem)] text-white">{item.title}</h4>
+                <h4 className="mt-5 font-serif text-[clamp(1.2rem,3vw,1.5rem)] text-white sm:mt-6">
+                  {item.title}
+                </h4>
                 <p className={`mt-3 ${bodyText}`}>{item.body}</p>
               </article>
             </Reveal>
@@ -389,65 +387,93 @@ const Sira = () => {
         title="Les niveaux Sira"
         description="Le taux de remise définitif est déterminé selon le volume global et le mix de modèles sélectionnés."
       />
-      <div className={`${pageMax} px-5 pb-14 sm:px-8 sm:pb-16 md:pb-20 lg:px-12 xl:px-16`}>
-        {/* Tier progression bar — desktop */}
-        <div aria-hidden className="relative mx-auto mb-8 hidden max-w-4xl xl:block">
-          <div className="h-px w-full bg-linear-to-r from-[#CD7F32] via-kp-gold to-sky-200/80" />
-          <div className="absolute inset-x-0 -top-2 flex justify-between">
-            {tiers.map((tier) => (
-              <span
+      <div className={`${pageMax} ${sectionPad} pb-12 sm:pb-16 md:pb-20`}>
+        {/* Mobile / tablet progression */}
+        <div aria-hidden className="mb-7 xl:hidden">
+          <ol className="-mx-5 flex snap-x snap-mandatory gap-3 overflow-x-auto px-5 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {tiers.map((tier, i) => (
+              <li
                 key={tier.name}
-                className="size-4 rounded-full border-2 border-kp-bg shadow-[0_0_12px_currentColor]"
-                style={{ backgroundColor: tier.metal, color: tier.metal }}
-              />
+                className="flex min-w-[46%] snap-start flex-col items-center rounded-2xl border border-white/8 bg-white/[0.03] px-4 py-4 sm:min-w-[30%]"
+              >
+                <div className="flex items-center gap-2">
+                  <TierNode tier={tier} />
+                  {i < tiers.length - 1 ? (
+                    <span className="hidden h-px w-6 bg-white/15 sm:block" />
+                  ) : null}
+                </div>
+                <p
+                  className="mt-3 text-[10px] font-semibold uppercase tracking-[0.22em]"
+                  style={{ color: tier.metal }}
+                >
+                  {tier.name}
+                </p>
+                <p className="mt-1 text-[9px] font-medium uppercase tracking-[0.16em] text-white/30">
+                  ≥ {tier.minVehicles} véh.
+                </p>
+              </li>
             ))}
-          </div>
-          <div className="mt-4 flex justify-between text-[10px] font-semibold uppercase tracking-[0.2em] text-white/40">
-            {tiers.map((tier) => (
-              <span key={tier.name} style={{ color: tier.metal }}>
-                {tier.name}
-              </span>
-            ))}
-          </div>
+          </ol>
         </div>
 
-        <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4 xl:gap-6">
+        {/* Desktop progression rail */}
+        <div aria-hidden className="relative mx-auto mb-10 hidden max-w-3xl xl:block">
+          <div className="pointer-events-none absolute left-[10%] right-[10%] top-[13px] h-px bg-white/10" />
+          <div className="pointer-events-none absolute left-[10%] right-[10%] top-[13px] h-px bg-linear-to-r from-[#CD7F32] via-[#C0C0C0] to-kp-gold opacity-70" />
+          <ol className="relative flex justify-between">
+            {tiers.map((tier) => (
+              <li key={tier.name} className="flex w-28 flex-col items-center">
+                <TierNode tier={tier} />
+                <p
+                  className="mt-3 text-[10px] font-semibold uppercase tracking-[0.22em]"
+                  style={{ color: tier.metal }}
+                >
+                  {tier.name}
+                </p>
+                <p className="mt-1 text-[9px] font-medium uppercase tracking-[0.16em] text-white/30">
+                  ≥ {tier.minVehicles} véh.
+                </p>
+              </li>
+            ))}
+          </ol>
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 lg:gap-6">
           {tiers.map((tier, index) => (
             <Reveal key={tier.fullName} from="bottom" delayMs={index * 70}>
               <article
-                className={`group relative h-full overflow-hidden rounded-2xl border ${tier.ring} bg-kp-elevated/25 ${tier.glow} transition-all duration-500 hover:-translate-y-1.5 hover:bg-kp-elevated/40`}
+                className={`group relative flex h-full flex-col overflow-hidden rounded-2xl border ${tier.ring} bg-kp-elevated/25 ${tier.glow} transition-all duration-500 hover:bg-kp-elevated/40 motion-safe:hover:-translate-y-1`}
               >
                 <div aria-hidden className={`pointer-events-none absolute inset-0 bg-linear-to-b ${tier.accent}`} />
 
-                {/* Metal badge ribbon */}
                 <div
-                  className="absolute right-0 top-0 z-10 px-4 py-2 text-[9px] font-bold uppercase tracking-[0.22em] text-black"
+                  className="absolute right-0 top-0 z-10 px-3.5 py-1.5 text-[9px] font-bold uppercase tracking-[0.22em] text-black sm:px-4 sm:py-2"
                   style={{ backgroundColor: tier.metal }}
                 >
                   {tier.name}
                 </div>
 
-                <div className="relative p-5 sm:p-6">
-                  <p className={`text-[10px] font-semibold uppercase tracking-[0.24em] ${tier.badge}`}>
+                <div className="relative flex flex-1 flex-col p-4 sm:p-5 md:p-6">
+                  <p className={`pr-16 text-[10px] font-semibold uppercase tracking-[0.24em] ${tier.badge}`}>
                     {tier.fullName}
                   </p>
-                  <h4 className="mt-1 font-serif text-2xl text-white">{tier.model}</h4>
+                  <h4 className="mt-1 font-serif text-[1.65rem] text-white sm:text-2xl">{tier.model}</h4>
 
-                  <div className="relative mt-5 aspect-16/10 overflow-hidden rounded-xl border border-white/8 bg-black/30">
+                  <div className="relative mt-4 aspect-16/10 overflow-hidden rounded-xl border border-white/8 bg-black/30 sm:mt-5">
                     <Image
                       src={tier.image}
                       alt={`Modèle ${tier.model} — ${tier.fullName}`}
                       fill
-                      sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 25vw"
-                      className="object-cover object-center transition duration-700 group-hover:scale-[1.05]"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      className="object-cover object-center transition duration-700 motion-safe:group-hover:scale-[1.04]"
                     />
                     <div aria-hidden className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/55 via-transparent to-transparent" />
-                    <div className="absolute bottom-3 left-3 rounded-full border border-white/15 bg-black/50 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/80 backdrop-blur-sm">
+                    <div className="absolute bottom-2.5 left-2.5 rounded-full border border-white/15 bg-black/50 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/80 backdrop-blur-sm sm:bottom-3 sm:left-3 sm:px-3">
                       ≥ {tier.minVehicles} véh.
                     </div>
                   </div>
 
-                  <div className="mt-5 flex items-center justify-between border-t border-white/8 pt-4">
+                  <div className="mt-4 flex items-center justify-between border-t border-white/8 pt-3.5 sm:mt-5 sm:pt-4">
                     <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/40">
                       Seuil d&apos;accès
                     </p>
@@ -456,6 +482,25 @@ const Sira = () => {
                       <span className="ml-1 text-sm text-white/45">véhicules</span>
                     </p>
                   </div>
+
+                  <a
+                    href={tier.brochureHref}
+                    download={tier.brochureFilename}
+                    className="mt-auto pt-4 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full border border-white/12 bg-white/[0.04] px-5 py-2.5 font-sans text-[10px] font-semibold uppercase tracking-[0.18em] text-white/75 transition duration-300 hover:border-white/25 hover:bg-white/[0.08] hover:text-white"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      className="size-3.5 shrink-0"
+                      aria-hidden
+                    >
+                      <path d="M12 3v12M7 11l5 5 5-5" strokeLinecap="round" strokeLinejoin="round" />
+                      <path d="M5 19h14" strokeLinecap="round" />
+                    </svg>
+                    <span>Fiche technique</span>
+                  </a>
                 </div>
               </article>
             </Reveal>
@@ -463,7 +508,7 @@ const Sira = () => {
         </div>
 
         <Reveal from="bottom" delayMs={120}>
-          <p className="mx-auto mt-8 max-w-2xl text-center text-[13px] leading-relaxed text-white/40">
+          <p className="mx-auto mt-7 max-w-2xl text-center text-[12px] leading-relaxed text-white/40 sm:mt-8 sm:text-[13px]">
             <span className="text-kp-gold/80">Note :</span> le taux de remise définitif dépend du volume
             global de commande et du mix de modèles retenus.
           </p>
@@ -476,15 +521,19 @@ const Sira = () => {
         label="Engagements"
         title="Services & garanties exclusifs"
       />
-      <div className={`${pageMax} px-5 pb-14 sm:px-8 sm:pb-16 md:pb-20 lg:px-12 xl:px-16`}>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
+      <div className={`${pageMax} ${sectionPad} pb-12 sm:pb-16 md:pb-20`}>
+        <div className="grid gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3 lg:gap-5">
           {engagements.map((item, i) => (
             <Reveal key={item.title} from="bottom" delayMs={(i % 3) * 60}>
-              <article className={`${cardClass} flex h-full gap-4 p-5 sm:p-6`}>
+              <article className={`${cardClass} flex h-full gap-3.5 p-4 sm:gap-4 sm:p-5 md:p-6`}>
                 <IconBox>{item.icon}</IconBox>
-                <div>
-                  <h4 className="font-sans text-[15px] font-semibold text-white/90">{item.title}</h4>
-                  <p className="mt-2 text-[13px] leading-relaxed text-white/50 sm:text-[14px]">{item.body}</p>
+                <div className="min-w-0">
+                  <h4 className="font-sans text-[14px] font-semibold leading-snug text-white/90 sm:text-[15px]">
+                    {item.title}
+                  </h4>
+                  <p className="mt-1.5 text-[13px] leading-relaxed text-white/50 sm:mt-2 sm:text-[14px]">
+                    {item.body}
+                  </p>
                 </div>
               </article>
             </Reveal>
@@ -492,43 +541,39 @@ const Sira = () => {
         </div>
       </div>
 
-
-
       {/* ─── Conclusion & CTA ─── */}
       <div className="relative border-t border-white/8 bg-[radial-gradient(900px_400px_at_50%_0%,rgba(201,169,98,0.10),transparent_65%)]">
         <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-kp-gold/45 to-transparent" />
-        <div className={`${pageMax} px-5 py-16 sm:px-8 sm:py-20 md:py-24 lg:px-12 lg:py-28 xl:px-16`}>
+        <div className={`${pageMax} ${sectionPad} py-14 sm:py-20 md:py-24 lg:py-28`}>
           <Reveal from="bottom">
             <div className="mx-auto max-w-3xl text-center">
-              <div className="mx-auto mb-6 flex size-16 items-center justify-center rounded-2xl border border-kp-gold/30 bg-kp-gold/10">
-                <span className="font-serif text-2xl font-medium tracking-[0.12em] text-kp-gold">S</span>
+              <div className="mx-auto mb-5 flex size-14 items-center justify-center rounded-2xl border border-kp-gold/30 bg-kp-gold/10 sm:mb-6 sm:size-16">
+                <span className="font-serif text-xl font-medium tracking-[0.12em] text-kp-gold sm:text-2xl">
+                  S
+                </span>
               </div>
               <p className={`${eyebrow} justify-center`}>
-                <span aria-hidden className="h-px w-8 bg-kp-gold/60" />
+                <span aria-hidden className="h-px w-6 bg-kp-gold/60 sm:w-8" />
                 Partenariat national
-                <span aria-hidden className="h-px w-8 bg-kp-gold/60" />
+                <span aria-hidden className="h-px w-6 bg-kp-gold/60 sm:w-8" />
               </p>
-              <h3 className={`mt-5 ${sectionTitle}`}>
+              <h3 className={`mt-4 ${sectionTitle} sm:mt-5`}>
                 Bien plus qu&apos;une flotte automobile
               </h3>
-              <p className={`mx-auto mt-5 max-w-2xl ${bodyTextLg}`}>
+              <p className={`mx-auto mt-4 max-w-2xl text-pretty sm:mt-5 ${bodyTextLg}`}>
                 En choisissant l&apos;offre KPANDJI Sira, vous scellez un partenariat avec une
                 expertise locale aux standards internationaux. Ensemble, valorisons le savoir-faire
-                national et offrons à vos membres la fierté de rouler dans des véhicules neufs,
-                portés par un engagement patriotique au service de la mobilité ivoirienne.
+                national et offrons à vos membres la fierté de rouler dans des véhicules neufs.
               </p>
 
-              <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+              <div className="mt-8 flex flex-col items-stretch gap-3 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center sm:gap-4">
                 <a href={WHATSAPP_SIRA} target="_blank" rel="noopener noreferrer" className={btnGold}>
                   <span>Lancer mon projet flotte</span>
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="size-3.5 transition-transform duration-300 group-hover:translate-x-0.5" aria-hidden>
                     <path d="M5 12h14M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </a>
-                <Link
-                  href="/contact"
-                  className="inline-flex min-h-11 items-center justify-center rounded-full border border-white/15 px-8 py-3.5 font-sans text-[11px] font-semibold uppercase tracking-[0.18em] text-white/80 transition hover:border-white/25 hover:text-white"
-                >
+                <Link href="/contact" className={btnGhost}>
                   Parler à un conseiller
                 </Link>
               </div>

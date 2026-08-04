@@ -173,7 +173,7 @@ export const MODELES: Modele[] = [
 					"Usage professionnel et personnel: Dimensions du véhicule supérieures à celles des produits concurrents de même catégorie. Volume de chargement arrière le plus important de sa catégorie. Profitez d'un espace de conduite intérieur généreux. Transformez votre véhicule en SUV grâce à la capote. Inclinaison des sièges arrière réglable.",
 			},
 			desc2: {
-				ext2: "/models/desc/djetran/avant4.jpg",
+				ext2: "/models/desc/djetran/avant43.jpg",
 				descDetail2:
 					"Surveillance de la pression et de la température des pneus: Un design élégant et raffiné, rehaussé de détails soignés. Des finitions haut de gamme et des détails soignés témoignent d'un design exceptionnel. Un style résolument moderne et élégant.",
 			},

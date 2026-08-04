@@ -39,8 +39,8 @@ const sectionTitle =
 const INTRO =
   "Acquérez votre véhicule neuf en toute sérénité, où que vous soyez. Vous vivez à l’étranger (Diaspora) ou en Côte d’Ivoire ? Kpandji Automobiles facilite votre accès à l’automobile de luxe. Profitez d’un service sur mesure pour acquérir un véhicule robuste et élégant, conçu pour nos routes.";
 
-const WHATSAPP_COMMERCIAL = "https://wa.me/2250707201553?text=INFOS";
-const WHATSAPP_FLOTTE = "https://wa.me/2250707201553?text=FLOTTE";
+const WHATSAPP_COMMERCIAL = "https://wa.me/2250707201992?text=INFOS";
+const WHATSAPP_FLOTTE = "https://wa.me/2250707201992?text=FLOTTE";
 
 const stats = [
   { value: "3", label: "Modèles premium" },
@@ -148,19 +148,19 @@ const fleetRentability = [
 
 const contacts = [
   { icon: "📍", label: "Siège social", value: "Abidjan, Riviera Palmeraie (Côte d’Ivoire)" },
-  { icon: "📞", label: "Standard & fixe", value: "+225 27 23 27 95 67", href: "tel:+225 27 23 27 95 67" },
+  { icon: "📞", label: "Standard & fixe", value: "+225 07 07 20 19 92", href: "tel:+225 07 07 20 19 92" },
   {
     icon: "💼",
     label: "Service commercial",
-    value: "+225 07 07 20 15 53",
+    value: "+225 07 07 20 19 92",
     href: WHATSAPP_COMMERCIAL,
     note: "WhatsApp",
   },
   {
     icon: "📣",
     label: "Service marketing",
-    value: "+225 07 07 20 22 11",
-    href: "https://wa.me/2250707202211",
+    value: "+225 07 07 20 19 92",
+    href: WHATSAPP_COMMERCIAL,
     note: "WhatsApp",
   },
   { icon: "📧", label: "E-mail", value: "contact@kpandji.com", href: "mailto:contact@kpandji.com" },
@@ -177,7 +177,7 @@ const contacts = [
 const benefits = [
   {
     title: "Transparence digitale",
-    body: "Notifications en temps réel sur l’état de préparation de votre véhicule et rapports réguliers d’entretien en cas de gardiennage.",
+    body: "L'investissement à distance génère de l'anxiété chez la diaspora. Nous devons expliciter noir sur blanc les mesures de sécurité (traceur GPS actif 24h/7, assurance tous risques flotte incluse, et envoi automatisé de rapports d'entretien mensuels).",
     icon: (
       <>
         <rect x="3" y="5" width="18" height="14" rx="2" />
@@ -1331,11 +1331,11 @@ export function PrestigePrivilege() {
                   <p className="mt-1 text-[14px] text-white/55">Côte d&apos;Ivoire</p>
                   <div className="mt-8 space-y-3 border-t border-white/10 pt-8">
                     <a
-                      href="tel:+2252723279567"
+                      href="tel:+2250707201992"
                       className="flex items-center gap-3 rounded-xl border border-white/8 bg-black/20 px-4 py-3 text-[14px] text-white/80 transition hover:border-kp-gold/30 hover:text-kp-gold"
                     >
                       <span aria-hidden>📞</span>
-                      +225 27 23 27 95 67
+                      +225 07 07 20 19 92
                     </a>
                     <a
                       href="mailto:contact@kpandji.com"
