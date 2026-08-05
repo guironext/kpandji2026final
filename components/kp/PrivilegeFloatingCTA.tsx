@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-const WHATSAPP = "https://wa.me/2250707201553?text=INFOS";
+const WHATSAPP = "https://wa.me/2250707201992?text=INFOS";
 
 export function PrivilegeFloatingCTA() {
   const [visible, setVisible] = useState(false);
