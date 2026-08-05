@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import dynamic from "next/dynamic";
-import Link from "next/link";
 import { ContactFormSkeleton } from "@/components/kp/ContactFormSkeleton";
 import { ContactPageDecor } from "@/components/kp/ContactPageDecor";
 
@@ -63,25 +62,6 @@ function IconPin({ className }: { className?: string }) {
     >
       <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
       <circle cx="12" cy="10" r="3" />
-    </svg>
-  );
-}
-
-function IconArrow({ className }: { className?: string }) {
-  return (
-    <svg
-      className={className}
-      width="18"
-      height="18"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-    >
-      <path d="M5 12h14M13 5l7 7-7 7" />
     </svg>
   );
 }
@@ -188,35 +168,8 @@ export default function ContactPage() {
                   </div>
 
                   <div className="mt-6 rounded-2xl border border-white/6 bg-black/25 p-5 backdrop-blur-sm md:p-6">
-                    <p className="text-center font-sans text-[10px] font-semibold uppercase tracking-[0.28em] text-white/35 lg:text-left">
-                      Poursuivre sur le site
-                    </p>
-                    <ul className="mt-4 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:gap-3">
-                      <li className="flex-1 sm:flex-none sm:min-w-[140px]">
-                        <Link
-                          href="/showroom"
-                          className="flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/4 px-4 py-3.5 text-center text-[13px] font-medium text-white/70 transition-all duration-300 hover:border-kp-gold/35 hover:bg-kp-gold/10 hover:text-kp-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-kp-gold/45 sm:justify-between sm:text-left">
-                          <span>Showroom</span>
-                          <IconArrow className="hidden shrink-0 text-kp-gold/80 sm:block" />
-                        </Link>
-                      </li>
-                      <li className="flex-1 sm:flex-none sm:min-w-[140px]">
-                        <Link
-                          href="/sav"
-                          className="flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/4 px-4 py-3.5 text-center text-[13px] font-medium text-white/70 transition-all duration-300 hover:border-kp-gold/35 hover:bg-kp-gold/10 hover:text-kp-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-kp-gold/45 sm:justify-between sm:text-left">
-                          <span>Service après-vente</span>
-                          <IconArrow className="hidden shrink-0 text-kp-gold/80 sm:block" />
-                        </Link>
-                      </li>
-                      <li className="flex-1 sm:flex-none sm:min-w-[140px]">
-                        <Link
-                          href="/#contact"
-                          className="flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/4 px-4 py-3.5 text-center text-[13px] font-medium text-white/70 transition-all duration-300 hover:border-kp-gold/35 hover:bg-kp-gold/10 hover:text-kp-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-kp-gold/45 sm:justify-between sm:text-left">
-                          <span>Pied de page</span>
-                          <IconArrow className="hidden shrink-0 text-kp-gold/80 sm:block" />
-                        </Link>
-                      </li>
-                    </ul>
+                    
+                    
                   </div>
                 </div>
             </div>

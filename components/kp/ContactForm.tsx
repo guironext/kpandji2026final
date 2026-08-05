@@ -3,11 +3,12 @@
 import { FormEvent, useState } from "react";
 
 const SUBJECT_PRESETS = [
-  "Demande d’information",
-  "Essai ou visite",
-  "Devis véhicule",
-  "Service après-vente",
-  "Partenariat",
+  "Reserver un essai",
+  "Découvrir l'offre SIRA",
+  "Investir depuis l'étranger",
+  "Demande d'information",
+  "Contacter S.A.V",
+  "Demande de devis",
 ] as const;
 
 function isValidEmail(value: string) {
@@ -263,7 +264,7 @@ export function ContactForm() {
                     setSubject(ev.target.value);
                     if (error) setError(null);
                   }}
-                  placeholder="Ou précisez votre sujet…"
+                  placeholder="Choisissez une option ci-dessus Ou précisez votre sujet…"
                   className={`${inputClass} mt-3`}
                 />
               </div>

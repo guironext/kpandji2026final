@@ -240,7 +240,8 @@ export function KpFooter() {
                     Siège
                   </p>
                   <p className="mt-0.5 font-sans text-sm text-white/75">
-                    Côte d&apos;Ivoire, Abidjan Cocody palmeraie, carrefour Cabine Bleue
+                    Côte d&apos;Ivoire, 
+                    Abidjan, Cocody Riviera Palmeraie, Carrefour Cabine Bleue 
                   </p>
                 </div>
               </div>

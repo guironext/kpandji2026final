@@ -11,7 +11,7 @@ const MODELS = [
     name: "DJETRAN PLUS",
     tagline: "Dominez la route avec une allure magistrale.",
     description:
-      "Cette pick-up robuste, allie la force brute à l'élégance pure. Le véritable outil de distinction pour les bâtisseurs de demain.",
+      "L'alliance ultime entre la force brute et la haute technologie. Des finitions intérieures exclusives en cuir et des systèmes d'assistance à la conduite intelligents de niveau 2 pour dominer la route en toute sérénité.",
     image: "/derniers/djetranplus.png",
     href: "/modeles/djetranplus",
   },
@@ -20,7 +20,7 @@ const MODELS = [
     name: "DJETRAN",
     tagline: "Pick-up conquérant, robuste et élégant.",
     description:
-      "Pick-up conquérant, robuste et élégant. L'outil de travail infatigable des entrepreneurs et des bâtisseurs de la nation.",
+      "Le sommet du prestige et du raffinement. Un pick-up haut de gamme qui offre l'élégance VIP pour vos déplacements professionnels et privés les plus exigeants à Abidjan.                   ",
     image: "/derniers/djetran.png",
     href: "/modeles/djetran",
   },
@@ -31,7 +31,7 @@ const MODELS = [
     name: "LATHAYE",
     tagline: "SUV, mariant puissance et confort premium.",
     description:
-      "SUV de direction de 221 ch, une véritable bolide qui redéfinit la performance à chaque voyage.",
+      "Idéal pour la famille et les longs trajets en Côte d'Ivoire. Le SUV LATHAYE combine espace généreux, confort supérieur et une robustesse à toute épreuve conçue spécifiquement pour nos routes nationales.",
     image: "/derniers/lathaye.png",
     href: "/modeles/lathaye",
   },
