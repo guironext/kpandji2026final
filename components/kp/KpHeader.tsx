@@ -20,9 +20,18 @@ type NavItem = {
 function KpAnimatedLogo() {
   const { t } = useLocale();
   const reduceMotion = useReducedMotion();
-  const [showLayout, setShowLayout] = useState(() => reduceMotion !== true);
-  const [showLogo, setShowLogo] = useState(() => reduceMotion === true);
+  const [compact, setCompact] = useState(true);
+  const [showLayout, setShowLayout] = useState(false);
+  const [showLogo, setShowLogo] = useState(true);
   const sequenceTimeoutRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    const sync = () => setCompact(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
 
   const startLayoutToLogo = useCallback(() => {
     if (sequenceTimeoutRef.current) window.clearTimeout(sequenceTimeoutRef.current);
@@ -36,21 +45,24 @@ function KpAnimatedLogo() {
   }, []);
 
   useEffect(() => {
-    if (reduceMotion) {
+    if (compact || reduceMotion) {
+      if (sequenceTimeoutRef.current) window.clearTimeout(sequenceTimeoutRef.current);
       const id = window.setTimeout(() => {
         setShowLayout(false);
         setShowLogo(true);
       }, 0);
       return () => window.clearTimeout(id);
     }
+    setShowLogo(false);
+    setShowLayout(true);
     startLayoutToLogo();
     return () => {
       if (sequenceTimeoutRef.current) window.clearTimeout(sequenceTimeoutRef.current);
     };
-  }, [reduceMotion, startLayoutToLogo]);
+  }, [compact, reduceMotion, startLayoutToLogo]);
 
   useEffect(() => {
-    if (reduceMotion) return;
+    if (compact || reduceMotion) return;
 
     const runSequence = () => {
       if (sequenceTimeoutRef.current) window.clearTimeout(sequenceTimeoutRef.current);
@@ -64,14 +76,14 @@ function KpAnimatedLogo() {
       window.clearInterval(interval);
       if (sequenceTimeoutRef.current) window.clearTimeout(sequenceTimeoutRef.current);
     };
-  }, [reduceMotion, startLayoutToLogo]);
+  }, [compact, reduceMotion, startLayoutToLogo]);
 
-  const crossDuration = reduceMotion ? 0 : 0.7;
+  const crossDuration = reduceMotion || compact ? 0 : 0.7;
   const easeLux = [0.22, 1, 0.36, 1] as const;
 
-  /** Fixed width so layout ↔ logo never shifts the header; stays left of nav. */
+  /** Compact on phone so icons stay reachable; wide only where nav has room. */
   const brandBlockClass =
-    "relative isolate shrink-0 w-[420px] max-w-[min(420px,calc(100vw-2rem))] min-h-[52px] sm:min-h-[56px] md:min-h-[60px]";
+    "relative isolate shrink-0 h-9 w-[132px] sm:h-10 sm:w-[156px] md:h-[56px] md:w-[min(300px,34vw)] md:min-h-[56px] xl:h-[60px] xl:w-[420px] xl:max-w-[min(420px,calc(100vw-2rem))] xl:min-h-[60px]";
 
   return (
     <div className={brandBlockClass}>
@@ -210,7 +222,7 @@ function KpAnimatedLogo() {
                   alt=""
                   width={220}
                   height={62}
-                  className="relative h-9 w-auto sm:h-10 md:h-11"
+                  className="relative h-8 w-auto sm:h-9 md:h-11"
                   priority
                   loading="eager"
                   aria-hidden
@@ -397,7 +409,7 @@ export function KpHeader() {
   return (
     <>
       <header
-        className={`kp-header-mount fixed inset-x-0 top-0 z-50 overflow-visible transition-[background,box-shadow,border-color] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+        className={`kp-header-mount fixed inset-x-0 top-0 z-50 overflow-visible pt-[env(safe-area-inset-top)] transition-[background,box-shadow,border-color] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
           barSolid
             ? "border-b border-white/10 bg-black/80 shadow-[0_20px_60px_rgba(0,0,0,0.45)] backdrop-blur-2xl backdrop-saturate-150"
             : "border-b border-transparent bg-linear-to-b from-black/55 via-black/20 to-transparent"
@@ -416,25 +428,34 @@ export function KpHeader() {
           }`}
         >
           <div className="overflow-hidden">
-            <div className="mx-auto flex max-w-[1680px] items-center justify-end gap-6 px-5 py-2.5 text-sm font-medium uppercase tracking-widest text-white/45 md:px-10">
-              <Link href="/kpandji-automobiles" className="transition-colors hover:text-white/80">
+            <div className="kp-hide-scrollbar mx-auto flex max-w-[1680px] items-center justify-end gap-3 overflow-x-auto px-4 py-2 text-[9px] font-medium uppercase tracking-[0.16em] text-white/45 sm:gap-5 sm:px-5 sm:text-[10px] sm:tracking-[0.2em] md:gap-6 md:px-10 md:py-2.5 md:text-sm md:tracking-widest">
+              <Link
+                href="/kpandji-automobiles"
+                className="shrink-0 whitespace-nowrap transition-colors hover:text-white/80"
+              >
                 {t.utility.automobiles}
               </Link>
-              <span className="hidden h-3 w-px bg-white/15 sm:block" aria-hidden />
-              <Link href="/ecologie" className="transition-colors hover:text-white/80">
+              <span className="hidden h-3 w-px shrink-0 bg-white/15 sm:block" aria-hidden />
+              <Link
+                href="/ecologie"
+                className="shrink-0 whitespace-nowrap transition-colors hover:text-white/80"
+              >
                 {t.utility.ecology}
               </Link>
-              <span className="hidden h-3 w-px bg-white/15 sm:block" aria-hidden />
-              <Link href="/emplois" className="transition-colors hover:text-white/80">
+              <span className="hidden h-3 w-px shrink-0 bg-white/15 sm:block" aria-hidden />
+              <Link
+                href="/emplois"
+                className="shrink-0 whitespace-nowrap transition-colors hover:text-white/80"
+              >
                 {t.utility.careers}
               </Link>
-              <span className="hidden h-3 w-px bg-white/15 md:block" aria-hidden />
+              <span className="hidden h-3 w-px shrink-0 bg-white/15 md:block" aria-hidden />
               <KpLocaleSwitch className="hidden md:inline-flex" />
             </div>
           </div>
         </div>
 
-        <div className="relative mx-auto flex h-[72px] max-w-[1680px] items-center gap-4 px-4 md:h-[84px] md:gap-6 md:px-10">
+        <div className="relative mx-auto flex h-14 max-w-[1680px] items-center gap-2 px-3 sm:h-16 sm:gap-3 sm:px-4 md:h-[84px] md:gap-6 md:px-10">
           <Link
             href="/"
             className="relative z-10 flex shrink-0 items-center"
@@ -471,7 +492,7 @@ export function KpHeader() {
           </nav>
 
           {/* Right icon cluster — Mercedes search / account / menu */}
-          <div className="ml-auto flex items-center gap-0.5 sm:gap-1">
+          <div className="ml-auto flex shrink-0 items-center gap-0 sm:gap-1">
             {scrolled &&
               !menuOpen &&
               !searchOpen &&
@@ -488,7 +509,7 @@ export function KpHeader() {
             <button
               type="button"
               onClick={() => setSearchOpen(true)}
-              className="flex h-11 w-11 items-center justify-center rounded-full text-white/85 transition-colors hover:bg-white/10 hover:text-white"
+              className="flex h-10 w-10 items-center justify-center rounded-full text-white/85 transition-colors hover:bg-white/10 hover:text-white sm:h-11 sm:w-11"
               aria-label={t.actions.search}
             >
               <IconSearch />
@@ -521,7 +542,7 @@ export function KpHeader() {
               onClick={() => {
                 setMenuOpen((v) => !v);
               }}
-              className="relative flex h-11 w-11 flex-col items-center justify-center gap-[5px] rounded-full bg-white text-black transition-colors hover:bg-white/90 xl:hidden"
+              className="relative flex h-10 w-10 flex-col items-center justify-center gap-[5px] rounded-full bg-white text-black transition-colors hover:bg-white/90 sm:h-11 sm:w-11 xl:hidden"
               aria-expanded={menuOpen}
               aria-label={menuOpen ? t.actions.closeMenu : t.actions.openMenu}
             >
@@ -575,49 +596,49 @@ export function KpHeader() {
 
       {/* Search overlay — full-screen, Mercedes-style focus */}
       <div
-        className={`fixed inset-0 z-70 flex flex-col bg-black/96 backdrop-blur-2xl transition-[opacity,visibility] duration-500 ease-out ${
+        className={`fixed inset-0 z-70 flex flex-col bg-black/96 pt-[env(safe-area-inset-top)] backdrop-blur-2xl transition-[opacity,visibility] duration-500 ease-out ${
           searchOpen ? "visible opacity-100" : "invisible pointer-events-none opacity-0"
         }`}
         role="dialog"
         aria-modal="true"
         aria-label={t.a11y.searchDialog}
       >
-        <div className="flex items-center justify-between border-b border-white/10 px-5 py-5 md:px-10">
+        <div className="flex items-center justify-between border-b border-white/10 px-4 py-4 sm:px-5 sm:py-5 md:px-10">
           <label htmlFor={searchId} className="sr-only">
             {t.search.label}
           </label>
-          <div className="flex flex-1 items-center gap-4">
+          <div className="flex min-w-0 flex-1 items-center gap-3 sm:gap-4">
             <IconSearch className="shrink-0 text-white/50" />
             <input
               ref={searchInputRef}
               id={searchId}
               type="search"
               placeholder={t.search.placeholder}
-              className="w-full bg-transparent font-sans text-lg text-white outline-none placeholder:text-white/35 md:text-xl"
+              className="w-full min-w-0 bg-transparent font-sans text-base text-white outline-none placeholder:text-white/35 sm:text-lg md:text-xl"
             />
           </div>
           <button
             type="button"
             onClick={() => setSearchOpen(false)}
-            className="ml-4 rounded-full px-4 py-2 font-sans text-[11px] font-semibold uppercase tracking-[0.2em] text-white/70 transition hover:text-white"
+            className="ml-3 shrink-0 rounded-full px-3 py-2 font-sans text-[11px] font-semibold uppercase tracking-[0.2em] text-white/70 transition hover:text-white sm:ml-4 sm:px-4"
           >
             {t.actions.close}
           </button>
         </div>
-        <div className="mx-auto mt-16 max-w-2xl px-6 text-center">
-          <p className="font-serif text-2xl text-white/90 md:text-3xl">
+        <div className="mx-auto mt-10 max-w-2xl px-5 text-center sm:mt-16 sm:px-6">
+          <p className="font-serif text-xl text-white/90 sm:text-2xl md:text-3xl">
             {t.search.headline}
           </p>
           <p className="mt-3 font-sans text-sm text-white/45">
             {t.search.hint}
           </p>
-          <div className="mt-10 flex flex-wrap justify-center gap-3">
+          <div className="mt-8 flex flex-wrap justify-center gap-2.5 sm:mt-10 sm:gap-3">
             {t.search.tags.map((tag) => (
               <button
                 key={tag}
                 type="button"
                 onClick={() => setSearchOpen(false)}
-                className="rounded-full border border-white/15 px-5 py-2 font-sans text-[11px] font-semibold uppercase tracking-[0.18em] text-white/75 transition hover:border-white/35 hover:bg-white/5"
+                className="rounded-full border border-white/15 px-4 py-2 font-sans text-[10px] font-semibold uppercase tracking-[0.18em] text-white/75 transition hover:border-white/35 hover:bg-white/5 sm:px-5 sm:text-[11px]"
               >
                 {tag}
               </button>
@@ -642,46 +663,53 @@ export function KpHeader() {
           aria-label={t.actions.closeMenu}
         />
         <div
-          className={`absolute inset-y-0 right-0 flex w-[min(100%,420px)] flex-col bg-[#060606] shadow-[-24px_0_80px_rgba(0,0,0,0.75)] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+          className={`absolute inset-y-0 right-0 flex w-full max-w-none flex-col bg-[#060606] shadow-[-24px_0_80px_rgba(0,0,0,0.75)] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] sm:max-w-[420px] ${
             menuOpen ? "translate-x-0" : "translate-x-full"
           }`}
+          style={{
+            paddingTop: "env(safe-area-inset-top)",
+            paddingBottom: "env(safe-area-inset-bottom)",
+          }}
         >
-          <div className="flex items-center justify-between border-b border-white/10 px-6 py-5">
+          <div className="flex items-center justify-between border-b border-white/10 px-5 py-4 sm:px-6 sm:py-5">
             <Image
               src="/logo.png"
               alt="KPANDJI"
               width={200}
               height={56}
-              className="h-10 w-auto opacity-90 sm:h-11"
+              className="h-9 w-auto opacity-90 sm:h-11"
               loading="eager"
             />
             <button
               type="button"
               onClick={() => setMenuOpen(false)}
-              className="rounded-full p-2 text-white/70 transition hover:bg-white/10 hover:text-white"
+              className="flex h-10 w-10 items-center justify-center rounded-full text-white/70 transition hover:bg-white/10 hover:text-white"
               aria-label={t.actions.close}
             >
-              <span className="block text-xl leading-none">×</span>
+              <span className="block text-2xl leading-none">×</span>
             </button>
           </div>
-          <div className="flex-1 overflow-y-auto px-2 py-4">
+          <div className="flex-1 overflow-y-auto overscroll-contain px-2 py-2 sm:py-4">
             {nav.map((item, i) => (
               <Link
                 key={item.label}
                 href={item.href}
                 onClick={() => setMenuOpen(false)}
                 aria-current={pathname === item.href ? "page" : undefined}
-                className={`kp-mobile-link block border-b border-white/6 px-4 py-4 font-sans text-[12px] font-semibold uppercase tracking-[0.22em] transition hover:bg-white/5 ${
+                className={`kp-mobile-link flex items-center justify-between border-b border-white/6 px-4 py-4 font-sans text-[12px] font-semibold uppercase tracking-[0.2em] transition hover:bg-white/5 sm:tracking-[0.22em] ${
                   pathname === item.href ? "text-white" : "text-white/85 hover:text-white"
                 }`}
                 style={{
                   animationDelay: menuOpen ? `${80 + i * 45}ms` : "0ms",
                 }}
               >
-                {item.label}
+                <span>{item.label}</span>
+                <span className="font-serif text-sm tabular-nums text-white/25">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
               </Link>
             ))}
-            <div className="space-y-3 px-4 pb-2 pt-6">
+            <div className="space-y-3 px-4 pb-4 pt-6">
               {isLoaded && !isSignedIn && (
                 <button
                   type="button"
@@ -693,7 +721,7 @@ export function KpHeader() {
                   onMouseEnter={() => setLoginPrefetch(true)}
                   onFocus={() => setLoginPrefetch(true)}
                   onTouchStart={() => setLoginPrefetch(true)}
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/15 px-6 py-3 font-sans text-[11px] font-semibold uppercase tracking-[0.22em] text-white/90 transition hover:border-white/30 hover:bg-white/5"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/15 px-6 py-3.5 font-sans text-[11px] font-semibold uppercase tracking-[0.22em] text-white/90 transition hover:border-white/30 hover:bg-white/5"
                 >
                   <IconUser className="h-4 w-4" />
                   {t.actions.clientSpace}
@@ -708,7 +736,7 @@ export function KpHeader() {
               <Link
                 href="/essai"
                 onClick={() => setMenuOpen(false)}
-                className="inline-flex w-full items-center justify-center rounded-full bg-white px-6 py-3 font-sans text-[11px] font-semibold uppercase tracking-[0.22em] text-black transition hover:bg-white/95"
+                className="inline-flex w-full items-center justify-center rounded-full bg-white px-6 py-3.5 font-sans text-[11px] font-semibold uppercase tracking-[0.22em] text-black transition hover:bg-white/95"
               >
                 {t.actions.bookTrial}
               </Link>
@@ -717,7 +745,7 @@ export function KpHeader() {
               </div>
             </div>
           </div>
-          <p className="border-t border-white/10 px-6 py-4 font-sans text-[10px] uppercase tracking-[0.25em] text-white/35">
+          <p className="border-t border-white/10 px-5 py-4 font-sans text-[10px] uppercase tracking-[0.25em] text-white/35 sm:px-6">
             {t.mobile.tagline}
           </p>
         </div>

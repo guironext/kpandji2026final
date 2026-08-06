@@ -217,7 +217,7 @@ export function KpHero() {
 						transition: "transform 0.1s linear",
 					}}>
 					<video
-						className="h-full w-full object-cover"
+						className="h-full w-full object-cover object-[center_35%] sm:object-center"
 						autoPlay
 						muted
 						loop
@@ -229,7 +229,7 @@ export function KpHero() {
 				<div
 					className="pointer-events-none absolute inset-0 h-full w-full"
 					style={{ opacity: dim }}>
-					<div className="absolute inset-0 bg-linear-to-b from-black/55 via-black/20 to-black/95" />
+					<div className="absolute inset-0 bg-linear-to-b from-black/70 via-black/25 to-black/95 sm:from-black/55 sm:via-black/20" />
 					<div className="absolute inset-0 bg-[radial-gradient(1200px_520px_at_22%_18%,rgba(201,169,98,0.20),transparent_62%)]" />
 					<div className="absolute inset-0 bg-[radial-gradient(900px_500px_at_85%_80%,rgba(201,169,98,0.10),transparent_60%)]" />
 					<div className="absolute inset-0 bg-[radial-gradient(1200px_800px_at_50%_50%,transparent_55%,rgba(0,0,0,0.78)_100%)]" />
@@ -238,36 +238,38 @@ export function KpHero() {
 			</div>
 
 			{/* Editorial copy & CTAs — staggered slide-up */}
-			<div className="relative z-10 mt-20 flex flex-1 items-end md:mt-0">
+			<div className="relative z-10 mt-[4.75rem] flex flex-1 items-end sm:mt-20 md:mt-0">
 				<motion.div
-					className="mx-auto w-full max-w-[1600px] px-5 pb-10 pt-24 md:px-10 md:pb-14 md:pt-28"
+					className="mx-auto w-full max-w-[1600px] px-4 pb-6 pt-10 sm:px-5 sm:pb-10 sm:pt-20 md:px-10 md:pb-14 md:pt-28"
 					variants={copyContainer}
 					initial="hidden"
 					animate={copyPhase}>
 					<motion.p
 						variants={lineSoft}
-						className="mb-5 flex items-center gap-3 font-sans text-[10px] font-semibold uppercase tracking-[0.45em] text-white/70 md:text-xs">
-						<span className="md:hidden">
-							<span className="relative inline-flex h-1.5 w-1.5">
-								<span className="kp-pulse-dot absolute inline-flex h-full w-full rounded-full bg-(--kp-gold)/80" />
-								<span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-kp-gold" />
+						className="mb-4 flex flex-col gap-1.5 font-sans text-[9px] font-semibold uppercase tracking-[0.28em] text-white/70 sm:mb-5 sm:flex-row sm:items-center sm:gap-3 sm:text-[10px] sm:tracking-[0.45em] md:text-xs">
+						<span className="flex items-center gap-2.5">
+							<span className="sm:hidden">
+								<span className="relative inline-flex h-1.5 w-1.5">
+									<span className="kp-pulse-dot absolute inline-flex h-full w-full rounded-full bg-(--kp-gold)/80" />
+									<span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-kp-gold" />
+								</span>
 							</span>
+							<span>{tr("La force d'une racine,", "The strength of a root,")}</span>
 						</span>
-						<span>{tr("La force d'une racine,", "The strength of a root,")}</span>
-						<span className="h-px w-6 bg-white/30 md:w-10" />
-						<span className="text-kp-gold">
+						<span className="hidden h-px w-6 bg-white/30 sm:block md:w-10" />
+						<span className="text-kp-gold sm:pl-0">
 							{tr("L'élan d'une Nation", "The drive of a Nation")}
 						</span>
 					</motion.p>
 
 					<motion.h1
 						variants={titleGroup}
-						className="max-w-[18ch] font-serif text-[clamp(2.6rem,6.4vw,6rem)] font-medium leading-[1.02] tracking-[-0.025em] text-white">
+						className="max-w-[12ch] font-serif text-[clamp(2.15rem,10vw,6rem)] font-medium leading-[1.02] tracking-[-0.025em] text-white sm:max-w-[18ch]">
 						<motion.span variants={line} className="block">
 							KPANDJI AUTOMOBILES
 						</motion.span>
-						<motion.span variants={line} className="block">
-							<span className="bg-linear-to-r from-white via-white to-kp-gold bg-clip-text text-[clamp(1.6rem,6.4vw,3rem)] text-transparent">
+						<motion.span variants={line} className="mt-1 block sm:mt-0">
+							<span className="bg-linear-to-r from-white via-white to-kp-gold bg-clip-text text-[clamp(1.2rem,5.6vw,3rem)] text-transparent">
 								{tr(
 									"Constructeur & Assembleur automobile",
 									"Automotive manufacturer & assembler",
@@ -278,7 +280,7 @@ export function KpHero() {
 
 					<motion.p
 						variants={lineSoft}
-						className="mt-6 max-w-xl font-sans text-base font-light italic leading-relaxed text-white/75 md:mt-8 md:text-lg">
+						className="mt-5 max-w-[34ch] font-sans text-[15px] font-light italic leading-relaxed text-white/75 sm:mt-6 sm:max-w-xl sm:text-base md:mt-8 md:text-lg">
 						{tr(
 							"Ingénierie, assemblage et mobilité durable — une signature africaine pour des véhicules pensés pour exiger le meilleur.",
 							"Engineering, assembly, and sustainable mobility — an African signature for vehicles built to demand the best.",
@@ -287,10 +289,10 @@ export function KpHero() {
 
 					<motion.div
 						variants={lineSoft}
-						className="mt-8 flex flex-wrap items-center gap-3 md:mt-12 md:gap-5">
+						className="mt-7 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:flex-wrap sm:items-center sm:gap-5 md:mt-12">
 						<a
 							href="#vehicules"
-							className="group inline-flex items-center gap-3 rounded-full bg-white px-7 py-3.5 font-sans text-[11px] font-semibold uppercase tracking-[0.22em] text-black transition duration-300 ease-out hover:scale-[1.02] hover:bg-white/95 active:scale-[0.98] md:px-8 md:text-[12px]">
+							className="group inline-flex w-full items-center justify-center gap-3 rounded-full bg-white px-6 py-3.5 font-sans text-[11px] font-semibold uppercase tracking-[0.22em] text-black transition duration-300 ease-out hover:scale-[1.02] hover:bg-white/95 active:scale-[0.98] sm:w-auto sm:justify-start sm:px-7 md:px-8 md:text-[12px]">
 							<span>{tr("Découvrir nos véhicules", "Discover our vehicles")}</span>
 							<svg
 								aria-hidden
@@ -311,8 +313,35 @@ export function KpHero() {
 
 			{/* Brand pillars strip */}
 			<div className="relative z-10 border-t border-white/10 bg-black/30 backdrop-blur-[2px]">
+				{/* Mobile: horizontal snap — no truncation, easy thumb scroll */}
 				<motion.div
-					className="mx-auto grid w-full max-w-[1600px] grid-cols-2 divide-y divide-white/10 px-5 md:grid-cols-4 md:divide-x md:divide-y-0 md:px-10"
+					className="kp-hide-scrollbar flex snap-x snap-mandatory gap-0 overflow-x-auto px-4 md:hidden"
+					variants={pillarsContainer(reduce)}
+					initial="hidden"
+					animate={pillarsShown ? "visible" : "hidden"}>
+					{pillars.map((p) => (
+						<motion.div
+							key={p.code}
+							variants={pillarItem(reduce)}
+							className="flex w-[78vw] max-w-[280px] shrink-0 snap-start items-start gap-3 border-r border-white/10 py-4 pr-5 last:border-r-0">
+							<span className="mt-0.5 font-serif text-base text-(--kp-gold)/85">
+								{p.code}
+							</span>
+							<div className="min-w-0">
+								<p className="font-sans text-[11px] font-semibold uppercase leading-snug tracking-[0.16em] text-white">
+									{p.label}
+								</p>
+								<p className="mt-1 font-sans text-[11px] leading-snug text-white/55">
+									{p.detail}
+								</p>
+							</div>
+						</motion.div>
+					))}
+				</motion.div>
+
+				{/* Desktop / tablet: 4-column grid */}
+				<motion.div
+					className="mx-auto hidden w-full max-w-[1600px] grid-cols-4 divide-x divide-white/10 px-5 md:grid md:px-10"
 					variants={pillarsContainer(reduce)}
 					initial="hidden"
 					animate={pillarsShown ? "visible" : "hidden"}>
@@ -320,17 +349,15 @@ export function KpHero() {
 						<motion.div
 							key={p.code}
 							variants={pillarItem(reduce)}
-							className={`flex items-center gap-4 py-5 md:py-6 ${
-								i === 0 ? "" : "md:pl-6 lg:pl-8"
-							} ${i % 2 === 1 ? "pl-5" : ""}`}>
-							<span className="font-serif text-base text-(--kp-gold)/85 md:text-lg">
+							className={`flex items-center gap-4 py-6 ${i === 0 ? "" : "md:pl-6 lg:pl-8"}`}>
+							<span className="font-serif text-lg text-(--kp-gold)/85">
 								{p.code}
 							</span>
 							<div className="min-w-0">
-								<p className="truncate font-sans text-[11px] font-semibold uppercase tracking-[0.22em] text-white md:text-[12px]">
+								<p className="font-sans text-[12px] font-semibold uppercase tracking-[0.22em] text-white">
 									{p.label}
 								</p>
-								<p className="kp-clamp-2 mt-0.5 font-sans text-[11px] leading-snug text-white/55 md:text-[12px]">
+								<p className="kp-clamp-2 mt-0.5 font-sans text-[12px] leading-snug text-white/55">
 									{p.detail}
 								</p>
 							</div>
@@ -349,19 +376,19 @@ export function KpHero() {
 						ease: easeOut,
 					}}>
 					<div className="pointer-events-none">
-						<div className="kp-marquee-track flex w-max items-center gap-12 py-3 will-change-transform md:gap-16 md:py-4">
+						<div className="kp-marquee-track flex w-max items-center gap-10 py-2.5 will-change-transform sm:gap-12 sm:py-3 md:gap-16 md:py-4">
 							{[...marquee, ...marquee].map((label, i) => (
 								<span
 									key={`${label}-${i}`}
-									className="flex items-center gap-12 font-sans text-[11px] uppercase tracking-[0.5em] text-white/45 md:text-[12px]">
+									className="flex items-center gap-10 font-sans text-[10px] uppercase tracking-[0.4em] text-white/45 sm:gap-12 sm:text-[11px] sm:tracking-[0.5em] md:text-[12px]">
 									<span>{label}</span>
 									<span className="text-kp-gold">◆</span>
 								</span>
 							))}
 						</div>
 					</div>
-					<div className="pointer-events-none absolute inset-y-0 left-0 w-12 bg-linear-to-r from-black/80 to-transparent md:w-24" />
-					<div className="pointer-events-none absolute inset-y-0 right-0 w-12 bg-linear-to-l from-black/80 to-transparent md:w-24" />
+					<div className="pointer-events-none absolute inset-y-0 left-0 w-8 bg-linear-to-r from-black/80 to-transparent sm:w-12 md:w-24" />
+					<div className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-linear-to-l from-black/80 to-transparent sm:w-12 md:w-24" />
 				</motion.div>
 			</div>
 
