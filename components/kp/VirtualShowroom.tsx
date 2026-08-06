@@ -11,98 +11,134 @@ import {
   useScroll,
 } from "framer-motion";
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
+import { useLocale } from "@/components/providers/KpLocaleProvider";
+
+type Copy = { fr: string; en: string };
+
+type GalleryTagKey = "ext" | "int";
 
 type ShowroomModel = {
   id: string;
   name: string;
-  badge?: string;
-  tagline: string;
-  description: string;
+  badge?: Copy;
+  tagline: Copy;
+  description: Copy;
   brochureHref: string;
-  highlights: string[];
-  gallery: Array<{ src: string; alt: string; tag?: "Extérieur" | "Intérieur" }>;
+  highlights: Copy[];
+  gallery: Array<{ src: string; alt: string; tag?: GalleryTagKey }>;
 };
 
 const MODELS: ShowroomModel[] = [
   {
     id: "djetranplus",
     name: "DJETRAN PLUS",
-    badge: "Nouveau",
-    tagline: "Pick-up premium, diesel ou essence, assistance niveau 2.",
-    description:
-      "Motorisations essence 2.0 GDI (197 ch, 360 Nm). Régulateur adaptatif, alerte de ligne, collision frontale, vision 360° et équipements de confort haut de gamme.",
+    badge: { fr: "Nouveau", en: "New" },
+    tagline: {
+      fr: "Pick-up premium, diesel ou essence, assistance niveau 2.",
+      en: "Premium pick-up, diesel or petrol, level 2 driving assistance.",
+    },
+    description: {
+      fr: "Motorisations essence 2.0 GDI (197 ch, 360 Nm). Régulateur adaptatif, alerte de ligne, collision frontale, vision 360° et équipements de confort haut de gamme.",
+      en: "2.0 GDI petrol engine (197 hp, 360 Nm). Adaptive cruise control, lane-departure warning, forward-collision warning, 360° vision, and premium comfort equipment.",
+    },
     brochureHref: "/fiche_djetran.pdf",
     highlights: [
-      "Diesel 2.3T — 163 ch / 380 Nm",
-      "Essence 2.0 GDI — 197 ch / 360 Nm",
-      "Assistance à la conduite niveau 2",
-      "Vision panoramique 360°",
+      {
+        fr: "Diesel 2.3T — 163 ch / 380 Nm",
+        en: "2.3T diesel — 163 hp / 380 Nm",
+      },
+      {
+        fr: "Essence 2.0 GDI — 197 ch / 360 Nm",
+        en: "2.0 GDI petrol — 197 hp / 360 Nm",
+      },
+      {
+        fr: "Assistance à la conduite niveau 2",
+        en: "Level 2 driving assistance",
+      },
+      {
+        fr: "Vision panoramique 360°",
+        en: "360° panoramic vision",
+      },
     ],
     gallery: [
-      { src: "/models/showcase/plusext0.jpg", alt: "DJETRAN PLUS", tag: "Extérieur" },
-      { src: "/models/showcase/plusext1.jpg", alt: "DJETRAN PLUS", tag: "Extérieur" },
-      { src: "/models/showcase/plusext2.jpg", alt: "DJETRAN PLUS", tag: "Extérieur" },
-      { src: "/models/showcase/plusext3.jpg", alt: "DJETRAN PLUS", tag: "Extérieur" },
-      { src: "/models/showcase/plusext4.jpg", alt: "DJETRAN PLUS", tag: "Extérieur" },
-      { src: "/models/showcase/plusext5.jpg", alt: "DJETRAN PLUS", tag: "Extérieur" },
-      { src: "/models/showcase/plusint1.jpg", alt: "DJETRAN PLUS", tag: "Intérieur" },
-      { src: "/models/showcase/plusint2.jpg", alt: "DJETRAN PLUS", tag: "Intérieur" },
-
+      { src: "/models/showcase/plusext0.jpg", alt: "DJETRAN PLUS", tag: "ext" },
+      { src: "/models/showcase/plusext1.jpg", alt: "DJETRAN PLUS", tag: "ext" },
+      { src: "/models/showcase/plusext2.jpg", alt: "DJETRAN PLUS", tag: "ext" },
+      { src: "/models/showcase/plusext3.jpg", alt: "DJETRAN PLUS", tag: "ext" },
+      { src: "/models/showcase/plusext4.jpg", alt: "DJETRAN PLUS", tag: "ext" },
+      { src: "/models/showcase/plusext5.jpg", alt: "DJETRAN PLUS", tag: "ext" },
+      { src: "/models/showcase/plusint1.jpg", alt: "DJETRAN PLUS", tag: "int" },
+      { src: "/models/showcase/plusint2.jpg", alt: "DJETRAN PLUS", tag: "int" },
     ],
   },
   {
     id: "djetran",
     name: "DJETRAN",
-    tagline: "4×4 robuste pour la route et le tout-terrain.",
-    description:
-      "Turbo Diesel 2,3L, développant 163 chevaux  avec un couple 340 Nm, offran puissance et souplesse pour la route comme le tout-terrain. Cockpit intelligent, caméra 360°, contrôle électronique de stabilité et ABS + EBD. ",
+    tagline: {
+      fr: "4×4 robuste pour la route et le tout-terrain.",
+      en: "A rugged 4×4 built for the road and the off-road.",
+    },
+    description: {
+      fr: "Turbo Diesel 2,3L, développant 163 chevaux  avec un couple 340 Nm, offran puissance et souplesse pour la route comme le tout-terrain. Cockpit intelligent, caméra 360°, contrôle électronique de stabilité et ABS + EBD. ",
+      en: "2.3L Turbo Diesel delivering 163 hp with 340 Nm of torque, offering power and flexibility on the road and off it. Smart cockpit, 360° camera, electronic stability control, and ABS + EBD.",
+    },
     brochureHref: "/fiche_djetran.pdf",
     highlights: [
-      "Moteur Turbo Diesel 2.3L",
-			"163 ch et 340 Nm de couple",
-			"Transmission intégrale",
-			"Caméra 360° et contrôle de stabilité",
+      { fr: "Moteur Turbo Diesel 2.3L", en: "2.3L Turbo Diesel engine" },
+      { fr: "163 ch et 340 Nm de couple", en: "163 hp and 340 Nm of torque" },
+      { fr: "Transmission intégrale", en: "All-wheel drive" },
+      {
+        fr: "Caméra 360° et contrôle de stabilité",
+        en: "360° camera and stability control",
+      },
     ],
     gallery: [
-      { src: "/models/showcase/djetext1.jpg", alt: "DJETRAN", tag: "Extérieur" },
-      { src: "/models/showcase/djetext2.jpg", alt: "DJETRAN", tag: "Extérieur" },
-      { src: "/models/showcase/djetext3.jpg", alt: "DJETRAN", tag: "Extérieur" },
-      { src: "/models/showcase/djetext4.jpg", alt: "DJETRAN", tag: "Extérieur" },
-      { src: "/models/showcase/djetext5.jpg", alt: "DJETRAN", tag: "Extérieur" },
-      { src: "/models/showcase/djetint1.jpg", alt: "DJETRAN", tag: "Intérieur" },
-      { src: "/models/showcase/djetint2.jpg", alt: "DJETRAN", tag: "Intérieur" },
-      { src: "/models/showcase/djetint3.jpg", alt: "DJETRAN", tag: "Intérieur" },
+      { src: "/models/showcase/djetext1.jpg", alt: "DJETRAN", tag: "ext" },
+      { src: "/models/showcase/djetext2.jpg", alt: "DJETRAN", tag: "ext" },
+      { src: "/models/showcase/djetext3.jpg", alt: "DJETRAN", tag: "ext" },
+      { src: "/models/showcase/djetext4.jpg", alt: "DJETRAN", tag: "ext" },
+      { src: "/models/showcase/djetext5.jpg", alt: "DJETRAN", tag: "ext" },
+      { src: "/models/showcase/djetint1.jpg", alt: "DJETRAN", tag: "int" },
+      { src: "/models/showcase/djetint2.jpg", alt: "DJETRAN", tag: "int" },
+      { src: "/models/showcase/djetint3.jpg", alt: "DJETRAN", tag: "int" },
     ],
   },
   {
     id: "lathaye",
     name: "LATHAYE",
-    tagline: "SUV fluide, moderne et performant.",
-    description:
-      "Avec un moteur 2.0T GDI Turbo compressé de 165 Kw. Transmission automatique CVT à 8 vitesses pour une vitesse maximale de 210 km/h. C'est un véritable bilide qui redéfinit la performance à chaque voyage.",
+    tagline: {
+      fr: "SUV fluide, moderne et performant.",
+      en: "A smooth, modern, and high-performing SUV.",
+    },
+    description: {
+      fr: "Avec un moteur 2.0T GDI Turbo compressé de 165 Kw. Transmission automatique CVT à 8 vitesses pour une vitesse maximale de 210 km/h. C'est un véritable bilide qui redéfinit la performance à chaque voyage.",
+      en: "Powered by a 2.0T GDI turbocharged engine developing 165 kW. 8-speed automatic CVT transmission for a top speed of 210 km/h. A true powerhouse that redefines performance on every journey.",
+    },
     brochureHref: "/fiche_lath.pdf",
     highlights: [
-    "Moteur 2.0T GDI Turbo",
-			"Puissance maximale de 165 kW",
-			"Boîte automatique CVT à 8 vitesses",
-			"Vitesse maximale de 210 km/h",
+      { fr: "Moteur 2.0T GDI Turbo", en: "2.0T GDI Turbo engine" },
+      { fr: "Puissance maximale de 165 kW", en: "Maximum power of 165 kW" },
+      {
+        fr: "Boîte automatique CVT à 8 vitesses",
+        en: "8-speed automatic CVT gearbox",
+      },
+      { fr: "Vitesse maximale de 210 km/h", en: "Top speed of 210 km/h" },
     ],
     gallery: [
-      { src: "/models/showcase/latxt1.jpg", alt: "LATHAYE", tag: "Extérieur" },
-      { src: "/models/showcase/latxt2.jpg", alt: "LATHAYE", tag: "Extérieur" },
-      { src: "/models/showcase/latxt3.jpg", alt: "LATHAYE", tag: "Extérieur" },
-      { src: "/models/showcase/latxt4.jpg", alt: "LATHAYE", tag: "Extérieur" },
-      { src: "/models/showcase/latint1.jpg", alt: "LATHAYE", tag: "Intérieur" },
-      { src: "/models/showcase/latint2.jpg", alt: "LATHAYE", tag: "Intérieur" },
-      { src: "/models/showcase/latint3.jpg", alt: "LATHAYE", tag: "Intérieur" },
-      { src: "/models/showcase/latint4.jpg", alt: "LATHAYE", tag: "Intérieur" },
-     
+      { src: "/models/showcase/latxt1.jpg", alt: "LATHAYE", tag: "ext" },
+      { src: "/models/showcase/latxt2.jpg", alt: "LATHAYE", tag: "ext" },
+      { src: "/models/showcase/latxt3.jpg", alt: "LATHAYE", tag: "ext" },
+      { src: "/models/showcase/latxt4.jpg", alt: "LATHAYE", tag: "ext" },
+      { src: "/models/showcase/latint1.jpg", alt: "LATHAYE", tag: "int" },
+      { src: "/models/showcase/latint2.jpg", alt: "LATHAYE", tag: "int" },
+      { src: "/models/showcase/latint3.jpg", alt: "LATHAYE", tag: "int" },
+      { src: "/models/showcase/latint4.jpg", alt: "LATHAYE", tag: "int" },
     ],
   },
 ];
 
-const TAGS = ["Tous", "Extérieur", "Intérieur"] as const;
-type GalleryTag = (typeof TAGS)[number];
+const TAG_KEYS = ["all", "ext", "int"] as const;
+type GalleryTag = (typeof TAG_KEYS)[number];
 
 const easeLux = [0.22, 1, 0.36, 1] as const;
 
@@ -207,15 +243,25 @@ function IconButton({
 }
 
 export default function VirtualShowroom() {
+  const { tr } = useLocale();
   const reduceMotion = useReducedMotion();
   const regionId = useId();
   const tabsId = useId();
   const rootRef = useRef<HTMLElement | null>(null);
   const thumbsRef = useRef<HTMLDivElement | null>(null);
   const [selectedId, setSelectedId] = useState(MODELS[0]?.id ?? "djetran");
-  const [tag, setTag] = useState<GalleryTag>("Tous");
+  const [tag, setTag] = useState<GalleryTag>("all");
   const [activeIndex, setActiveIndex] = useState(0);
   const [isHoveringGallery, setIsHoveringGallery] = useState(false);
+
+  const tagLabel = useCallback(
+    (key: GalleryTag) => {
+      if (key === "ext") return tr("Extérieur", "Exterior");
+      if (key === "int") return tr("Intérieur", "Interior");
+      return tr("Tous", "All");
+    },
+    [tr]
+  );
 
   const selected = useMemo(
     () => MODELS.find((m) => m.id === selectedId) ?? MODELS[0],
@@ -224,7 +270,7 @@ export default function VirtualShowroom() {
 
   const filteredGallery = useMemo(() => {
     const base = selected?.gallery ?? [];
-    const list = tag === "Tous" ? base : base.filter((g) => g.tag === tag);
+    const list = tag === "all" ? base : base.filter((g) => g.tag === tag);
     return list.length ? list : base;
   }, [selected, tag]);
 
@@ -243,7 +289,7 @@ export default function VirtualShowroom() {
   function selectModel(id: string) {
     setSelectedId(id);
     setActiveIndex(0);
-    setTag("Tous");
+    setTag("all");
   }
 
   const { scrollYProgress } = useScroll({
@@ -254,7 +300,7 @@ export default function VirtualShowroom() {
   useEffect(() => {
     if (reduceMotion) return;
     if (isHoveringGallery) return;
-    if (tag !== "Tous") return;
+    if (tag !== "all") return;
     if (filteredGallery.length <= 1) return;
 
     const id = window.setInterval(() => {
@@ -312,17 +358,19 @@ export default function VirtualShowroom() {
               aria-hidden
             />
             <p className="mt-5 font-sans text-[10px] font-semibold uppercase tracking-[0.32em] text-kp-muted sm:mt-6 sm:text-[11px] sm:tracking-[0.38em]">
-              Découvrez notre
+              {tr("Découvrez notre", "Discover our")}
             </p>
             <h1
               id={regionId}
               className="mt-4 font-serif text-[clamp(1.85rem,6.5vw,3.4rem)] font-medium leading-[1.08] tracking-[-0.02em] text-kp-accent sm:mt-5"
             >
-              Showroom virtuel
+              {tr("Showroom virtuel", "Virtual showroom")}
             </h1>
             <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-white/50 sm:text-[15px]">
-              Parcourez nos modèles en images, filtrez extérieur et intérieur, et
-              téléchargez les fiches techniques.
+              {tr(
+                "Parcourez nos modèles en images, filtrez extérieur et intérieur, et téléchargez les fiches techniques.",
+                "Browse our models in pictures, filter by exterior and interior, and download the technical sheets."
+              )}
             </p>
           </header>
 
@@ -337,7 +385,7 @@ export default function VirtualShowroom() {
                 id={tabsId}
                 className="px-1 font-sans text-[10px] font-semibold uppercase tracking-[0.24em] text-white/45 sm:tracking-[0.28em]"
               >
-                Modèle
+                {tr("Modèle", "Model")}
               </p>
               <div
                 role="tablist"
@@ -381,12 +429,12 @@ export default function VirtualShowroom() {
                         </span>
                         {model.badge ? (
                           <span className="rounded-full border border-kp-gold/35 bg-kp-gold/10 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-[0.16em] text-kp-gold">
-                            {model.badge}
+                            {tr(model.badge.fr, model.badge.en)}
                           </span>
                         ) : null}
                       </span>
                       <span className="mt-1 block text-xs text-white/45 sm:text-[13px]">
-                        {model.tagline}
+                        {tr(model.tagline.fr, model.tagline.en)}
                       </span>
                       {isActive ? (
                         <motion.span
@@ -428,38 +476,38 @@ export default function VirtualShowroom() {
 
                   <div className="relative">
                     <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.28em] text-white/45">
-                      Points forts
+                      {tr("Points forts", "Highlights")}
                     </p>
                     <h2 className="mt-2 font-serif text-2xl font-medium tracking-[-0.02em] text-kp-accent sm:text-[1.65rem]">
                       {selected?.name}
                     </h2>
                     <p className="mt-2 text-sm leading-relaxed text-white/55">
-                      {selected?.description}
+                      {selected ? tr(selected.description.fr, selected.description.en) : null}
                     </p>
                     <ul className="mt-5 space-y-3 border-t border-white/8 pt-5 text-[13px] text-white/60 sm:text-sm">
                       {(selected?.highlights ?? []).map((h) => (
-                        <li key={h} className="flex gap-3">
+                        <li key={h.fr} className="flex gap-3">
                           <span
                             className="mt-2 size-1.5 shrink-0 rounded-full bg-kp-gold/70 shadow-[0_0_12px_rgba(201,169,98,0.35)]"
                             aria-hidden
                           />
-                          <span>{h}</span>
+                          <span>{tr(h.fr, h.en)}</span>
                         </li>
                       ))}
                     </ul>
 
                     <div className="mt-6 grid gap-2.5 sm:grid-cols-2 lg:grid-cols-1">
                       <PrimaryButton href={selected.brochureHref} download>
-                        Fiche technique
+                        {tr("Fiche technique", "Technical sheet")}
                       </PrimaryButton>
                       <PrimaryButton href="/service-apres-vente">
-                        Prenez rendez-vous
+                        {tr("Prenez rendez-vous", "Book an appointment")}
                       </PrimaryButton>
                       <Link
                         href="/"
                         className="inline-flex min-h-11 w-full items-center justify-center rounded-full border border-white/12 bg-white/4 px-6 py-3 font-sans text-[11px] font-semibold uppercase tracking-[0.18em] text-white/75 transition hover:border-white/22 hover:bg-white/6 hover:text-white sm:col-span-2 lg:col-span-1"
                       >
-                        Retour à l&apos;accueil
+                        {tr("Retour à l'accueil", "Back to home")}
                       </Link>
                     </div>
                   </div>
@@ -470,12 +518,12 @@ export default function VirtualShowroom() {
               <div className="order-2 flex flex-col gap-4 sm:gap-5 lg:order-1 lg:col-span-8">
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.28em] text-white/40">
-                    Visuels — {selected?.name}
+                    {tr("Visuels", "Visuals")} — {selected?.name}
                   </p>
                   <div className="flex gap-2 overflow-x-auto pb-0.5 kp-hide-scrollbar">
-                    {TAGS.map((t) => (
+                    {TAG_KEYS.map((t) => (
                       <Chip key={t} active={tag === t} onClick={() => setTag(t)}>
-                        {t}
+                        {tagLabel(t)}
                       </Chip>
                     ))}
                   </div>
@@ -519,26 +567,31 @@ export default function VirtualShowroom() {
                         </motion.div>
                       ) : (
                         <div className="absolute inset-0 grid place-items-center">
-                          <p className="text-sm text-white/45">Aucun visuel disponible.</p>
+                          <p className="text-sm text-white/45">
+                            {tr("Aucun visuel disponible.", "No visual available.")}
+                          </p>
                         </div>
                       )}
                     </AnimatePresence>
 
                     {active?.tag ? (
                       <span className="absolute left-4 top-4 z-20 rounded-full border border-white/12 bg-black/55 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/80 backdrop-blur-md">
-                        {active.tag}
+                        {tagLabel(active.tag)}
                       </span>
                     ) : null}
 
                     {hasMultiple ? (
                       <div className="absolute inset-x-0 top-1/2 z-20 flex -translate-y-1/2 justify-between px-3 sm:px-4">
                         <IconButton
-                          label="Image précédente"
+                          label={tr("Image précédente", "Previous image")}
                           onClick={() => goTo(-1)}
                         >
                           <ChevronIcon direction="left" />
                         </IconButton>
-                        <IconButton label="Image suivante" onClick={() => goTo(1)}>
+                        <IconButton
+                          label={tr("Image suivante", "Next image")}
+                          onClick={() => goTo(1)}
+                        >
                           <ChevronIcon direction="right" />
                         </IconButton>
                       </div>
@@ -549,12 +602,16 @@ export default function VirtualShowroom() {
                         <span className="font-sans text-[10px] font-semibold tabular-nums tracking-widest text-white/70">
                           {safeIndex + 1} / {filteredGallery.length}
                         </span>
-                        <div className="flex gap-1.5" role="tablist" aria-label="Miniatures">
+                        <div
+                          className="flex gap-1.5"
+                          role="tablist"
+                          aria-label={tr("Miniatures", "Thumbnails")}
+                        >
                           {filteredGallery.map((_, idx) => (
                             <button
                               key={idx}
                               type="button"
-                              aria-label={`Image ${idx + 1}`}
+                              aria-label={`${tr("Image", "Image")} ${idx + 1}`}
                               aria-current={idx === safeIndex}
                               onClick={() => {
                                 setActiveIndex(idx);
@@ -574,7 +631,7 @@ export default function VirtualShowroom() {
 
                   <div className="border-t border-white/10 bg-black/40 px-4 py-4 sm:px-5 sm:py-4">
                     <p className="font-serif text-lg leading-snug text-kp-accent sm:text-xl">
-                      {selected?.tagline}
+                      {selected ? tr(selected.tagline.fr, selected.tagline.en) : null}
                     </p>
                     <p
                       className="kp-clamp-2 mt-1 min-h-10 text-sm leading-snug text-white/55 sm:min-h-11 sm:text-[15px]"
@@ -587,7 +644,7 @@ export default function VirtualShowroom() {
 
                 <div className="rounded-2xl border border-white/10 bg-white/4 p-3 ring-1 ring-white/5 backdrop-blur sm:p-4">
                   <p className="px-1 font-sans text-[10px] font-semibold uppercase tracking-[0.28em] text-white/45">
-                    Galerie
+                    {tr("Galerie", "Gallery")}
                   </p>
                   <div
                     ref={thumbsRef}
@@ -611,7 +668,7 @@ export default function VirtualShowroom() {
                               ? "border-kp-gold/55"
                               : "border-transparent opacity-80 hover:border-white/22 hover:opacity-100"
                           }`}
-                          aria-label={`Voir image ${idx + 1}`}
+                          aria-label={`${tr("Voir image", "View image")} ${idx + 1}`}
                           aria-current={isActive}
                         >
                           <Image
@@ -625,7 +682,7 @@ export default function VirtualShowroom() {
                           <div className="pointer-events-none absolute inset-0 bg-linear-to-b from-black/0 to-black/50" />
                           {g.tag ? (
                             <span className="absolute bottom-1.5 left-1.5 rounded-full border border-white/12 bg-black/55 px-1.5 py-0.5 text-[8px] font-semibold uppercase tracking-[0.14em] text-white/70 sm:text-[9px]">
-                              {g.tag}
+                              {tagLabel(g.tag)}
                             </span>
                           ) : null}
                         </button>
@@ -643,22 +700,24 @@ export default function VirtualShowroom() {
             <div className="grid gap-8 opacity-0-start animate-fade-up animation-delay-300 lg:grid-cols-12 lg:items-center lg:gap-10">
               <div className="lg:col-span-7">
                 <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.32em] text-kp-muted sm:tracking-[0.38em]">
-                  Besoin d&apos;aide ?
+                  {tr("Besoin d'aide ?", "Need help?")}
                 </p>
                 <h3 className="mt-3 font-serif text-[clamp(1.6rem,4.5vw,2rem)] font-medium tracking-[-0.02em] text-kp-accent">
-                  Un conseiller vous guide
+                  {tr("Un conseiller vous guide", "An advisor will guide you")}
                 </h3>
                 <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/52 sm:text-[15px]">
-                  Pour une disponibilité, un conseil sur la configuration ou l&apos;entretien,
-                  notre équipe S.A.V. peut vous orienter rapidement.
+                  {tr(
+                    "Pour une disponibilité, un conseil sur la configuration ou l'entretien, notre équipe S.A.V. peut vous orienter rapidement.",
+                    "For availability, configuration advice, or maintenance, our after-sales team can guide you quickly."
+                  )}
                 </p>
               </div>
               <div className="flex flex-col gap-3 sm:flex-row lg:col-span-5 lg:justify-end">
                 <PrimaryButton href="/service-apres-vente">
-                  Contactez le S.A.V.
+                  {tr("Contactez le S.A.V.", "Contact after-sales")}
                 </PrimaryButton>
                 <PrimaryButton href={selected.brochureHref} download>
-                  Télécharger la fiche
+                  {tr("Télécharger la fiche", "Download the sheet")}
                 </PrimaryButton>
               </div>
             </div>

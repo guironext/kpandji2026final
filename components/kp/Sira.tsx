@@ -1,6 +1,9 @@
+"use client";
+
 import type { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useLocale } from "@/components/providers/KpLocaleProvider";
 import { Reveal } from "@/components/kp/Reveal";
 
 const WHATSAPP_SIRA =
@@ -32,136 +35,170 @@ const btnGold =
 const btnGhost =
   "inline-flex min-h-12 w-full items-center justify-center rounded-full border border-white/15 bg-white/5 px-7 py-3.5 font-sans text-[11px] font-semibold uppercase tracking-[0.18em] text-white/85 backdrop-blur-sm transition hover:border-white/25 hover:bg-white/10 sm:min-h-11 sm:w-auto sm:px-8";
 
-const exclusivityFeatures = [
-  {
-    title: "Conception de flotte dédiée",
-    body: "Si un besoin spécifique n'est pas couvert par notre gamme actuelle, nous concevons un modèle exclusivement dédié à votre institution — coûts spéciaux et configuration unique.",
-    icon: (
-      <>
-        <path d="M3 17h18M5 17V9l7-4 7 4v8" strokeLinejoin="round" />
-        <path d="M9 17v-4h6v4" strokeLinecap="round" />
-      </>
-    ),
-  },
-  {
-    title: "Gadgets & options spécifiques",
-    body: "Intérieur cuir, écrans HD, caméras 360°, kits de remorquage… Chaque adhérent personnalise son véhicule. Le coût des options est calculé au plus juste.",
-    icon: (
-      <>
-        <circle cx="12" cy="12" r="3" />
-        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2" strokeLinecap="round" />
-      </>
-    ),
-  },
-] as const;
+function getExclusivityFeatures(tr: (fr: string, en: string) => string) {
+  return [
+    {
+      title: tr("Conception de flotte dédiée", "Dedicated fleet design"),
+      body: tr(
+        "Si un besoin spécifique n'est pas couvert par notre gamme actuelle, nous concevons un modèle exclusivement dédié à votre institution — coûts spéciaux et configuration unique.",
+        "If a specific need isn't covered by our current range, we design a model exclusively dedicated to your institution — special pricing and a unique configuration.",
+      ),
+      icon: (
+        <>
+          <path d="M3 17h18M5 17V9l7-4 7 4v8" strokeLinejoin="round" />
+          <path d="M9 17v-4h6v4" strokeLinecap="round" />
+        </>
+      ),
+    },
+    {
+      title: tr("Gadgets & options spécifiques", "Custom gadgets & options"),
+      body: tr(
+        "Intérieur cuir, écrans HD, caméras 360°, kits de remorquage… Chaque adhérent personnalise son véhicule. Le coût des options est calculé au plus juste.",
+        "Leather interior, HD screens, 360° cameras, towing kits… Every member customizes their vehicle. Option costs are calculated as fairly as possible.",
+      ),
+      icon: (
+        <>
+          <circle cx="12" cy="12" r="3" />
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2" strokeLinecap="round" />
+        </>
+      ),
+    },
+  ];
+}
 
-const tiers = [
-  {
-    name: "Bronze",
-    fullName: "Sira Bronze",
-    model: "BANCO",
-    minVehicles: 28,
-    image: "/derniers/banco.png",
-    brochureHref: "/fiche_tech/banco_bva.pdf",
-    brochureFilename: "KPANDJI-BANCO-BVA-Fiche-technique.pdf",
-    metal: "#CD7F32",
-    accent: "from-[#8B5A2B]/40 via-[#CD7F32]/18 to-transparent",
-    ring: "border-[#CD7F32]/40",
-    badge: "text-[#CD7F32]",
-    glow: "shadow-[0_0_48px_-14px_rgba(205,127,50,0.5)]",
-  },
-  {
-    name: "Argent",
-    fullName: "Sira Argent",
-    model: "SOURALAI",
-    minVehicles: 30,
-    image: "/derniers/souralai.png",
-    brochureHref: "/fiche_tech/souralai_suv.pdf",
-    brochureFilename: "KPANDJI-SOURALAI-Fiche-technique.pdf",
-    metal: "#C0C0C0",
-    accent: "from-white/22 via-white/8 to-transparent",
-    ring: "border-white/28",
-    badge: "text-white/80",
-    glow: "shadow-[0_0_48px_-14px_rgba(255,255,255,0.2)]",
-  },
-  {
-    name: "Or",
-    fullName: "Sira Or",
-    model: "LATHAYE 1",
-    minVehicles: 30,
-    image: "/derniers/lathaye.png",
-    brochureHref: "/fiche_tech/lathaye_suv.pdf",
-    brochureFilename: "KPANDJI-LATHAYE-Fiche-technique.pdf",
-    metal: "#C9A962",
-    accent: "from-kp-gold/35 via-kp-gold/14 to-transparent",
-    ring: "border-kp-gold/45",
-    badge: "text-kp-gold",
-    glow: "shadow-[0_0_48px_-14px_rgba(201,169,98,0.5)]",
-  },
-] as const;
+function getTiers(tr: (fr: string, en: string) => string) {
+  return [
+    {
+      name: tr("Bronze", "Bronze"),
+      fullName: tr("Sira Bronze", "Sira Bronze"),
+      model: "BANCO",
+      minVehicles: 28,
+      image: "/derniers/banco.png",
+      brochureHref: "/fiche_tech/banco_bva.pdf",
+      brochureFilename: "KPANDJI-BANCO-BVA-Fiche-technique.pdf",
+      metal: "#CD7F32",
+      accent: "from-[#8B5A2B]/40 via-[#CD7F32]/18 to-transparent",
+      ring: "border-[#CD7F32]/40",
+      badge: "text-[#CD7F32]",
+      glow: "shadow-[0_0_48px_-14px_rgba(205,127,50,0.5)]",
+    },
+    {
+      name: tr("Argent", "Silver"),
+      fullName: tr("Sira Argent", "Sira Silver"),
+      model: "SOURALAI",
+      minVehicles: 30,
+      image: "/derniers/souralai.png",
+      brochureHref: "/fiche_tech/souralai_suv.pdf",
+      brochureFilename: "KPANDJI-SOURALAI-Fiche-technique.pdf",
+      metal: "#C0C0C0",
+      accent: "from-white/22 via-white/8 to-transparent",
+      ring: "border-white/28",
+      badge: "text-white/80",
+      glow: "shadow-[0_0_48px_-14px_rgba(255,255,255,0.2)]",
+    },
+    {
+      name: tr("Or", "Gold"),
+      fullName: tr("Sira Or", "Sira Gold"),
+      model: "LATHAYE 1",
+      minVehicles: 30,
+      image: "/derniers/lathaye.png",
+      brochureHref: "/fiche_tech/lathaye_suv.pdf",
+      brochureFilename: "KPANDJI-LATHAYE-Fiche-technique.pdf",
+      metal: "#C9A962",
+      accent: "from-kp-gold/35 via-kp-gold/14 to-transparent",
+      ring: "border-kp-gold/45",
+      badge: "text-kp-gold",
+      glow: "shadow-[0_0_48px_-14px_rgba(201,169,98,0.5)]",
+    },
+  ];
+}
 
-const engagements = [
-  {
-    title: "Garantie constructeur excellence",
-    body: "Couverture complète de 3 ans ou 100 000 km sur l'ensemble de nos modèles.",
-    icon: (
-      <path d="M12 2l7 4v6c0 5-3.5 9.5-7 10-3.5-.5-7-5-7-10V6l7-4z" strokeLinejoin="round" />
-    ),
-  },
-  {
-    title: "Immatriculation offerte",
-    body: "Prise en charge intégrale des frais et démarches administratives de mise en circulation.",
-    icon: (
-      <>
-        <rect x="4" y="4" width="16" height="16" rx="2" />
-        <path d="M8 12h8M8 16h5" strokeLinecap="round" />
-      </>
-    ),
-  },
-  {
-    title: "Accompagnement assurance",
-    body: "Partenariats avec des assureurs de premier plan pour des tarifs préférentiels flotte.",
-    icon: <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" strokeLinejoin="round" />,
-  },
-  {
-    title: "Le levier bancaire Kpandji",
-    body: "Mise en relation avec nos banques partenaires ou adaptation à vos structures mutualistes.",
-    icon: (
-      <>
-        <rect x="3" y="7" width="18" height="13" rx="2" />
-        <path d="M3 11h18M7 15h.01M11 15h.01" strokeLinecap="round" />
-      </>
-    ),
-  },
-  {
-    title: "Conditions de règlement",
-    body: "Comptant (Cash) par la mutuelle ou via partenaire bancaire, sous accord préalable de la Direction.",
-    icon: (
-      <>
-        <circle cx="12" cy="12" r="9" />
-        <path d="M12 7v5l3 2" strokeLinecap="round" />
-      </>
-    ),
-  },
-  {
-    title: "Livraison garantie",
-    body: "Engagement de livraison de vos véhicules dans un délai maximum de 120 jours.",
-    icon: (
-      <>
-        <path d="M5 17h14l-1.5-5.5a2 2 0 00-1.9-1.5H8.4a2 2 0 00-1.9 1.5L5 17z" strokeLinejoin="round" />
-        <circle cx="7.5" cy="17.5" r="1.5" fill="currentColor" stroke="none" />
-        <circle cx="16.5" cy="17.5" r="1.5" fill="currentColor" stroke="none" />
-      </>
-    ),
-  },
-] as const;
+type Tier = ReturnType<typeof getTiers>[number];
 
-const stats = [
-  { value: "120j", label: "Livraison max." },
-  { value: "3 ans", label: "Garantie" },
-  { value: "20h/7", label: "Assistance VIP" },
-  { value: "28+", label: "Véhicules min." },
-] as const;
+function getEngagements(tr: (fr: string, en: string) => string) {
+  return [
+    {
+      title: tr("Garantie constructeur excellence", "Manufacturer excellence warranty"),
+      body: tr(
+        "Couverture complète de 3 ans ou 100 000 km sur l'ensemble de nos modèles.",
+        "Full coverage of 3 years or 100,000 km across our entire range.",
+      ),
+      icon: (
+        <path d="M12 2l7 4v6c0 5-3.5 9.5-7 10-3.5-.5-7-5-7-10V6l7-4z" strokeLinejoin="round" />
+      ),
+    },
+    {
+      title: tr("Immatriculation offerte", "Free registration"),
+      body: tr(
+        "Prise en charge intégrale des frais et démarches administratives de mise en circulation.",
+        "Full coverage of registration fees and administrative procedures.",
+      ),
+      icon: (
+        <>
+          <rect x="4" y="4" width="16" height="16" rx="2" />
+          <path d="M8 12h8M8 16h5" strokeLinecap="round" />
+        </>
+      ),
+    },
+    {
+      title: tr("Accompagnement assurance", "Insurance support"),
+      body: tr(
+        "Partenariats avec des assureurs de premier plan pour des tarifs préférentiels flotte.",
+        "Partnerships with leading insurers for preferential fleet rates.",
+      ),
+      icon: <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" strokeLinejoin="round" />,
+    },
+    {
+      title: tr("Le levier bancaire Kpandji", "The KPANDJI banking lever"),
+      body: tr(
+        "Mise en relation avec nos banques partenaires ou adaptation à vos structures mutualistes.",
+        "Introductions to our partner banks or tailored solutions for your mutual structures.",
+      ),
+      icon: (
+        <>
+          <rect x="3" y="7" width="18" height="13" rx="2" />
+          <path d="M3 11h18M7 15h.01M11 15h.01" strokeLinecap="round" />
+        </>
+      ),
+    },
+    {
+      title: tr("Conditions de règlement", "Payment terms"),
+      body: tr(
+        "Comptant (Cash) par la mutuelle ou via partenaire bancaire, sous accord préalable de la Direction.",
+        "Cash payment by the mutual association or via a banking partner, subject to prior approval from Management.",
+      ),
+      icon: (
+        <>
+          <circle cx="12" cy="12" r="9" />
+          <path d="M12 7v5l3 2" strokeLinecap="round" />
+        </>
+      ),
+    },
+    {
+      title: tr("Livraison garantie", "Guaranteed delivery"),
+      body: tr(
+        "Engagement de livraison de vos véhicules dans un délai maximum de 120 jours.",
+        "Committed delivery of your vehicles within a maximum of 120 days.",
+      ),
+      icon: (
+        <>
+          <path d="M5 17h14l-1.5-5.5a2 2 0 00-1.9-1.5H8.4a2 2 0 00-1.9 1.5L5 17z" strokeLinejoin="round" />
+          <circle cx="7.5" cy="17.5" r="1.5" fill="currentColor" stroke="none" />
+          <circle cx="16.5" cy="17.5" r="1.5" fill="currentColor" stroke="none" />
+        </>
+      ),
+    },
+  ];
+}
+
+function getStats(tr: (fr: string, en: string) => string) {
+  return [
+    { value: tr("120j", "120d"), label: tr("Livraison max.", "Max delivery") },
+    { value: tr("3 ans", "3 yrs"), label: tr("Garantie", "Warranty") },
+    { value: "20h/7", label: tr("Assistance VIP", "VIP support") },
+    { value: "28+", label: tr("Véhicules min.", "Min. vehicles") },
+  ];
+}
 
 function IconBox({ children }: { children: ReactNode }) {
   return (
@@ -184,6 +221,8 @@ function SectionChapter({
   title: string;
   description?: string;
 }) {
+  const { tr } = useLocale();
+  const partLabel = tr("Partie", "Part");
   return (
     <div className="relative overflow-hidden border-y border-white/8 bg-[radial-gradient(900px_320px_at_20%_50%,rgba(201,169,98,0.12),transparent_60%)]">
       <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-kp-gold/45 to-transparent" />
@@ -192,7 +231,7 @@ function SectionChapter({
           <div className="max-w-3xl">
             <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
               <span className="inline-flex items-center rounded-full border border-kp-gold/30 bg-kp-gold/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.28em] text-kp-gold">
-                Partie {part}
+                {partLabel} {part}
               </span>
               <span className="text-[10px] font-semibold uppercase tracking-[0.24em] text-white/40">
                 {label}
@@ -213,7 +252,7 @@ function SectionChapter({
   );
 }
 
-function TierNode({ tier }: { tier: (typeof tiers)[number] }) {
+function TierNode({ tier }: { tier: Tier }) {
   return (
     <span className="relative flex size-7 items-center justify-center">
       <span
@@ -236,6 +275,12 @@ function TierNode({ tier }: { tier: (typeof tiers)[number] }) {
 }
 
 const Sira = () => {
+  const { tr } = useLocale();
+  const exclusivityFeatures = getExclusivityFeatures(tr);
+  const tiers = getTiers(tr);
+  const engagements = getEngagements(tr);
+  const stats = getStats(tr);
+
   return (
     <section id="sira" className="relative overflow-hidden bg-kp-bg" aria-labelledby="sira-title">
       {/* ─── Hero ─── */}
@@ -261,7 +306,7 @@ const Sira = () => {
           <Reveal from="bottom">
             <p className={eyebrow}>
               <span aria-hidden className="h-px w-8 bg-kp-gold/80 sm:w-12" />
-              Offre institutionnelle · Côte d&apos;Ivoire
+              {tr("Offre institutionnelle · Côte d'Ivoire", "Institutional offer · Côte d'Ivoire")}
             </p>
           </Reveal>
 
@@ -279,20 +324,23 @@ const Sira = () => {
 
           <Reveal from="bottom" delayMs={140}>
             <p className={`mt-5 max-w-lg text-pretty sm:mt-6 ${bodyTextLg}`}>
-            Pour répondre aux exigences de volume et de rentabilité des institutions, KPANDJI conçoit des modèles exclusifs, spécifiquement configurés pour l'offre SIRA. Ces véhicules (utilitaires, citadines, SUV optimisés) offrent le meilleur coût de possession du marché et sont réservés uniquement aux commandes de flottes.
+              {tr(
+                "Pour répondre aux exigences de volume et de rentabilité des institutions, KPANDJI conçoit des modèles exclusifs, spécifiquement configurés pour l'offre SIRA. Ces véhicules (utilitaires, citadines, SUV optimisés) offrent le meilleur coût de possession du marché et sont réservés uniquement aux commandes de flottes.",
+                "To meet the volume and profitability requirements of institutions, KPANDJI designs exclusive models specifically configured for the SIRA offer. These vehicles (utility, city, and optimized SUVs) deliver the best cost of ownership on the market and are reserved exclusively for fleet orders.",
+              )}
             </p>
           </Reveal>
 
           <Reveal from="bottom" delayMs={200}>
             <div className="mt-8 flex flex-col gap-3 sm:mt-9 sm:flex-row sm:flex-wrap sm:items-center">
               <a href={WHATSAPP_SIRA} target="_blank" rel="noopener noreferrer" className={btnGold}>
-                <span>Demander une offre flotte</span>
+                <span>{tr("Demander une offre flotte", "Request a fleet quote")}</span>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="size-3.5 transition-transform duration-300 group-hover:translate-x-0.5" aria-hidden>
                   <path d="M5 12h14M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </a>
               <Link href="/contact" className={btnGhost}>
-                Nous contacter
+                {tr("Nous contacter", "Contact us")}
               </Link>
             </div>
           </Reveal>
@@ -328,15 +376,21 @@ const Sira = () => {
         <Reveal from="bottom">
           <div className="mx-auto max-w-3xl text-center">
             <p className="font-serif text-[clamp(1.35rem,3.5vw,1.85rem)] leading-snug tracking-tight text-white">
-              Votre flotte, <span className="text-white/50">votre identité.</span>
+              {tr("Votre flotte,", "Your fleet,")}{" "}
+              <span className="text-white/50">{tr("votre identité.", "your identity.")}</span>
             </p>
             <p className={`mx-auto mt-4 max-w-2xl text-pretty ${bodyText}`}>
-              Pour répondre aux exigences de volume et de rentabilité des institutions, KPANDJI
-              conçoit des modèles exclusifs Sira — utilitaires, citadines et SUV optimisés —
-              réservés uniquement aux commandes de flottes.
+              {tr(
+                "Pour répondre aux exigences de volume et de rentabilité des institutions, KPANDJI conçoit des modèles exclusifs Sira — utilitaires, citadines et SUV optimisés — réservés uniquement aux commandes de flottes.",
+                "To meet the volume and profitability requirements of institutions, KPANDJI designs exclusive Sira models — utility, city, and optimized SUVs — reserved exclusively for fleet orders.",
+              )}
             </p>
             <ul className="mt-7 flex flex-col items-stretch gap-2.5 sm:mx-auto sm:max-w-xl sm:flex-row sm:flex-wrap sm:justify-center sm:gap-3">
-              {["Personnalisation par adhérent", "Financement & assurance", "3 paliers Bronze → Or"].map(
+              {[
+                tr("Personnalisation par adhérent", "Personalization per member"),
+                tr("Financement & assurance", "Financing & insurance"),
+                tr("3 paliers Bronze → Or", "3 tiers Bronze → Gold"),
+              ].map(
                 (item) => (
                   <li
                     key={item}
@@ -355,9 +409,12 @@ const Sira = () => {
       {/* ─── Partie I : Exclusivité ─── */}
       <SectionChapter
         part="I"
-        label="Exclusivité"
-        title="Le sur-mesure & la personnalisation"
-        description="Chaque flotte Sira reflète l'identité de votre institution et les attentes de vos adhérents."
+        label={tr("Exclusivité", "Exclusivity")}
+        title={tr("Le sur-mesure & la personnalisation", "Tailored & personalized")}
+        description={tr(
+          "Chaque flotte Sira reflète l'identité de votre institution et les attentes de vos adhérents.",
+          "Every Sira fleet reflects your institution's identity and the expectations of its members.",
+        )}
       />
       <div className={`${pageMax} ${sectionPad} pb-12 sm:pb-16 md:pb-20`}>
         <div className="grid gap-4 sm:gap-5 lg:grid-cols-2 lg:gap-6">
@@ -383,9 +440,12 @@ const Sira = () => {
       {/* ─── Partie II : Paliers ─── */}
       <SectionChapter
         part="II"
-        label="Paliers d'offres"
-        title="Les niveaux Sira"
-        description="Le taux de remise définitif est déterminé selon le volume global et le mix de modèles sélectionnés."
+        label={tr("Paliers d'offres", "Tier levels")}
+        title={tr("Les niveaux Sira", "The Sira tiers")}
+        description={tr(
+          "Le taux de remise définitif est déterminé selon le volume global et le mix de modèles sélectionnés.",
+          "The final discount rate is determined by total order volume and the mix of models selected.",
+        )}
       />
       <div className={`${pageMax} ${sectionPad} pb-12 sm:pb-16 md:pb-20`}>
         {/* Mobile / tablet progression */}
@@ -409,7 +469,7 @@ const Sira = () => {
                   {tier.name}
                 </p>
                 <p className="mt-1 text-[9px] font-medium uppercase tracking-[0.16em] text-white/30">
-                  ≥ {tier.minVehicles} véh.
+                  ≥ {tier.minVehicles} {tr("véh.", "veh.")}
                 </p>
               </li>
             ))}
@@ -431,7 +491,7 @@ const Sira = () => {
                   {tier.name}
                 </p>
                 <p className="mt-1 text-[9px] font-medium uppercase tracking-[0.16em] text-white/30">
-                  ≥ {tier.minVehicles} véh.
+                  ≥ {tier.minVehicles} {tr("véh.", "veh.")}
                 </p>
               </li>
             ))}
@@ -462,24 +522,24 @@ const Sira = () => {
                   <div className="relative mt-4 aspect-16/10 overflow-hidden rounded-xl border border-white/8 bg-black/30 sm:mt-5">
                     <Image
                       src={tier.image}
-                      alt={`Modèle ${tier.model} — ${tier.fullName}`}
+                      alt={tr(`Modèle ${tier.model} — ${tier.fullName}`, `${tier.model} model — ${tier.fullName}`)}
                       fill
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       className="object-cover object-center transition duration-700 motion-safe:group-hover:scale-[1.04]"
                     />
                     <div aria-hidden className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/55 via-transparent to-transparent" />
                     <div className="absolute bottom-2.5 left-2.5 rounded-full border border-white/15 bg-black/50 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/80 backdrop-blur-sm sm:bottom-3 sm:left-3 sm:px-3">
-                      ≥ {tier.minVehicles} véh.
+                      ≥ {tier.minVehicles} {tr("véh.", "veh.")}
                     </div>
                   </div>
 
                   <div className="mt-4 flex items-center justify-between border-t border-white/8 pt-3.5 sm:mt-5 sm:pt-4">
                     <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/40">
-                      Seuil d&apos;accès
+                      {tr("Seuil d'accès", "Access threshold")}
                     </p>
                     <p className="font-serif text-lg text-white">
                       {tier.minVehicles}
-                      <span className="ml-1 text-sm text-white/45">véhicules</span>
+                      <span className="ml-1 text-sm text-white/45">{tr("véhicules", "vehicles")}</span>
                     </p>
                   </div>
 
@@ -499,7 +559,7 @@ const Sira = () => {
                       <path d="M12 3v12M7 11l5 5 5-5" strokeLinecap="round" strokeLinejoin="round" />
                       <path d="M5 19h14" strokeLinecap="round" />
                     </svg>
-                    <span>Fiche technique</span>
+                    <span>{tr("Fiche technique", "Technical sheet")}</span>
                   </a>
                 </div>
               </article>
@@ -509,8 +569,11 @@ const Sira = () => {
 
         <Reveal from="bottom" delayMs={120}>
           <p className="mx-auto mt-7 max-w-2xl text-center text-[12px] leading-relaxed text-white/40 sm:mt-8 sm:text-[13px]">
-            <span className="text-kp-gold/80">Note :</span> le taux de remise définitif dépend du volume
-            global de commande et du mix de modèles retenus.
+            <span className="text-kp-gold/80">{tr("Note :", "Note:")}</span>{" "}
+            {tr(
+              "le taux de remise définitif dépend du volume global de commande et du mix de modèles retenus.",
+              "the final discount rate depends on total order volume and the mix of models selected.",
+            )}
           </p>
         </Reveal>
       </div>
@@ -518,8 +581,8 @@ const Sira = () => {
       {/* ─── Partie III : Engagements ─── */}
       <SectionChapter
         part="III"
-        label="Engagements"
-        title="Services & garanties exclusifs"
+        label={tr("Engagements", "Commitments")}
+        title={tr("Services & garanties exclusifs", "Exclusive services & guarantees")}
       />
       <div className={`${pageMax} ${sectionPad} pb-12 sm:pb-16 md:pb-20`}>
         <div className="grid gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3 lg:gap-5">
@@ -554,27 +617,28 @@ const Sira = () => {
               </div>
               <p className={`${eyebrow} justify-center`}>
                 <span aria-hidden className="h-px w-6 bg-kp-gold/60 sm:w-8" />
-                Partenariat national
+                {tr("Partenariat national", "National partnership")}
                 <span aria-hidden className="h-px w-6 bg-kp-gold/60 sm:w-8" />
               </p>
               <h3 className={`mt-4 ${sectionTitle} sm:mt-5`}>
-                Bien plus qu&apos;une flotte automobile
+                {tr("Bien plus qu'une flotte automobile", "More than just a vehicle fleet")}
               </h3>
               <p className={`mx-auto mt-4 max-w-2xl text-pretty sm:mt-5 ${bodyTextLg}`}>
-                En choisissant l&apos;offre KPANDJI Sira, vous scellez un partenariat avec une
-                expertise locale aux standards internationaux. Ensemble, valorisons le savoir-faire
-                national et offrons à vos membres la fierté de rouler dans des véhicules neufs.
+                {tr(
+                  "En choisissant l'offre KPANDJI Sira, vous scellez un partenariat avec une expertise locale aux standards internationaux. Ensemble, valorisons le savoir-faire national et offrons à vos membres la fierté de rouler dans des véhicules neufs.",
+                  "By choosing the KPANDJI Sira offer, you seal a partnership with local expertise built to international standards. Together, let's champion national know-how and give your members the pride of driving brand-new vehicles.",
+                )}
               </p>
 
               <div className="mt-8 flex flex-col items-stretch gap-3 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center sm:gap-4">
                 <a href={WHATSAPP_SIRA} target="_blank" rel="noopener noreferrer" className={btnGold}>
-                  <span>Lancer mon projet flotte</span>
+                  <span>{tr("Lancer mon projet flotte", "Start my fleet project")}</span>
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="size-3.5 transition-transform duration-300 group-hover:translate-x-0.5" aria-hidden>
                     <path d="M5 12h14M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </a>
                 <Link href="/contact" className={btnGhost}>
-                  Parler à un conseiller
+                  {tr("Parler à un conseiller", "Speak to an advisor")}
                 </Link>
               </div>
             </div>

@@ -3,6 +3,9 @@
 import Image from "next/image";
 import { useCallback, useMemo, useState } from "react";
 import type { Modele } from "@/data/modeles";
+import type { Copy } from "@/lib/i18n/pick";
+import { useLocale } from "@/components/providers/KpLocaleProvider";
+import type { Locale } from "@/lib/i18n/config";
 
 type AngleKey = "intern" | "extern" | "back";
 
@@ -10,12 +13,13 @@ type Slide = { src: string; text: string };
 
 type AngleDesc = {
 	ext: string;
-	text: string;
+	text: Copy;
 };
 
 /** One of `Modele.intern` | `Modele.extern` | `Modele.back` from `data/modeles.ts` (same shape). */
 function slidesFromAngleBlock(
 	block: Modele["intern"] | Modele["extern"] | Modele["back"],
+	locale: Locale,
 ): Slide[] {
 	const candidates: AngleDesc[] = [
 		{ ext: block.desc1.ext1, text: block.desc1.descDetail1 },
@@ -31,19 +35,21 @@ function slidesFromAngleBlock(
 	}
 
 	return candidates
-		.filter(({ ext, text }) => Boolean(ext && text))
-		.map(({ ext, text }) => ({ src: ext, text }));
+		.filter(({ ext, text }) => Boolean(ext && text?.[locale]))
+		.map(({ ext, text }) => ({ src: ext, text: text[locale] }));
 }
 
 const ANGLES: {
 	key: AngleKey;
-	label: string;
+	labelFr: string;
+	labelEn: string;
 	bgIdle: string;
 	bgActive: string;
 }[] = [
 	{
 		key: "intern",
-		label: "Intérieur",
+		labelFr: "Intérieur",
+		labelEn: "Interior",
 		bgIdle:
 			"bg-linear-to-b from-emerald-950/55 via-emerald-950/25 to-kp-bg/90 border-emerald-500/20",
 		bgActive:
@@ -51,7 +57,8 @@ const ANGLES: {
 	},
 	{
 		key: "extern",
-		label: "Avant",
+		labelFr: "Avant",
+		labelEn: "Front",
 		bgIdle:
 			"bg-linear-to-b from-kp-gold/28 via-amber-950/20 to-kp-bg/90 border-kp-gold/25",
 		bgActive:
@@ -59,7 +66,8 @@ const ANGLES: {
 	},
 	{
 		key: "back",
-		label: "Arrière",
+		labelFr: "Arrière",
+		labelEn: "Rear",
 		bgIdle:
 			"bg-linear-to-b from-slate-900/70 via-zinc-900/35 to-kp-bg/90 border-slate-500/25",
 		bgActive:
@@ -76,6 +84,7 @@ type Props = {
 };
 
 export function ModeleAnglesExplorer({ name, modele }: Props) {
+	const { locale, tr } = useLocale();
 	const angleBlocks = useMemo(
 		() =>
 			({
@@ -93,8 +102,8 @@ export function ModeleAnglesExplorer({ name, modele }: Props) {
 	const [index, setIndex] = useState(0);
 
 	const slides = useMemo(
-		() => slidesFromAngleBlock(angleBlocks[angle]),
-		[angleBlocks, angle],
+		() => slidesFromAngleBlock(angleBlocks[angle], locale),
+		[angleBlocks, angle, locale],
 	);
 
 	const selectAngle = useCallback((next: AngleKey) => {
@@ -112,8 +121,9 @@ export function ModeleAnglesExplorer({ name, modele }: Props) {
 		<div className="flex min-h-0 w-full flex-col gap-4 lg:min-h-[min(72vh,640px)] lg:flex-row lg:gap-0 lg:divide-x lg:divide-white/8">
 			{/* Part A — narrow strip on large screens */}
 			<div className="flex w-full shrink-0 flex-row gap-1.5 sm:gap-2 lg:h-full lg:min-h-0 lg:w-14 lg:flex-col lg:gap-1.5 lg:pr-2">
-				{ANGLES.map(({ key, label, bgIdle, bgActive }) => {
+				{ANGLES.map(({ key, labelFr, labelEn, bgIdle, bgActive }) => {
 					const active = angle === key;
+					const label = tr(labelFr, labelEn);
 					return (
 						<button
 							key={key}
@@ -145,10 +155,13 @@ export function ModeleAnglesExplorer({ name, modele }: Props) {
 									: "border-white/10 hover:border-kp-gold/30"
 							}`}
 							aria-current={selected ? "true" : undefined}>
-							<Image
-								src={slide.src}
-								alt={`${name} — ${ANGLES.find((a) => a.key === angle)?.label ?? ""} ${i + 1}`}
-								fill
+						<Image
+							src={slide.src}
+							alt={`${name} — ${tr(
+								ANGLES.find((a) => a.key === angle)?.labelFr ?? "",
+								ANGLES.find((a) => a.key === angle)?.labelEn ?? "",
+							)} ${i + 1}`}
+							fill
 								sizes="120px"
 								className="object-cover"
 							/>
@@ -164,7 +177,7 @@ export function ModeleAnglesExplorer({ name, modele }: Props) {
 			{/* Part C */}
 			<div className="flex w-full min-h-0 shrink-0 flex-col lg:w-1/6 lg:px-3 lg:py-1">
 				<p className="mb-2 font-sans text-[9px] font-semibold uppercase tracking-[0.28em] text-kp-muted">
-					Description
+					{tr("Description", "Description")}
 				</p>
 				<div className="min-h-32 flex-1 overflow-y-auto rounded-xl border border-white/10 bg-black/20 p-3 ring-1 ring-white/5 lg:min-h-0">
 					<p className="text-pretty text-xs leading-relaxed text-kp-muted md:text-[13px] md:leading-6">
@@ -179,7 +192,7 @@ export function ModeleAnglesExplorer({ name, modele }: Props) {
 					{current ? (
 						<Image
 							src={current.src}
-							alt={`${name} — vue détaillée`}
+							alt={`${name} — ${tr("vue détaillée", "detailed view")}`}
 							fill
 							sizes="(max-width: 1024px) 100vw, 50vw"
 							className="object-cover object-center"
@@ -188,8 +201,11 @@ export function ModeleAnglesExplorer({ name, modele }: Props) {
 					<div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/55 via-transparent to-black/15" />
 					<div className="pointer-events-none absolute inset-x-0 bottom-0 p-4 md:p-6">
 						<span className="inline-flex rounded-full border border-white/20 bg-black/45 px-3 py-1 font-sans text-[10px] font-semibold uppercase tracking-[0.22em] text-white/90 backdrop-blur-md">
-							{ANGLES.find((a) => a.key === angle)?.label} ·{" "}
-							{String(safeIndex + 1).padStart(2, "0")}
+							{tr(
+								ANGLES.find((a) => a.key === angle)?.labelFr ?? "",
+								ANGLES.find((a) => a.key === angle)?.labelEn ?? "",
+							)}{" "}
+							· {String(safeIndex + 1).padStart(2, "0")}
 						</span>
 					</div>
 				</div>

@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { MODELES } from "@/data/modeles";
+import { useLocale } from "@/components/providers/KpLocaleProvider";
 import { Reveal } from "./Reveal";
 
 /** Loads and autoplays only when near the viewport — keeps the section fast. */
@@ -43,16 +44,17 @@ function LazyAutoplayVideo({ src, className }: { src: string; className?: string
 	);
 }
 
-function ModeleSpecChips({ items }: { items: string[] }) {
+function ModeleSpecChips({ items }: { items: (typeof MODELES)[number]["characteristics"] }) {
+	const { tr } = useLocale();
 	const top = items.slice(0, 4);
 	if (top.length === 0) return null;
 	return (
 		<div className="mt-5 flex flex-wrap gap-2">
 			{top.map((c) => (
 				<span
-					key={c}
+					key={c.fr}
 					className="inline-flex items-center rounded-full border border-white/12 bg-white/5 px-3 py-1 font-sans text-[10px] font-semibold uppercase tracking-[0.18em] text-kp-accent/90 backdrop-blur">
-					{c}
+					{tr(c.fr, c.en)}
 				</span>
 			))}
 		</div>
@@ -101,10 +103,11 @@ function ModeleRow({
 	const flipped = index % 2 === 1;
 	/* First rows + Lathaye (index 2): avoid a lazy tile becoming LCP (e.g. pic2.jpeg). */
 	const priorityTopImage = index < 3;
+	const { tr } = useLocale();
 
 	return (
 		<section
-			aria-label={`Modèle ${item.name}`}
+			aria-label={tr(`Modèle ${item.name}`, `${item.name} model`)}
 			className="relative w-full scroll-mt-28 border-t border-white/6 bg-kp-bg py-10 md:py-14">
 				<div
 					aria-hidden
@@ -128,13 +131,13 @@ function ModeleRow({
 											<div className="aspect-16/10">
 												<MediaTile
 													src={item.media.bottomLeftImage}
-													alt={`${item.name} — intérieur`}
+													alt={tr(`${item.name} — intérieur`, `${item.name} — interior`)}
 												/>
 											</div>
 											<div className="aspect-16/10">
 												<MediaTile
 													src={item.media.bottomRightImage}
-													alt={`${item.name} — extérieur`}
+													alt={tr(`${item.name} — extérieur`, `${item.name} — exterior`)}
 													priority={index === MODELES.length - 1}
 												/>
 											</div>
@@ -145,7 +148,7 @@ function ModeleRow({
 											<div className="aspect-video md:col-span-1 md:aspect-auto md:h-full">
 												<MediaTile
 													src={item.media.topImage}
-													alt={`${item.name} — visuel principal`}
+													alt={tr(`${item.name} — visuel principal`, `${item.name} — main visual`)}
 													priority={priorityTopImage}
 												/>
 											</div>
@@ -175,7 +178,7 @@ function ModeleRow({
 											<div className="aspect-video md:col-span-1 md:aspect-auto md:h-full">
 												<MediaTile
 													src={item.media.topImage}
-													alt={`${item.name} — visuel principal`}
+													alt={tr(`${item.name} — visuel principal`, `${item.name} — main visual`)}
 													priority={priorityTopImage}
 												/>
 											</div>
@@ -203,13 +206,13 @@ function ModeleRow({
 											<div className="aspect-16/10">
 												<MediaTile
 													src={item.media.bottomLeftImage}
-													alt={`${item.name} — intérieur`}
+													alt={tr(`${item.name} — intérieur`, `${item.name} — interior`)}
 												/>
 											</div>
 											<div className="aspect-16/10">
 												<MediaTile
 													src={item.media.bottomRightImage}
-													alt={`${item.name} — extérieur`}
+													alt={tr(`${item.name} — extérieur`, `${item.name} — exterior`)}
 													priority={index === MODELES.length - 1}
 												/>
 											</div>
@@ -236,7 +239,7 @@ function ModeleRow({
 								<div className="relative">
 									<div className="flex items-center justify-between gap-3">
 										<span className="inline-flex items-center rounded-full border border-white/14 bg-black/25 px-3 py-1 font-sans text-[10px] font-semibold uppercase tracking-[0.28em] text-white/85 backdrop-blur">
-											Modèle {String(index + 1).padStart(2, "0")}
+											{tr("Modèle", "Model")} {String(index + 1).padStart(2, "0")}
 										</span>
 										<span
 											aria-hidden
@@ -249,7 +252,7 @@ function ModeleRow({
 									</h3>
 									
 									<p className="mt-4 text-sm leading-relaxed text-kp-muted kp-clamp-3">
-										{item.description}
+										{tr(item.description.fr, item.description.en)}
 									</p>
 									<ModeleSpecChips items={item.characteristics} />
 
@@ -260,7 +263,7 @@ function ModeleRow({
 											aria-hidden
 											className="pointer-events-none absolute inset-y-0 left-0 w-[40%] -translate-x-[130%] bg-linear-to-r from-white/0 via-white/40 to-white/0 opacity-0 transition duration-700 ease-out group-hover:translate-x-[260%] group-hover:opacity-100"
 										/>
-										<span className="relative">Découvrir</span>
+										<span className="relative">{tr("Découvrir", "Discover")}</span>
 									</Link>
 								</div>
 								
@@ -275,10 +278,12 @@ function ModeleRow({
 }
 
 export default function Modeles() {
+	const { tr } = useLocale();
+
 	return (
 		<section
 			id="modeles"
-			aria-label="Modèles"
+			aria-label={tr("Modèles", "Models")}
 			className="w-full scroll-mt-28 border-t border-white/6 bg-kp-bg">
 			<div className="mx-auto max-w-[1600px] px-5 pt-14 md:px-10 md:pt-18">
 				<Reveal>
@@ -288,14 +293,19 @@ export default function Modeles() {
 							aria-hidden
 						/>
 						<p className="mt-6 font-sans text-[11px] font-semibold uppercase tracking-[0.38em] text-kp-muted">
-							Gamme KPANDJI AUTOMOBILES
+							{tr("Gamme KPANDJI AUTOMOBILES", "The KPANDJI AUTOMOBILES range")}
 						</p>
 						<h2 className="mt-5 font-serif text-[clamp(2.1rem,5.4vw,3.35rem)] font-medium leading-[1.04] tracking-[-0.03em] text-kp-accent">
-							Des modèles conçus pour la route, le travail et l’aventure.
+							{tr(
+								"Des modèles conçus pour la route, le travail et l’aventure.",
+								"Models built for the road, for work, and for adventure.",
+							)}
 						</h2>
 						<p className="mx-auto mt-5 max-w-2xl text-sm leading-relaxed text-kp-muted">
-							Découvrez la gamme, explorez les détails, et choisissez le véhicule qui
-							correspond à votre style de conduite.
+							{tr(
+								"Découvrez la gamme, explorez les détails, et choisissez le véhicule qui correspond à votre style de conduite.",
+								"Explore the range, discover the details, and choose the vehicle that matches your driving style.",
+							)}
 						</p>
 					</header>
 				</Reveal>

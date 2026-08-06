@@ -1,5 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useLocale } from "@/components/providers/KpLocaleProvider";
 import { Reveal } from "./Reveal";
 
 function IconMail({ className }: { className?: string }) {
@@ -147,38 +150,17 @@ const contactLineClass =
 const iconWrapClass =
   "flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-kp-gold/20 bg-kp-gold/8 text-kp-gold shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] transition-colors duration-300 group-hover:border-kp-gold/35 group-hover:bg-kp-gold/12";
 
-const PHONE_CONTACTS = [
-  {
-    role: "Contact fixe",
-    display: "+225 27 23 27 95 67",
-    tel: "+2252723279567",
-  },
-  {
-    role: "Marketing",
-    display: "+225 07 07 20 22 11",
-    tel: "+2250707202211",
-  },
-  {
-    role: "S.A.V",
-    display: "+225 07 07 20 19 92",
-    tel: "+2250707201992",
-  },
-  {
-    role: "Commercial",
-    display: "+225 07 07 20 22 11",
-    tel: "+2250707202211",
-  },
-] as const;
-
-const RESOURCE_LINKS = [
-  ["Fiche technique Djetran auto", "/djetranbva.pdf"],
-  ["Fiche technique Djetran manuel", "/djetranbvm.pdf"],
-  ["Fiche technique Djetran Plus", "/djetranplus.pdf"],
-  ["Fiche technique Lathaye", "/lathaye.pdf"],
-  ["Fiche technique Souralai", "/souralai.pdf"],
-] as const;
+const PHONE_TELS = [
+  { key: "landline" as const, display: "+225 27 23 27 95 67", tel: "+2252723279567" },
+  { key: "marketing" as const, display: "+225 07 07 20 22 11", tel: "+2250707202211" },
+  { key: "sav" as const, display: "+225 07 07 20 19 92", tel: "+2250707201992" },
+  { key: "commercial" as const, display: "+225 07 07 20 22 11", tel: "+2250707202211" },
+];
 
 export function KpFooter() {
+  const { m } = useLocale();
+  const f = m.footer;
+
   return (
     <footer
       id="contact"
@@ -221,14 +203,13 @@ export function KpFooter() {
                 />
               </Link>
               <p className="mt-3 font-sans text-[10px] font-semibold uppercase tracking-[0.34em] text-kp-gold">
-                Constructeur automobile
+                {f.manufacturer}
               </p>
               <p className="mt-8 font-serif text-2xl font-medium leading-[1.2] tracking-[-0.02em] text-white md:text-[1.75rem]">
-                Ingénierie, qualité et une signature ancrée en Afrique.
+                {f.headline}
               </p>
               <p className="mt-5 font-sans text-[15px] leading-relaxed text-kp-muted">
-                Conception, assemblage et commercialisation de véhicules pensés
-                pour l&apos;exigence du terrain et du quotidien.
+                {f.blurb}
               </p>
 
               <div className="mt-8 flex items-start gap-3 rounded-xl border border-white/6 bg-black/20 px-4 py-3.5">
@@ -237,11 +218,10 @@ export function KpFooter() {
                 </span>
                 <div className="min-w-0">
                   <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-kp-gold/75">
-                    Siège
+                    {f.seatLabel}
                   </p>
                   <p className="mt-0.5 font-sans text-sm text-white/75">
-                    Côte d&apos;Ivoire, 
-                    Abidjan, Cocody Riviera Palmeraie, Carrefour Cabine Bleue 
+                    {f.seatAddress}
                   </p>
                 </div>
               </div>
@@ -251,7 +231,7 @@ export function KpFooter() {
                   href="/contact"
                   className="inline-flex w-full items-center justify-center rounded-xl border border-kp-gold/35 bg-linear-to-br from-kp-gold/15 to-transparent px-8 py-4 font-sans text-[11px] font-semibold uppercase tracking-[0.24em] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] transition duration-300 hover:border-kp-gold/55 hover:from-kp-gold/25 hover:shadow-[0_0_0_1px_rgba(201,169,98,0.12),0_20px_50px_-24px_rgba(201,169,98,0.35)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-kp-gold/50 sm:w-auto"
                 >
-                  Écrire au constructeur
+                  {f.writeCta}
                 </Link>
               </div>
             </div>
@@ -260,9 +240,9 @@ export function KpFooter() {
           {/* Right column — Ressources & Contact */}
           <div className="grid min-w-0 gap-5 sm:grid-cols-2 lg:col-start-2 lg:row-start-1 lg:items-start">
             <Reveal delayMs={40} className={`${panelClass} w-full min-w-0`}>
-              <SectionLabel>Ressources</SectionLabel>
+              <SectionLabel>{f.resources}</SectionLabel>
               <ul className="mt-8 space-y-1">
-                {RESOURCE_LINKS.map(([label, href]) => (
+                {f.resourceLinks.map(([label, href]) => (
                   <li key={href}>
                     <a
                       href={href}
@@ -282,21 +262,21 @@ export function KpFooter() {
               <div className="mt-auto pt-8" aria-hidden>
                 <div className="h-px bg-linear-to-r from-kp-gold/30 via-white/8 to-transparent" />
                 <p className="mt-5 font-sans text-[12px] leading-relaxed text-white/32">
-                  Documents officiels — téléchargement direct.
+                  {f.resourceDocsHint}
                 </p>
               </div>
             </Reveal>
 
             <Reveal delayMs={80} className={`${panelClass} w-full min-w-0`}>
-              <SectionLabel>Contact</SectionLabel>
+              <SectionLabel>{f.contact}</SectionLabel>
               <address className="mt-8 not-italic">
                 <ul className="space-y-5" role="list">
-                  {PHONE_CONTACTS.map(({ role, display, tel }) => (
-                    <li key={role}>
+                  {PHONE_TELS.map(({ key, display, tel }) => (
+                    <li key={key}>
                       <a href={`tel:${tel}`} className={contactLineClass}>
                         <IconPhone className="mt-0.5 shrink-0 text-kp-gold/75" />
                         <span>
-                          <span>{role}</span>
+                          <span>{f.phones[key]}</span>
                           <span className="text-white/35"> : </span>
                           <span className="tabular-nums tracking-wide">
                             {display}
@@ -312,7 +292,7 @@ export function KpFooter() {
                     >
                       <IconMail className="mt-0.5 shrink-0 text-kp-gold/75" />
                       <span>
-                        <span>Courriel</span>
+                        <span>{f.emailLabel}</span>
                         <span className="text-white/35"> : </span>
                         <span className="break-all">contact@kpandji.com</span>
                       </span>
@@ -330,7 +310,7 @@ export function KpFooter() {
         <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-white/8 to-transparent" />
         <div className="mx-auto flex max-w-[1600px] flex-col gap-6 px-5 py-8 md:flex-row md:items-center md:justify-between md:px-10 md:py-9">
           <p className="max-w-xl font-sans text-[12px] leading-relaxed text-white/38">
-            © {new Date().getFullYear()} KPANDJI AUTOMOBILES. Tous droits réservés.
+            © {new Date().getFullYear()} KPANDJI AUTOMOBILES. {f.rights}
           </p>
           <a
             href="#accueil"
@@ -339,7 +319,7 @@ export function KpFooter() {
             <span className="flex h-7 w-7 items-center justify-center rounded-full border border-white/10 bg-white/4 transition-colors group-hover:border-kp-gold/25 group-hover:bg-kp-gold/15">
               <IconArrowUp className="text-kp-gold/70 transition-transform duration-300 group-hover:-translate-y-0.5" />
             </span>
-            Haut de page
+            {f.backToTop}
           </a>
         </div>
       </div>

@@ -1,5 +1,7 @@
+import { AdminCountLine } from "@/components/kp/AdminCountLine";
 import { AdminPageHeader } from "@/components/kp/AdminPageHeader";
 import { adminCardClass, adminCardGlow } from "@/components/kp/adminStyles";
+import { Tr } from "@/components/kp/Tr";
 import { VisitorEmailsTable } from "./VisitorEmailsTable";
 import { prisma } from "@/lib/db";
 
@@ -17,18 +19,31 @@ export default async function EmailVisiteursPage() {
   return (
     <div className="space-y-8">
       <AdminPageHeader
-        title="Emails visiteurs"
-        description="Consultez toutes les adresses e-mail collectées depuis le site public."
+        title={<Tr fr="Emails visiteurs" en="Visitor emails" />}
+        description={
+          <Tr
+            fr="Consultez toutes les adresses e-mail collectées depuis le site public."
+            en="View all email addresses collected from the public site."
+          />
+        }
       />
 
       <section className={adminCardClass}>
         <div className={adminCardGlow} aria-hidden />
-        <h2 className="font-serif text-2xl text-white">E-mails collectés</h2>
-        <p className="mt-2 font-sans text-sm text-white/50">
-          {visitorEmails.length} adresse
-          {visitorEmails.length !== 1 ? "s" : ""} — triées par date (plus
-          récentes en premier).
-        </p>
+        <h2 className="font-serif text-2xl text-white">
+          <Tr fr="E-mails collectés" en="Collected emails" />
+        </h2>
+        <AdminCountLine
+          count={visitorEmails.length}
+          singular={{
+            fr: "{n} adresse — triée par date (plus récentes en premier).",
+            en: "{n} address — sorted by date (most recent first).",
+          }}
+          plural={{
+            fr: "{n} adresses — triées par date (plus récentes en premier).",
+            en: "{n} addresses — sorted by date (most recent first).",
+          }}
+        />
 
         <VisitorEmailsTable emails={rows} />
       </section>

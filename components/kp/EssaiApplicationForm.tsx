@@ -5,12 +5,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { MODELES } from "@/data/modeles";
+import { useLocale } from "@/components/providers/KpLocaleProvider";
 
 const TIME_PRESETS = [
-  "Matin (9h – 12h)",
-  "Après-midi (14h – 17h)",
-  "Fin de journée (17h – 18h)",
-  "À convenir",
+  { fr: "Matin (9h – 12h)", en: "Morning (9am – 12pm)" },
+  { fr: "Après-midi (14h – 17h)", en: "Afternoon (2pm – 5pm)" },
+  { fr: "Fin de journée (17h – 18h)", en: "End of day (5pm – 6pm)" },
+  { fr: "À convenir", en: "To be arranged" },
 ] as const;
 
 function isValidEmail(value: string) {
@@ -56,6 +57,7 @@ function IconCheck({ className }: { className?: string }) {
 }
 
 export function EssaiApplicationForm() {
+  const { tr } = useLocale();
   const reduceMotion = useReducedMotion();
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [name, setName] = useState("");
@@ -84,23 +86,23 @@ export function EssaiApplicationForm() {
     const phoneTrim = phone.trim();
 
     if (selectedIds.length === 0) {
-      setError("Sélectionnez au moins un modèle à essayer.");
+      setError(tr("Sélectionnez au moins un modèle à essayer.", "Select at least one model to test drive."));
       return;
     }
     if (!nameTrim) {
-      setError("Indiquez votre nom.");
+      setError(tr("Indiquez votre nom.", "Please enter your name."));
       return;
     }
     if (!emailTrim) {
-      setError("Indiquez votre adresse e-mail.");
+      setError(tr("Indiquez votre adresse e-mail.", "Please enter your email address."));
       return;
     }
     if (!isValidEmail(emailTrim)) {
-      setError("Adresse e-mail invalide.");
+      setError(tr("Adresse e-mail invalide.", "Invalid email address."));
       return;
     }
     if (!phoneTrim) {
-      setError("Indiquez votre numéro de téléphone pour confirmer le rendez-vous.");
+      setError(tr("Indiquez votre numéro de téléphone pour confirmer le rendez-vous.", "Please enter your phone number to confirm the appointment."));
       return;
     }
 
@@ -126,13 +128,13 @@ export function EssaiApplicationForm() {
       } | null;
 
       if (!response.ok) {
-        setError(data?.error ?? "Une erreur est survenue. Réessayez plus tard.");
+        setError(data?.error ?? tr("Une erreur est survenue. Réessayez plus tard.", "An error occurred. Please try again later."));
         return;
       }
 
       setIsSuccess(true);
     } catch {
-      setError("Impossible d'envoyer la demande. Vérifiez votre connexion.");
+      setError(tr("Impossible d'envoyer la demande. Vérifiez votre connexion.", "Unable to send the request. Please check your connection."));
     } finally {
       setIsSubmitting(false);
     }
@@ -161,14 +163,16 @@ export function EssaiApplicationForm() {
 
         <div className="relative text-center lg:text-left">
           <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.32em] text-kp-gold/75 md:text-[11px]">
-            Demande d&apos;essai
+            {tr("Demande d'essai", "Test drive request")}
           </p>
           <p className="mt-3 font-serif text-2xl font-medium tracking-[-0.02em] text-kp-accent md:text-[1.75rem]">
-            Choisissez vos modèles
+            {tr("Choisissez vos modèles", "Choose your models")}
           </p>
           <p className="mx-auto mt-3 max-w-md text-[13px] leading-relaxed text-white/40 lg:mx-0">
-            Sélectionnez un ou plusieurs véhicules. Notre équipe vous recontactera
-            pour confirmer votre essai.
+            {tr(
+              "Sélectionnez un ou plusieurs véhicules. Notre équipe vous recontactera pour confirmer votre essai.",
+              "Select one or more vehicles. Our team will get back to you to confirm your test drive."
+            )}
           </p>
         </div>
 
@@ -177,11 +181,13 @@ export function EssaiApplicationForm() {
             role="status"
             className="relative mt-10 rounded-2xl border border-kp-gold/30 bg-kp-gold/8 px-6 py-10 text-center">
             <p className="font-serif text-2xl font-medium text-kp-accent">
-              Demande envoyée
+              {tr("Demande envoyée", "Request sent")}
             </p>
             <p className="mx-auto mt-4 max-w-sm text-[14px] leading-relaxed text-white/50">
-              Merci. Nous avons bien reçu votre demande d&apos;essai et vous
-              recontacterons par e-mail ou téléphone pour fixer le rendez-vous.
+              {tr(
+                "Merci. Nous avons bien reçu votre demande d'essai et vous recontacterons par e-mail ou téléphone pour fixer le rendez-vous.",
+                "Thank you. We've received your test drive request and will contact you by email or phone to arrange the appointment."
+              )}
             </p>
           </div>
         ) : null}
@@ -191,15 +197,17 @@ export function EssaiApplicationForm() {
           className={`relative mt-10 space-y-10 ${isSuccess ? "hidden" : ""}`}
           noValidate>
           <div>
-            <SectionTitle>Modèles à essayer</SectionTitle>
+            <SectionTitle>{tr("Modèles à essayer", "Models to test drive")}</SectionTitle>
             <p className="mb-4 text-[12px] leading-relaxed text-white/35">
-              Choix multiple — vous pouvez comparer plusieurs modèles lors d&apos;une
-              même visite.
+              {tr(
+                "Choix multiple — vous pouvez comparer plusieurs modèles lors d'une même visite.",
+                "Multiple choice — you can compare several models during the same visit."
+              )}
             </p>
             <div
               className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3"
               role="group"
-              aria-label="Modèles à essayer">
+              aria-label={tr("Modèles à essayer", "Models to test drive")}>
               {MODELES.map((modele) => {
                 const selected = selectedIds.includes(modele.id);
                 return (
@@ -236,13 +244,15 @@ export function EssaiApplicationForm() {
                         {modele.name}
                       </p>
                       <p className="mt-1.5 line-clamp-2 text-[11px] leading-relaxed text-white/38">
-                        {modele.characteristics[0]}
+                        {modele.characteristics[0]
+                          ? tr(modele.characteristics[0].fr, modele.characteristics[0].en)
+                          : ""}
                       </p>
                       <Link
                         href={`/modeles/${modele.id}`}
                         onClick={(ev) => ev.stopPropagation()}
                         className="mt-2 inline-block text-[10px] font-medium uppercase tracking-[0.16em] text-kp-gold/70 transition-colors hover:text-kp-gold">
-                        Voir la fiche →
+                        {tr("Voir la fiche", "View spec sheet")} →
                       </Link>
                     </div>
                   </button>
@@ -251,18 +261,20 @@ export function EssaiApplicationForm() {
             </div>
             {selectedIds.length > 0 ? (
               <p className="mt-3 text-[12px] text-kp-gold/80">
-                {selectedIds.length} modèle{selectedIds.length > 1 ? "s" : ""}{" "}
-                sélectionné{selectedIds.length > 1 ? "s" : ""}
+                {tr(
+                  `${selectedIds.length} modèle${selectedIds.length > 1 ? "s" : ""} sélectionné${selectedIds.length > 1 ? "s" : ""}`,
+                  `${selectedIds.length} model${selectedIds.length > 1 ? "s" : ""} selected`
+                )}
               </p>
             ) : null}
           </div>
 
           <div>
-            <SectionTitle>Identité & coordonnées</SectionTitle>
+            <SectionTitle>{tr("Identité & coordonnées", "Identity & contact details")}</SectionTitle>
             <div className="space-y-5">
               <div>
                 <label htmlFor="kp-essai-name" className={labelClass}>
-                  Nom et prénom <span className="text-kp-gold/90">*</span>
+                  {tr("Nom et prénom", "Full name")} <span className="text-kp-gold/90">*</span>
                 </label>
                 <input
                   id="kp-essai-name"
@@ -282,7 +294,7 @@ export function EssaiApplicationForm() {
               <div className="grid gap-5 sm:grid-cols-2">
                 <div>
                   <label htmlFor="kp-essai-email" className={labelClass}>
-                    E-mail <span className="text-kp-gold/90">*</span>
+                    {tr("E-mail", "Email")} <span className="text-kp-gold/90">*</span>
                   </label>
                   <input
                     id="kp-essai-email"
@@ -301,7 +313,7 @@ export function EssaiApplicationForm() {
                 </div>
                 <div>
                   <label htmlFor="kp-essai-phone" className={labelClass}>
-                    Téléphone <span className="text-kp-gold/90">*</span>
+                    {tr("Téléphone", "Phone")} <span className="text-kp-gold/90">*</span>
                   </label>
                   <input
                     id="kp-essai-phone"
@@ -322,13 +334,13 @@ export function EssaiApplicationForm() {
           </div>
 
           <div>
-            <SectionTitle>Disponibilités</SectionTitle>
+            <SectionTitle>{tr("Disponibilités", "Availability")}</SectionTitle>
             <div className="space-y-5">
               <div>
                 <label htmlFor="kp-essai-date" className={labelClass}>
-                  Date souhaitée
+                  {tr("Date souhaitée", "Preferred date")}
                   <span className="ml-1.5 font-normal normal-case tracking-normal text-white/22">
-                    optionnel
+                    {tr("optionnel", "optional")}
                   </span>
                 </label>
                 <input
@@ -344,27 +356,28 @@ export function EssaiApplicationForm() {
 
               <div>
                 <label className={labelClass}>
-                  Créneau horaire
+                  {tr("Créneau horaire", "Time slot")}
                   <span className="ml-1.5 font-normal normal-case tracking-normal text-white/22">
-                    optionnel
+                    {tr("optionnel", "optional")}
                   </span>
                 </label>
                 <div className="flex flex-wrap gap-2">
                   {TIME_PRESETS.map((preset) => {
-                    const active = timeSlot === preset;
+                    const label = tr(preset.fr, preset.en);
+                    const active = timeSlot === label;
                     return (
                       <button
-                        key={preset}
+                        key={preset.fr}
                         type="button"
                         onClick={() =>
-                          setTimeSlot((prev) => (prev === preset ? "" : preset))
+                          setTimeSlot((prev) => (prev === label ? "" : label))
                         }
                         className={`rounded-full border px-3.5 py-2 font-sans text-[11px] font-medium tracking-wide transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-kp-gold/45 ${
                           active
                             ? "border-kp-gold/50 bg-kp-gold/15 text-kp-accent"
                             : "border-white/12 bg-white/3 text-white/50 hover:border-white/18 hover:bg-white/6 hover:text-white/75"
                         }`}>
-                        {preset}
+                        {label}
                       </button>
                     );
                   })}
@@ -373,9 +386,9 @@ export function EssaiApplicationForm() {
 
               <div>
                 <label htmlFor="kp-essai-message" className={labelClass}>
-                  Message
+                  {tr("Message", "Message")}
                   <span className="ml-1.5 font-normal normal-case tracking-normal text-white/22">
-                    optionnel
+                    {tr("optionnel", "optional")}
                   </span>
                 </label>
                 <textarea
@@ -384,7 +397,10 @@ export function EssaiApplicationForm() {
                   rows={4}
                   value={message}
                   onChange={(ev) => setMessage(ev.target.value)}
-                  placeholder="Précisions : lieu de rendez-vous, permis, questions…"
+                  placeholder={tr(
+                    "Précisions : lieu de rendez-vous, permis, questions…",
+                    "Details: meeting location, driving licence, questions…"
+                  )}
                   className={`${inputClass} min-h-[112px] resize-y`}
                 />
               </div>
@@ -406,11 +422,13 @@ export function EssaiApplicationForm() {
               className="order-2 w-full rounded-full bg-kp-gold px-10 py-4 font-sans text-[11px] font-semibold uppercase tracking-[0.22em] text-black shadow-[0_16px_40px_-12px_rgba(201,169,98,0.45)] transition-colors duration-300 hover:bg-[#d4b56e] disabled:cursor-not-allowed disabled:opacity-60 sm:order-1 sm:w-auto"
               whileHover={reduceMotion || isSubmitting ? undefined : { scale: 1.02 }}
               whileTap={reduceMotion || isSubmitting ? undefined : { scale: 0.98 }}>
-              {isSubmitting ? "Envoi en cours…" : "Demander un essai"}
+              {isSubmitting ? tr("Envoi en cours…", "Sending…") : tr("Demander un essai", "Request a test drive")}
             </motion.button>
             <p className="order-1 max-w-xs text-center text-[11px] leading-relaxed text-white/30 sm:order-2 sm:text-right">
-              Notre équipe vous confirmera le créneau par retour d&apos;e-mail ou
-              téléphone.
+              {tr(
+                "Notre équipe vous confirmera le créneau par retour d'e-mail ou téléphone.",
+                "Our team will confirm the slot by email or phone."
+              )}
             </p>
           </div>
         </form>

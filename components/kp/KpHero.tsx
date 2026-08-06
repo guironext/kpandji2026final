@@ -1,11 +1,61 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useLocale } from "@/components/providers/KpLocaleProvider";
 
 
 export function KpHero() {
+	const { tr } = useLocale();
 	const wrapRef = useRef<HTMLDivElement>(null);
 	const [progress, setProgress] = useState(0);
+
+	const pillars = useMemo(
+		() => [
+			{
+				code: "01",
+				label: tr("Conçu en Côte d'Ivoire", "Designed in Côte d'Ivoire"),
+				detail: tr(
+					"Design et ingénierie pensés pour le continent.",
+					"Design and engineering built for the continent.",
+				),
+			},
+			{
+				code: "02",
+				label: tr("Production locale", "Local production"),
+				detail: tr(
+					"Assemblage à Abidjan, savoir-faire ivoirien.",
+					"Assembled in Abidjan, Ivorian craftsmanship.",
+				),
+			},
+			{
+				code: "03",
+				label: tr("Mobilité durable", "Sustainable mobility"),
+				detail: tr(
+					"Performance, sobriété et fiabilité au long cours.",
+					"Performance, efficiency, and long-haul reliability.",
+				),
+			},
+			{
+				code: "04",
+				label: tr("Garantie 3 ans ou 100 000 km", "3-year or 100,000 km warranty"),
+				detail: tr(
+					"Sérénité totale et service après-vente premium.",
+					"Complete peace of mind and premium after-sales service.",
+				),
+			},
+		],
+		[tr],
+	);
+
+	const marquee = useMemo(
+		() => [
+			"KPANDJI DJETRAN",
+			"KPANDJI DJETRAN PLUS",
+			"KPANDJI LATHAYE",
+			tr("MADE IN CÔTE D'IVOIRE", "MADE IN CÔTE D'IVOIRE"),
+		],
+		[tr],
+	);
 
 	useEffect(() => {
 		const onScroll = () => {
@@ -73,11 +123,10 @@ export function KpHero() {
 								<span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-kp-gold" />
 							</span>
 						</span>
-						<span>La force d&apos;une racine,</span>
+						<span>{tr("La force d'une racine,", "The strength of a root,")}</span>
 						<span className="h-px w-6 bg-white/30 md:w-10" />
 						<span className="text-kp-gold">
-						L&apos;élan d&apos;une Nation
-							
+							{tr("L'élan d'une Nation", "The drive of a Nation")}
 						</span>
 					</p>
 
@@ -87,21 +136,26 @@ export function KpHero() {
 						</span>
 						<span className="kp-hero-reveal kp-hero-delay-3 block">
 							<span className="bg-linear-to-r from-white via-white to-kp-gold bg-clip-text text-transparent text-[clamp(1.6rem,6.4vw,3rem)]">
-							Constructeur & Assembleur automobile
+								{tr(
+									"Constructeur & Assembleur automobile",
+									"Automotive manufacturer & assembler",
+								)}
 							</span>
 						</span>
 					</h1>
 
 					<p className="kp-hero-reveal kp-hero-delay-4 mt-6 max-w-xl font-sans text-base leading-relaxed text-white/75 md:mt-8 md:text-lg italic font-light">
-						Ingénierie, assemblage et mobilité durable — une signature
-						africaine pour des véhicules pensés pour exiger le meilleur.
+						{tr(
+							"Ingénierie, assemblage et mobilité durable — une signature africaine pour des véhicules pensés pour exiger le meilleur.",
+							"Engineering, assembly, and sustainable mobility — an African signature for vehicles built to demand the best.",
+						)}
 					</p>
 
 					<div className="mt-8 flex flex-wrap items-center gap-3 md:mt-12 md:gap-5">
 						<a
 							href="#vehicules"
 							className="kp-hero-reveal kp-hero-delay-5 group inline-flex items-center gap-3 rounded-full bg-white px-7 py-3.5 font-sans text-[11px] font-semibold uppercase tracking-[0.22em] text-black transition duration-300 ease-out hover:scale-[1.02] hover:bg-white/95 active:scale-[0.98] md:px-8 md:text-[12px]">
-							<span>Découvrir nos véhicules</span>
+							<span>{tr("Découvrir nos véhicules", "Discover our vehicles")}</span>
 							<svg
 								aria-hidden
 								viewBox="0 0 24 24"
@@ -125,9 +179,9 @@ export function KpHero() {
 			{/* 5 — Brand pillars strip */}
 			<div className="relative z-10 border-t border-white/10 bg-black/30 backdrop-blur-[2px]">
 				<div className="mx-auto grid w-full max-w-[1600px] grid-cols-2 divide-y divide-white/10 px-5 md:grid-cols-4 md:divide-x md:divide-y-0 md:px-10">
-					{PILLARS.map((p, i) => (
+					{pillars.map((p, i) => (
 						<div
-							key={p.label}
+							key={p.code}
 							className={`kp-hero-reveal kp-hero-delay-7 flex items-center gap-4 py-5 md:py-6 ${
 								i === 0 ? "" : "md:pl-6 lg:pl-8"
 							} ${i % 2 === 1 ? "pl-5" : ""}`}>
@@ -150,7 +204,7 @@ export function KpHero() {
 				<div className="relative overflow-hidden border-t border-white/10">
 					<div className="kp-hero-reveal kp-hero-delay-8 pointer-events-none">
 						<div className="kp-marquee-track flex w-max items-center gap-12 py-3 will-change-transform md:gap-16 md:py-4">
-							{[...MARQUEE, ...MARQUEE].map((label, i) => (
+							{[...marquee, ...marquee].map((label, i) => (
 								<span
 									key={`${label}-${i}`}
 									className="flex items-center gap-12 font-sans text-[11px] uppercase tracking-[0.5em] text-white/45 md:text-[12px]">
@@ -186,34 +240,3 @@ export function KpHero() {
 		</section>
 	);
 }
-
-const PILLARS: { code: string; label: string; detail: string }[] = [
-	{
-		code: "01",
-		label: "Conçu en Côte d'Ivoire",
-		detail: "Design et ingénierie pensés pour le continent.",
-	},
-	{
-		code: "02",
-		label: "Production locale",
-		detail: "Assemblage à Abidjan, savoir-faire ivoirien.",
-	},
-	{
-		code: "03",
-		label: "Mobilité durable",
-		detail: "Performance, sobriété et fiabilité au long cours.",
-	},
-	{
-		code: "04",
-		label: "Garantie 3 ans ou 100 000 km",
-		detail: "Sérénité totale et service après-vente premium.",
-	},
-];
-
-const MARQUEE = [
-	"KPANDJI DJETRAN",
-	"KPANDJI DJETRAN PLUS",
-	"KPANDJI LATHAYE",
-	"MADE IN CÔTE D'IVOIRE",
-
-];

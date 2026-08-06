@@ -7,6 +7,7 @@ import { useCallback, useEffect, useRef } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { useClerkAuthLinkInterceptor } from "@/components/kp/useClerkAuthLinkInterceptor";
 import { useInvitationValidation } from "@/components/kp/useInvitationValidation";
+import { useLocale } from "@/components/providers/KpLocaleProvider";
 
 type KpClientSignUpModalProps = {
   open: boolean;
@@ -16,10 +17,19 @@ type KpClientSignUpModalProps = {
   prefetch?: boolean;
 };
 
-const REASON_COPY: Record<string, string> = {
-  invalid: "Cette invitation est introuvable ou a été révoquée.",
-  used: "Cette invitation a déjà été utilisée.",
-  expired: "Cette invitation a expiré.",
+const REASON_COPY: Record<string, { fr: string; en: string }> = {
+  invalid: {
+    fr: "Cette invitation est introuvable ou a été révoquée.",
+    en: "This invitation could not be found or has been revoked.",
+  },
+  used: {
+    fr: "Cette invitation a déjà été utilisée.",
+    en: "This invitation has already been used.",
+  },
+  expired: {
+    fr: "Cette invitation a expiré.",
+    en: "This invitation has expired.",
+  },
 };
 
 export function KpClientSignUpModal({
@@ -35,6 +45,7 @@ export function KpClientSignUpModal({
   const easeLux = [0.22, 1, 0.36, 1] as const;
   const active = open || prefetch;
   const state = useInvitationValidation(token, active);
+  const { tr } = useLocale();
 
   useClerkAuthLinkInterceptor(panelRef, open, {
     onLogin: onSwitchToLogin,
@@ -129,23 +140,26 @@ export function KpClientSignUpModal({
 
           <div className="relative [text-shadow:0_1px_12px_rgba(0,0,0,0.85)]">
             <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.28em] text-white/60">
-              KPANDJI — Espace privé
+              {tr("KPANDJI — Espace privé", "KPANDJI — Private area")}
             </p>
             <h2
               id="kp-client-signup-title"
               className="mt-1 font-serif text-2xl text-white"
             >
-              Créer votre compte
+              {tr("Créer votre compte", "Create your account")}
             </h2>
             <p className="mt-2 font-sans text-sm text-white/70">
-              L’inscription se fait uniquement sur invitation.
+              {tr(
+                "L’inscription se fait uniquement sur invitation.",
+                "Sign-up is by invitation only."
+              )}
             </p>
           </div>
           <button
             type="button"
             onClick={onClose}
             className="relative shrink-0 rounded-full p-2 text-white/70 transition hover:bg-white/10 hover:text-white"
-            aria-label="Fermer l'inscription"
+            aria-label={tr("Fermer l'inscription", "Close sign-up")}
           >
             <span className="block text-2xl leading-none" aria-hidden>
               ×
@@ -156,18 +170,26 @@ export function KpClientSignUpModal({
         <div className="relative px-6 py-6 sm:px-8 sm:py-7">
           {state.phase === "loading" && (
             <p className="font-sans text-sm text-white/50">
-              Vérification de votre invitation…
+              {tr(
+                "Vérification de votre invitation…",
+                "Checking your invitation…"
+              )}
             </p>
           )}
 
           {state.phase === "invite-only" && (
             <div>
               <p className="font-sans text-sm text-white/60">
-                L’espace client KPANDJI est réservé aux clients invités.
+                {tr(
+                  "L’espace client KPANDJI est réservé aux clients invités.",
+                  "The KPANDJI client area is reserved for invited clients."
+                )}
               </p>
               <p className="mt-3 font-sans text-sm text-white/45">
-                Pour créer un compte, ouvrez le lien d’invitation reçu par
-                e-mail.
+                {tr(
+                  "Pour créer un compte, ouvrez le lien d’invitation reçu par e-mail.",
+                  "To create an account, open the invitation link you received by email."
+                )}
               </p>
               <div className="mt-7 flex flex-col gap-3 sm:flex-row">
                 <Link
@@ -175,7 +197,7 @@ export function KpClientSignUpModal({
                   onClick={onClose}
                   className="inline-flex justify-center rounded-full border border-white/20 px-7 py-3 font-sans text-[11px] font-semibold uppercase tracking-[0.2em] text-white/90 transition hover:border-white/40 hover:bg-white/5"
                 >
-                  En savoir plus
+                  {tr("En savoir plus", "Learn more")}
                 </Link>
                 {onSwitchToLogin && (
                   <button
@@ -183,7 +205,7 @@ export function KpClientSignUpModal({
                     onClick={onSwitchToLogin}
                     className="inline-flex justify-center rounded-full border border-white/10 px-7 py-3 font-sans text-[11px] font-semibold uppercase tracking-[0.2em] text-white/55 transition hover:border-white/25 hover:bg-white/5 hover:text-white/80"
                   >
-                    Se connecter
+                    {tr("Se connecter", "Sign in")}
                   </button>
                 )}
               </div>
@@ -193,11 +215,16 @@ export function KpClientSignUpModal({
           {state.phase === "invalid" && (
             <div>
               <p className="font-sans text-sm text-white/60">
-                {REASON_COPY[state.reason] ?? REASON_COPY.invalid}
+                {tr(
+                  (REASON_COPY[state.reason] ?? REASON_COPY.invalid).fr,
+                  (REASON_COPY[state.reason] ?? REASON_COPY.invalid).en
+                )}
               </p>
               <p className="mt-3 font-sans text-sm text-white/45">
-                Contactez l’administrateur pour recevoir un nouveau lien
-                d’invitation.
+                {tr(
+                  "Contactez l’administrateur pour recevoir un nouveau lien d’invitation.",
+                  "Contact the administrator to receive a new invitation link."
+                )}
               </p>
               <div className="mt-7 flex flex-col gap-3 sm:flex-row">
                 {onSwitchToLogin && (
@@ -206,7 +233,7 @@ export function KpClientSignUpModal({
                     onClick={onSwitchToLogin}
                     className="inline-flex justify-center rounded-full border border-white/20 px-7 py-3 font-sans text-[11px] font-semibold uppercase tracking-[0.2em] text-white/90 transition hover:border-white/40 hover:bg-white/5"
                   >
-                    Se connecter
+                    {tr("Se connecter", "Sign in")}
                   </button>
                 )}
                 <Link
@@ -214,7 +241,7 @@ export function KpClientSignUpModal({
                   onClick={onClose}
                   className="inline-flex justify-center rounded-full border border-white/10 px-7 py-3 font-sans text-[11px] font-semibold uppercase tracking-[0.2em] text-white/55 transition hover:border-white/25 hover:bg-white/5 hover:text-white/80"
                 >
-                  Retour à l’accueil
+                  {tr("Retour à l’accueil", "Back to home")}
                 </Link>
               </div>
             </div>
@@ -223,11 +250,14 @@ export function KpClientSignUpModal({
           {state.phase === "valid" && (
             <>
               <p className="font-sans text-sm text-white/50">
-                Invitation confirmée pour{" "}
+                {tr("Invitation confirmée pour", "Invitation confirmed for")}{" "}
                 <span className="text-white/80">{state.email}</span>.
               </p>
               <p className="mt-3 font-sans text-sm text-white/45">
-                Redirection vers le formulaire d&apos;inscription…
+                {tr(
+                  "Redirection vers le formulaire d'inscription…",
+                  "Redirecting to the sign-up form…"
+                )}
               </p>
             </>
           )}

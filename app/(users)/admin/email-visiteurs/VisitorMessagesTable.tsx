@@ -6,6 +6,7 @@ import {
   adminPrimaryButtonClass,
   adminSecondaryButtonClass,
 } from "@/components/kp/adminStyles";
+import { useLocale } from "@/components/providers/KpLocaleProvider";
 
 export type VisitorMessageRow = {
   id: string;
@@ -67,10 +68,10 @@ function displayValue(value: string) {
   return value.trim() || "—";
 }
 
-function formatDate(iso: string) {
+function formatDate(iso: string, locale: string) {
   const date = new Date(iso);
   if (Number.isNaN(date.getTime())) return "—";
-  return new Intl.DateTimeFormat("fr-FR", {
+  return new Intl.DateTimeFormat(locale === "en" ? "en-US" : "fr-FR", {
     day: "2-digit",
     month: "short",
     year: "numeric",
@@ -93,6 +94,7 @@ function VisitorMessageModal({
     () => true,
     () => false
   );
+  const { tr, locale } = useLocale();
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
@@ -135,10 +137,10 @@ function VisitorMessageModal({
       >
         <div className="border-b border-white/8 bg-kp-gold/10 px-6 py-5">
           <h3 id={titleId} className="font-serif text-xl text-white">
-            Message visiteur
+            {tr("Message visiteur", "Visitor message")}
           </h3>
           <p className="mt-1 font-sans text-sm text-white/55">
-            {displayValue(message.subject)} · {formatDate(message.createdAt)}
+            {displayValue(message.subject)} · {formatDate(message.createdAt, locale)}
           </p>
         </div>
 
@@ -146,14 +148,14 @@ function VisitorMessageModal({
           <dl className="space-y-4 font-sans text-sm">
             <div>
               <dt className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-                Nom
+                {tr("Nom", "Name")}
               </dt>
               <dd className="mt-1 text-white/85">{displayValue(message.name)}</dd>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <dt className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-                  E-mail
+                  {tr("E-mail", "Email")}
                 </dt>
                 <dd className="mt-1 break-all text-white/85">
                   {displayValue(message.email)}
@@ -161,7 +163,7 @@ function VisitorMessageModal({
               </div>
               <div>
                 <dt className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-                  Téléphone
+                  {tr("Téléphone", "Phone")}
                 </dt>
                 <dd className="mt-1 text-white/85">
                   {displayValue(message.phone)}
@@ -172,7 +174,7 @@ function VisitorMessageModal({
 
           <div className="mt-6">
             <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-              Message
+              {tr("Message", "Message")}
             </p>
             <div className="mt-3 rounded-xl border border-white/10 bg-black/35 p-4">
               <p className="whitespace-pre-wrap font-sans text-sm leading-relaxed text-white/90">
@@ -188,7 +190,7 @@ function VisitorMessageModal({
               href={`mailto:${message.email.trim()}?subject=${encodeURIComponent(`Re: ${message.subject.trim()}`)}`}
               className={adminSecondaryButtonClass}
             >
-              Répondre
+              {tr("Répondre", "Reply")}
             </a>
           ) : null}
           {message.phone.trim() ? (
@@ -196,7 +198,7 @@ function VisitorMessageModal({
               href={`tel:${message.phone.trim()}`}
               className={adminSecondaryButtonClass}
             >
-              Appeler
+              {tr("Appeler", "Call")}
             </a>
           ) : null}
           <button
@@ -204,7 +206,7 @@ function VisitorMessageModal({
             onClick={onClose}
             className={adminPrimaryButtonClass}
           >
-            Fermer
+            {tr("Fermer", "Close")}
           </button>
         </div>
       </div>
@@ -223,6 +225,7 @@ function VisitorMessageRowItem({
   const [open, setOpen] = useState(false);
   const [read, setRead] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const { tr, locale } = useLocale();
 
   const openModal = useCallback(() => {
     setOpen(true);
@@ -236,7 +239,10 @@ function VisitorMessageRowItem({
   const handleDelete = useCallback(async () => {
     if (
       !window.confirm(
-        "Supprimer ce message ? Cette action est irréversible."
+        tr(
+          "Supprimer ce message ? Cette action est irréversible.",
+          "Delete this message? This action is irreversible."
+        )
       )
     ) {
       return;
@@ -256,10 +262,15 @@ function VisitorMessageRowItem({
 
       onDelete(message.id);
     } catch {
-      window.alert("Impossible de supprimer ce message. Réessayez.");
+      window.alert(
+        tr(
+          "Impossible de supprimer ce message. Réessayez.",
+          "Unable to delete this message. Please try again."
+        )
+      );
       setIsDeleting(false);
     }
-  }, [message.id, onDelete]);
+  }, [message.id, onDelete, tr]);
 
   return (
     <tr
@@ -277,7 +288,7 @@ function VisitorMessageRowItem({
         {displayValue(message.subject)}
       </td>
       <td className="whitespace-nowrap px-4 py-3.5 font-sans text-sm text-white/55">
-        {formatDate(message.createdAt)}
+        {formatDate(message.createdAt, locale)}
       </td>
       <td className="px-4 py-3.5">
         <div className="flex items-center gap-2">
@@ -285,8 +296,8 @@ function VisitorMessageRowItem({
             type="button"
             onClick={openModal}
             aria-expanded={open}
-            aria-label={read ? "Message déjà lu" : "Voir le message"}
-            title={read ? "Déjà lu" : "Voir"}
+            aria-label={read ? tr("Message déjà lu", "Message already read") : tr("Voir le message", "View message")}
+            title={read ? tr("Déjà lu", "Already read") : tr("Voir", "View")}
             className={`${iconButtonClass} ${
               read
                 ? "border-kp-gold/45 bg-kp-gold/15 text-kp-gold hover:bg-kp-gold/25"
@@ -299,8 +310,8 @@ function VisitorMessageRowItem({
             type="button"
             onClick={handleDelete}
             disabled={isDeleting}
-            aria-label="Supprimer le message"
-            title="Supprimer"
+            aria-label={tr("Supprimer le message", "Delete message")}
+            title={tr("Supprimer", "Delete")}
             className={`${iconButtonClass} border-white/15 bg-white/3 text-white/55 hover:border-[#e85d5d]/45 hover:bg-[#e85d5d]/10 hover:text-[#e85d5d]`}
           >
             <IconTrash />
@@ -320,6 +331,7 @@ export function VisitorMessagesTable({
   messages: VisitorMessageRow[];
 }) {
   const [messages, setMessages] = useState(initialMessages);
+  const { tr } = useLocale();
 
   useEffect(() => {
     setMessages(initialMessages);
@@ -332,7 +344,7 @@ export function VisitorMessagesTable({
   if (messages.length === 0) {
     return (
       <p className="mt-6 font-sans text-sm text-white/50">
-        Aucun message visiteur pour le moment.
+        {tr("Aucun message visiteur pour le moment.", "No visitor messages at the moment.")}
       </p>
     );
   }
@@ -343,19 +355,19 @@ export function VisitorMessagesTable({
         <thead>
           <tr className="border-b border-white/8 bg-white/3">
             <th className="px-4 py-3 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-              Nom
+              {tr("Nom", "Name")}
             </th>
             <th className="px-4 py-3 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-              E-mail
+              {tr("E-mail", "Email")}
             </th>
             <th className="px-4 py-3 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-              Sujet
+              {tr("Sujet", "Subject")}
             </th>
             <th className="px-4 py-3 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-              Date
+              {tr("Date", "Date")}
             </th>
             <th className="px-4 py-3 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-              Action
+              {tr("Action", "Action")}
             </th>
           </tr>
         </thead>

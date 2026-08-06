@@ -9,11 +9,12 @@ import {
   adminSecondaryButtonClass,
 } from "@/components/kp/adminStyles";
 import type { AdminUser } from "@/components/kp/adminTypes";
+import { useLocale } from "@/components/providers/KpLocaleProvider";
 
-const STATUS_LABEL: Record<AdminUser["status"], string> = {
-  PENDING: "En attente",
-  APPROVED: "Approuvé",
-  REJECTED: "Refusé",
+const STATUS_LABEL: Record<AdminUser["status"], { fr: string; en: string }> = {
+  PENDING: { fr: "En attente", en: "Pending" },
+  APPROVED: { fr: "Approuvé", en: "Approved" },
+  REJECTED: { fr: "Refusé", en: "Rejected" },
 };
 
 export type { AdminUser } from "@/components/kp/adminTypes";
@@ -50,6 +51,7 @@ export function InvitePanel() {
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [copied, setCopied] = useState(false);
+  const { tr } = useLocale();
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -68,7 +70,7 @@ export function InvitePanel() {
         error?: string;
       };
       if (!res.ok) {
-        setError(data.error ?? "Échec de la création.");
+        setError(data.error ?? tr("Échec de la création.", "Creation failed."));
         return;
       }
       const url = data.invitation?.url ?? null;
@@ -77,7 +79,7 @@ export function InvitePanel() {
       );
       setEmail("");
     } catch {
-      setError("Impossible de joindre le serveur.");
+      setError(tr("Impossible de joindre le serveur.", "Unable to reach the server."));
     } finally {
       setBusy(false);
     }
@@ -86,9 +88,12 @@ export function InvitePanel() {
   return (
     <section className={adminCardClass}>
       <div className={adminCardGlow} aria-hidden />
-      <h2 className="font-serif text-2xl text-white">Inviter un membre</h2>
+      <h2 className="font-serif text-2xl text-white">{tr("Inviter un membre", "Invite a member")}</h2>
       <p className="mt-2 font-sans text-sm text-white/50">
-        Générez un lien d’invitation à transmettre au futur membre.
+        {tr(
+          "Générez un lien d’invitation à transmettre au futur membre.",
+          "Generate an invitation link to share with the future member."
+        )}
       </p>
 
       <form onSubmit={submit} className="mt-6 space-y-4">
@@ -97,7 +102,7 @@ export function InvitePanel() {
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="email@exemple.com"
+          placeholder={tr("email@exemple.com", "email@example.com")}
           className={adminFieldClass()}
         />
         <select
@@ -105,15 +110,15 @@ export function InvitePanel() {
           onChange={(e) => setRole(e.target.value as "prestige-user" | "admin")}
           className={adminFieldClass()}
         >
-          <option value="prestige-user">Membre Prestige</option>
-          <option value="admin">Administrateur</option>
+          <option value="prestige-user">{tr("Membre Prestige", "Prestige member")}</option>
+          <option value="admin">{tr("Administrateur", "Administrator")}</option>
         </select>
         <button
           type="submit"
           disabled={busy}
           className={adminPrimaryButtonClass}
         >
-          {busy ? "Génération…" : "Générer le lien"}
+          {busy ? tr("Génération…", "Generating…") : tr("Générer le lien", "Generate link")}
         </button>
       </form>
 
@@ -122,7 +127,7 @@ export function InvitePanel() {
       {link && (
         <div className="mt-5 rounded-xl border border-white/10 bg-black/40 p-4">
           <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-white/40">
-            Lien d’invitation
+            {tr("Lien d’invitation", "Invitation link")}
           </p>
           <a
             href={link}
@@ -141,7 +146,7 @@ export function InvitePanel() {
             }}
             className={`mt-3 ${adminSecondaryButtonClass}`}
           >
-            {copied ? "Copié" : "Copier"}
+            {copied ? tr("Copié", "Copied") : tr("Copier", "Copy")}
           </button>
         </div>
       )}
@@ -159,6 +164,7 @@ export function MembersPanel({ pendingOnly = false }: MembersPanelProps) {
   const [loading, setLoading] = useState(true);
   const [pendingId, setPendingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const { tr } = useLocale();
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -192,7 +198,7 @@ export function MembersPanel({ pendingOnly = false }: MembersPanelProps) {
         error?: string;
       };
       if (!res.ok) {
-        setError(data.error ?? "Impossible de mettre à jour le membre.");
+        setError(data.error ?? tr("Impossible de mettre à jour le membre.", "Unable to update this member."));
         return;
       }
       if (data.user) {
@@ -213,7 +219,7 @@ export function MembersPanel({ pendingOnly = false }: MembersPanelProps) {
         await load();
       }
     } catch {
-      setError("Impossible de joindre le serveur.");
+      setError(tr("Impossible de joindre le serveur.", "Unable to reach the server."));
     } finally {
       setPendingId(null);
     }
@@ -223,13 +229,13 @@ export function MembersPanel({ pendingOnly = false }: MembersPanelProps) {
     <section className={adminCardClass}>
       <div className={adminCardGlow} aria-hidden />
       <div className="flex items-center justify-between gap-4">
-        <h2 className="font-serif text-2xl text-white">Membres</h2>
+        <h2 className="font-serif text-2xl text-white">{tr("Membres", "Members")}</h2>
         <button
           type="button"
           onClick={load}
           className={adminSecondaryButtonClass}
         >
-          Actualiser
+          {tr("Actualiser", "Refresh")}
         </button>
       </div>
 
@@ -238,10 +244,10 @@ export function MembersPanel({ pendingOnly = false }: MembersPanelProps) {
       )}
 
       {loading ? (
-        <p className="mt-6 font-sans text-sm text-white/50">Chargement…</p>
+        <p className="mt-6 font-sans text-sm text-white/50">{tr("Chargement…", "Loading…")}</p>
       ) : users.length === 0 ? (
         <p className="mt-6 font-sans text-sm text-white/50">
-          Aucun membre pour le moment.
+          {tr("Aucun membre pour le moment.", "No members at the moment.")}
         </p>
       ) : (
         <ul className="mt-6 divide-y divide-white/8">
@@ -256,7 +262,7 @@ export function MembersPanel({ pendingOnly = false }: MembersPanelProps) {
                 </p>
                 <p className="truncate font-sans text-xs text-white/45">
                   {u.email} ·{" "}
-                  {u.role === "ADMIN" ? "Administrateur" : "Membre Prestige"}
+                  {u.role === "ADMIN" ? tr("Administrateur", "Administrator") : tr("Membre Prestige", "Prestige member")}
                 </p>
               </div>
 
@@ -270,7 +276,7 @@ export function MembersPanel({ pendingOnly = false }: MembersPanelProps) {
                         : "bg-white/10 text-white/60"
                   }`}
                 >
-                  {STATUS_LABEL[u.status]}
+                  {tr(STATUS_LABEL[u.status].fr, STATUS_LABEL[u.status].en)}
                 </span>
 
                 {u.status === "PENDING" && (
@@ -281,7 +287,7 @@ export function MembersPanel({ pendingOnly = false }: MembersPanelProps) {
                       onClick={() => decide(u.id, "approve")}
                       className={adminPrimaryButtonClass}
                     >
-                      {pendingId === u.id ? "Approbation…" : "Approuver"}
+                      {pendingId === u.id ? tr("Approbation…", "Approving…") : tr("Approuver", "Approve")}
                     </button>
                     <button
                       type="button"
@@ -289,7 +295,7 @@ export function MembersPanel({ pendingOnly = false }: MembersPanelProps) {
                       onClick={() => decide(u.id, "reject")}
                       className={adminSecondaryButtonClass}
                     >
-                      Refuser
+                      {tr("Refuser", "Reject")}
                     </button>
                   </>
                 )}

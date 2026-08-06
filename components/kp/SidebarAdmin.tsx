@@ -3,17 +3,20 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
+import { useLocale } from "@/components/providers/KpLocaleProvider";
+
+type LocalizedText = { fr: string; en: string };
 
 type AdminNavItem = {
-  label: string;
+  label: LocalizedText;
   href: string;
-  description: string;
+  description: LocalizedText;
   icon: ReactNode;
-  shortLabel?: string;
+  shortLabel?: LocalizedText;
 };
 
 type AdminNavSection = {
-  title: string;
+  title: LocalizedText;
   items: AdminNavItem[];
 };
 
@@ -108,79 +111,106 @@ function IconArrowLeft({ className }: IconProps) {
 
 const NAV_SECTIONS: AdminNavSection[] = [
   {
-    title: "Membres",
+    title: { fr: "Membres", en: "Members" },
     items: [
       {
-        label: "Invitations",
-        shortLabel: "Inviter",
+        label: { fr: "Invitations", en: "Invitations" },
+        shortLabel: { fr: "Inviter", en: "Invite" },
         href: "/admin/invitations",
-        description: "Créer et partager des liens d’accès",
+        description: {
+          fr: "Créer et partager des liens d’accès",
+          en: "Create and share access links",
+        },
         icon: <IconInvite />,
       },
       {
-        label: "Validation",
-        shortLabel: "Validation",
+        label: { fr: "Validation", en: "Approval" },
+        shortLabel: { fr: "Validation", en: "Approval" },
         href: "/admin/membres",
-        description: "Approuver ou refuser un membre",
+        description: {
+          fr: "Approuver ou refuser un membre",
+          en: "Approve or reject a member",
+        },
         icon: <IconUserCheck />,
       },
       {
-        label: "Liste membres",
-        shortLabel: "Liste",
+        label: { fr: "Liste membres", en: "Members list" },
+        shortLabel: { fr: "Liste", en: "List" },
         href: "/admin/liste-membres",
-        description: "Consulter tous les membres Prestige",
+        description: {
+          fr: "Consulter tous les membres Prestige",
+          en: "View all Prestige members",
+        },
         icon: <IconList />,
       },
     ],
   },
   {
-    title: "Messagerie",
+    title: { fr: "Messagerie", en: "Messaging" },
     items: [
       {
-        label: "Message Reçus ",
-        shortLabel: "Message Reçus",
+        label: { fr: "Message Reçus ", en: "Received messages" },
+        shortLabel: { fr: "Message Reçus", en: "Received" },
         href: "/admin/message-recus",
-        description: "Consulter tous les messages reçus",
+        description: {
+          fr: "Consulter tous les messages reçus",
+          en: "View all received messages",
+        },
         icon: <IconList />,
       },
       {
-        label: "Envoyer un message",
-        shortLabel: "Envoyer",
+        label: { fr: "Envoyer un message", en: "Send a message" },
+        shortLabel: { fr: "Envoyer", en: "Send" },
         href: "/admin/envoyer-message",
-        description: "Contacter un membre Prestige",
+        description: {
+          fr: "Contacter un membre Prestige",
+          en: "Contact a Prestige member",
+        },
         icon: <IconSend />,
       },
     ],
   },
   {
-    title: "Demandes publiques",
+    title: { fr: "Demandes publiques", en: "Public requests" },
     items: [
       {
-        label: "Demandes d'essai",
-        shortLabel: "Essais",
+        label: { fr: "Demandes d'essai", en: "Test drive requests" },
+        shortLabel: { fr: "Essais", en: "Test drives" },
         href: "/admin/demandes-essai",
-        description: "Consulter toutes les demandes d'essai",
+        description: {
+          fr: "Consulter toutes les demandes d'essai",
+          en: "View all test drive requests",
+        },
         icon: <IconCar />,
       },
       {
-        label: "E-mails visiteurs",
-        shortLabel: "E-mails",
+        label: { fr: "E-mails visiteurs", en: "Visitor emails" },
+        shortLabel: { fr: "E-mails", en: "Emails" },
         href: "/admin/email-visiteurs",
-        description: "Gérer les e-mails des visiteurs",
+        description: {
+          fr: "Gérer les e-mails des visiteurs",
+          en: "Manage visitor emails",
+        },
         icon: <IconMail />,
       },
       {
-        label: "Écrire au SAV",
-        shortLabel: "SAV",
+        label: { fr: "Écrire au SAV", en: "Write to support" },
+        shortLabel: { fr: "SAV", en: "Support" },
         href: "/admin/ecrire-au-sav",
-        description: "Demandes S.A.V. du site public",
+        description: {
+          fr: "Demandes S.A.V. du site public",
+          en: "Support requests from the public site",
+        },
         icon: <IconWrench />,
       },
       {
-        label: "Message Privilégié",
-        shortLabel: "Privilège",
+        label: { fr: "Message Privilégié", en: "Privileged contact" },
+        shortLabel: { fr: "Privilège", en: "Privileged" },
         href: "/admin/privilege-contact",
-        description: "Gérer les contacts privilégiés",
+        description: {
+          fr: "Gérer les contacts privilégiés",
+          en: "Manage privileged contacts",
+        },
         icon: <IconCrown />,
       },
     ],
@@ -206,6 +236,7 @@ function AdminNavLink({
   active: boolean;
   compact?: boolean;
 }) {
+  const { tr } = useLocale();
   return (
     <Link
       href={item.href}
@@ -232,11 +263,14 @@ function AdminNavLink({
             active ? "text-kp-gold" : "text-inherit"
           }`}
         >
-          {compact ? (item.shortLabel ?? item.label) : item.label}
+          {tr(
+            (compact ? (item.shortLabel ?? item.label) : item.label).fr,
+            (compact ? (item.shortLabel ?? item.label) : item.label).en
+          )}
         </span>
         {!compact && (
           <span className="mt-0.5 hidden font-sans text-xs leading-snug text-white/42 lg:block">
-            {item.description}
+            {tr(item.description.fr, item.description.en)}
           </span>
         )}
       </span>
@@ -263,6 +297,7 @@ type SidebarAdminProps = {
 
 export function SidebarAdmin({ userEmail }: SidebarAdminProps) {
   const pathname = usePathname();
+  const { tr } = useLocale();
   const allItems = NAV_SECTIONS.flatMap((section) => section.items);
 
   return (
@@ -277,19 +312,22 @@ export function SidebarAdmin({ userEmail }: SidebarAdminProps) {
             <div className="inline-flex items-center gap-2 rounded-full border border-kp-gold/25 bg-kp-gold/8 px-3 py-1">
               <span className="size-1.5 rounded-full bg-kp-gold shadow-[0_0_8px_rgba(201,169,98,0.8)]" />
               <span className="font-sans text-[9px] font-semibold uppercase tracking-[0.28em] text-kp-gold/90">
-                Administration
+                {tr("Administration", "Administration")}
               </span>
             </div>
             <p className="mt-4 font-serif text-[1.75rem] leading-tight text-white sm:text-[1.85rem]">
-              Espace admin
+              {tr("Espace admin", "Admin area")}
             </p>
             <p className="mt-2 max-w-[26ch] font-sans text-sm leading-relaxed text-white/45">
-              Accès, membres et messagerie Prestige — tout en un seul endroit.
+              {tr(
+                "Accès, membres et messagerie Prestige — tout en un seul endroit.",
+                "Access, members and Prestige messaging — all in one place."
+              )}
             </p>
           </div>
 
           <nav
-            aria-label="Navigation administrateur"
+            aria-label={tr("Navigation administrateur", "Administrator navigation")}
             className="relative min-h-0 lg:flex lg:flex-1 lg:flex-col"
           >
             <div className="flex gap-2 overflow-x-auto px-4 py-4 [-ms-overflow-style:none] [scrollbar-width:none] lg:hidden [&::-webkit-scrollbar]:hidden">
@@ -306,9 +344,9 @@ export function SidebarAdmin({ userEmail }: SidebarAdminProps) {
             <div className="hidden max-h-[min(420px,58dvh)] min-h-0 flex-1 overflow-y-auto overscroll-y-contain px-4 py-4 [-webkit-overflow-scrolling:touch] lg:block lg:max-h-none lg:px-3 lg:pb-3">
               <div className="space-y-5">
                 {NAV_SECTIONS.map((section) => (
-                  <div key={section.title}>
+                  <div key={section.title.fr}>
                     <p className="mb-2 px-3 font-sans text-[9px] font-semibold uppercase tracking-[0.26em] text-white/32">
-                      {section.title}
+                      {tr(section.title.fr, section.title.en)}
                     </p>
                     <div className="space-y-1 rounded-xl border border-white/6 bg-black/18 p-1.5">
                       {section.items.map((item) => (
@@ -333,7 +371,7 @@ export function SidebarAdmin({ userEmail }: SidebarAdminProps) {
                 </span>
                 <div className="min-w-0 flex-1">
                   <p className="font-sans text-[9px] font-semibold uppercase tracking-[0.22em] text-white/35">
-                    Administrateur
+                    {tr("Administrateur", "Administrator")}
                   </p>
                   <p className="mt-1 truncate font-sans text-sm text-white/72">{userEmail}</p>
                 </div>
@@ -345,7 +383,7 @@ export function SidebarAdmin({ userEmail }: SidebarAdminProps) {
               className="mt-3 inline-flex items-center gap-2 rounded-lg px-2 py-1.5 font-sans text-xs text-white/42 transition-colors hover:text-kp-gold/90"
             >
               <IconArrowLeft className="opacity-70" />
-              Retour au site
+              {tr("Retour au site", "Back to site")}
             </Link>
           </div>
         </div>

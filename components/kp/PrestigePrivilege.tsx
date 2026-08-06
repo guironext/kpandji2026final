@@ -1,3 +1,5 @@
+"use client";
+
 import type { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -5,6 +7,7 @@ import { PrestigeContactCTA } from "@/components/kp/PrestigeContactCTA";
 import { PrivilegeFloatingCTA } from "@/components/kp/PrivilegeFloatingCTA";
 import { PrivilegeSectionNav } from "@/components/kp/PrivilegeSectionNav";
 import { Reveal } from "@/components/kp/Reveal";
+import { useLocale } from "@/components/providers/KpLocaleProvider";
 
 const HERO_BACKDROP = "/derniers/djetran.jpeg";
 const FEATURE_IMAGE = "/models/para/pic2.jpg";
@@ -36,242 +39,11 @@ const sectionPad =
 const sectionTitle =
   "font-serif text-[clamp(1.75rem,4.2vw,3rem)] font-normal leading-[1.1] tracking-tight text-white";
 
-const INTRO =
-  "Acquérez votre véhicule neuf en toute sérénité, où que vous soyez. Vous vivez à l’étranger (Diaspora) ou en Côte d’Ivoire ? Kpandji Automobiles facilite votre accès à l’automobile de luxe. Profitez d’un service sur mesure pour acquérir un véhicule robuste et élégant, conçu pour nos routes.";
-
 const WHATSAPP_COMMERCIAL = "https://wa.me/2250707201992?text=INFOS";
 const WHATSAPP_FLOTTE = "https://wa.me/2250707201992?text=FLOTTE";
 
-const stats = [
-  { value: "3", label: "Modèles premium" },
-  { value: "6–24", label: "Mois d’échelonnement" },
-  { value: "70%", label: "Revenus pour vous" },
-  { value: "120j", label: "Délai minimum" },
-];
-
-const models = [
-  {
-    name: "LATHAYE",
-    tagline: "Le confort souverain",
-    body: "Idéal pour la famille et les longs trajets — espace, confort supérieur et robustesse.",
-    href: "/modeles/lathaye",
-    image: "/models/showcase/latint1.jpg",
-  },
-  {
-    name: "DJETRAN",
-    tagline: "Le sommet du prestige et du raffinement",
-    body: "L’élégance VIP pour les déplacements les plus exigeants.",
-    href: "/modeles/djetran",
-    image: "/models/showcase/djetext1.jpg",
-  },
-  {
-    name: "DJETRAN PLUS",
-    tagline: "Le sommet du prestige et du raffinement",
-    body: "L’élégance robuste avec des finitions et technologies de pointe.",
-    href: "/modeles/djetranplus",
-    image: "/models/showcase/plusext0.jpg",
-  },
-] as const;
-
-const paymentOptions = [
-  {
-    title: "Paiement Cash",
-    subtitle: "Achat direct",
-    body: "Livraison immédiate dès la finalisation de votre acquisition.",
-    highlight: "Immédiat",
-  },
-  {
-    title: "Paiement Échelonné",
-    subtitle: "Kpandji Privilège",
-    body: "Devenez propriétaire en payant à votre rythme sur une période allant de 6 à 24 mois.",
-    highlight: "6 à 24 mois",
-  },
-] as const;
-
-const conciergeServices = [
-  {
-    title: "Gardiennage sécurisé",
-    body: "Vous vivez à l’étranger ? Votre véhicule est conservé en toute sécurité dans nos locaux, entretenu et prêt à rouler dès votre arrivée.",
-    icon: (
-      <path
-        d="M12 2l7 4v6c0 5-3.5 9.5-7 10-3.5-.5-7-5-7-10V6l7-4z"
-        strokeLinejoin="round"
-      />
-    ),
-  },
-  {
-    title: "Livraison sur mesure",
-    body: "Acheminement à l’adresse de votre choix — domicile, bureau ou famille — partout en Côte d’Ivoire.",
-    icon: <path d="M5 17h14l-1.5-5.5a2 2 0 00-1.9-1.5H8.4a2 2 0 00-1.9 1.5L5 17z" strokeLinejoin="round" />,
-  },
-  {
-    title: "Maintenance expert",
-    body: "En tant que concepteur, nous assurons un entretien certifié constructeur pour que votre véhicule reste neuf.",
-    icon: (
-      <>
-        <circle cx="12" cy="12" r="3" />
-        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" strokeLinecap="round" />
-      </>
-    ),
-  },
-] as const;
-
-const fleetBenefits = [
-  {
-    title: "Mise en activité privilégiée",
-    body: "Opportunité exclusive aux propriétaires de LATHAYE, DJETRAN et DJETRAN PLUS d’intégrer leur véhicule dans notre flotte de location Premium.",
-  },
-  {
-    title: "Partenaires de prestige",
-    body: "Votre véhicule sera mis à disposition de nos partenaires Elite : ambassades, multinationales, services VIP et délégations diplomatiques.",
-  },
-  {
-    title: "Gestion 100 % sereine",
-    body: "Kpandji Automobiles s’occupe de tout : recherche de clients sélectifs, entretien constructeur rigoureux et suivi technique complet.",
-  },
-] as const;
-
-const fleetRentability = [
-  {
-    title: "Transparence totale",
-    body: "Vous êtes informé en temps réel dès que votre véhicule est en mission.",
-  },
-  {
-    title: "Modèle gagnant-gagnant",
-    body: "Votre véhicule génère des revenus dès qu’il roule. S’il est à l’arrêt, vous n’avez aucun frais de gestion.",
-  },
-  {
-    title: "Liberté absolue",
-    body: "Vous restez maître de votre bien : récupérez-le pour un usage personnel ou continuez à percevoir vos dividendes tant qu’il est en activité.",
-  },
-] as const;
-
-const contacts = [
-  { icon: "📍", label: "Siège social", value: "Abidjan, Riviera Palmeraie (Côte d’Ivoire)" },
-  { icon: "📞", label: "Standard & fixe", value: "+225 07 07 20 19 92", href: "tel:+225 07 07 20 19 92" },
-  {
-    icon: "💼",
-    label: "Service commercial",
-    value: "+225 07 07 20 19 92",
-    href: WHATSAPP_COMMERCIAL,
-    note: "WhatsApp",
-  },
-  {
-    icon: "📣",
-    label: "Service marketing",
-    value: "+225 07 07 20 19 92",
-    href: WHATSAPP_COMMERCIAL,
-    note: "WhatsApp",
-  },
-  { icon: "📧", label: "E-mail", value: "contact@kpandji.com", href: "mailto:contact@kpandji.com" },
-  {
-    icon: "🌐",
-    label: "Site web",
-    value: "www.kpandjiautomobiles.com",
-    href: "https://www.kpandjiautomobiles.com",
-  },
-] as const;
-
-
-
-const benefits = [
-  {
-    title: "Transparence digitale",
-    body: "L'investissement à distance génère de l'anxiété chez la diaspora. Nous devons expliciter noir sur blanc les mesures de sécurité (traceur GPS actif 24h/7, assurance tous risques flotte incluse, et envoi automatisé de rapports d'entretien mensuels).",
-    icon: (
-      <>
-        <rect x="3" y="5" width="18" height="14" rx="2" />
-        <path d="M8 10h8M8 14h5" strokeLinecap="round" />
-      </>
-    ),
-    featured: true,
-  },
-  {
-    title: "Achat sécurisé",
-    body: "Transaction directe avec le constructeur ivoirien, sans intermédiaire opaque.",
-    icon: (
-      <path
-        d="M12 2l7 4v6c0 5-3.5 9.5-7 10-3.5-.5-7-5-7-10V6l7-4z"
-        strokeLinejoin="round"
-      />
-    ),
-    featured: false,
-  },
-  {
-    title: "Prêt à l’arrivée",
-    body: "Véhicule entretenu et disponible dès votre descente d’avion.",
-    icon: <path d="M5 17h14l-1.5-5.5a2 2 0 00-1.9-1.5H8.4a2 2 0 00-1.9 1.5L5 17z" strokeLinejoin="round" />,
-    featured: false,
-  },
-  {
-    title: "Revenus locatifs",
-    body: "Votre véhicule génère des revenus dès qu’il roule — aucun frais de gestion s’il est à l’arrêt.",
-    icon: (
-      <>
-        <circle cx="12" cy="12" r="9" />
-        <path d="M12 7v5l3 2" strokeLinecap="round" />
-      </>
-    ),
-    featured: false,
-  },
-];
-
-const steps = [
-  {
-    num: "01",
-    title: "Choisissez votre modèle",
-    body: "Showroom virtuel ou conseiller dédié — sélectionnez le véhicule adapté à vos usages.",
-  },
-  {
-    num: "02",
-    title: "Contractualisez à distance",
-    body: "Signature et règlement depuis votre pays selon les modalités de l’équipe commerciale.",
-  },
-  {
-    num: "03",
-    title: "KPANDJI prend le relais",
-    body: "Immatriculation, stockage, entretien : votre auto est gérée sur le territoire ivoirien.",
-  },
-  {
-    num: "04",
-    title: "Choisissez votre usage",
-    body: "Récupération personnelle ou mise en location avec reversement des revenus.",
-  },
-];
-
-const flowNodes = [
-  {
-    label: "Vous",
-    sub: "À l’étranger",
-    desc: "Achat & suivi à distance",
-  },
-  {
-    label: "KPANDJI",
-    sub: "Côte d’Ivoire",
-    desc: "Préparation & gestion locale",
-  },
-  {
-    label: "Valorisation",
-    sub: "Votre choix",
-    desc: "Arrivée ou revenus locatifs",
-  },
-];
-
 const cardClass =
   "group relative overflow-hidden rounded-2xl border border-white/[0.07] bg-kp-elevated/30 shadow-[0_24px_80px_-40px_rgba(0,0,0,0.9)] backdrop-blur-md transition-all duration-500 hover:border-white/12 hover:bg-kp-elevated/40";
-
-const marqueeValues = [
-  "Kpandji Privilège",
-  "Diaspora ivoirienne",
-  "Paiement échelonné",
-  "Flotte élite",
-  "Conciergerie",
-  "Côte d’Ivoire",
-  "Investissement automobile",
-  "La force d’une racine",
-];
-
-
 
 function SectionIntro({
   label,
@@ -345,6 +117,7 @@ function SectionChapter({
   description?: string;
   accent?: "gold" | "emerald";
 }) {
+  const { tr } = useLocale();
   const accentBorder = accent === "emerald" ? "border-emerald-500/25" : "border-kp-gold/25";
   const accentText = accent === "emerald" ? "text-emerald-400/90" : "text-kp-gold/90";
   const accentBg =
@@ -365,7 +138,7 @@ function SectionChapter({
               <span
                 className={`inline-flex items-center rounded-full border ${accentBorder} bg-white/5 px-3.5 py-1 text-[10px] font-semibold uppercase tracking-[0.28em] ${accentText}`}
               >
-                Partie {part}
+                {tr("Partie", "Part")} {part}
               </span>
               <span className="text-[10px] font-semibold uppercase tracking-[0.24em] text-white/40">
                 {label}
@@ -393,6 +166,303 @@ function StepBadge({ num }: { num: string }) {
 }
 
 export function PrestigePrivilege() {
+  const { tr } = useLocale();
+
+  const INTRO = tr(
+    "Acquérez votre véhicule neuf en toute sérénité, où que vous soyez. Vous vivez à l’étranger (Diaspora) ou en Côte d’Ivoire ? Kpandji Automobiles facilite votre accès à l’automobile de luxe. Profitez d’un service sur mesure pour acquérir un véhicule robuste et élégant, conçu pour nos routes.",
+    "Acquire your new vehicle with total peace of mind, wherever you are. Whether you live abroad (in the diaspora) or in Côte d’Ivoire, Kpandji Automobiles makes luxury car ownership accessible. Enjoy a bespoke service to acquire a robust, elegant vehicle designed for our roads."
+  );
+
+  const stats = [
+    { value: "3", label: tr("Modèles premium", "Premium models") },
+    { value: "6–24", label: tr("Mois d’échelonnement", "Months of financing") },
+    { value: "70%", label: tr("Revenus pour vous", "Revenue for you") },
+    { value: "120j", label: tr("Délai minimum", "Minimum lead time") },
+  ];
+
+  const models = [
+    {
+      name: "LATHAYE",
+      tagline: tr("Le confort souverain", "Sovereign comfort"),
+      body: tr(
+        "Idéal pour la famille et les longs trajets — espace, confort supérieur et robustesse.",
+        "Ideal for family life and long journeys — space, superior comfort and robustness."
+      ),
+      href: "/modeles/lathaye",
+      image: "/models/showcase/latint1.jpg",
+    },
+    {
+      name: "DJETRAN",
+      tagline: tr("Le sommet du prestige et du raffinement", "The pinnacle of prestige and refinement"),
+      body: tr(
+        "L’élégance VIP pour les déplacements les plus exigeants.",
+        "VIP elegance for the most demanding journeys."
+      ),
+      href: "/modeles/djetran",
+      image: "/models/showcase/djetext1.jpg",
+    },
+    {
+      name: "DJETRAN PLUS",
+      tagline: tr("Le sommet du prestige et du raffinement", "The pinnacle of prestige and refinement"),
+      body: tr(
+        "L’élégance robuste avec des finitions et technologies de pointe.",
+        "Robust elegance with cutting-edge finishes and technology."
+      ),
+      href: "/modeles/djetranplus",
+      image: "/models/showcase/plusext0.jpg",
+    },
+  ] as const;
+
+  const paymentOptions = [
+    {
+      title: tr("Paiement Cash", "Cash Payment"),
+      subtitle: tr("Achat direct", "Direct purchase"),
+      body: tr(
+        "Livraison immédiate dès la finalisation de votre acquisition.",
+        "Immediate delivery as soon as your purchase is finalized."
+      ),
+      highlight: tr("Immédiat", "Immediate"),
+    },
+    {
+      title: tr("Paiement Échelonné", "Installment Payment"),
+      subtitle: "Kpandji Privilège",
+      body: tr(
+        "Devenez propriétaire en payant à votre rythme sur une période allant de 6 à 24 mois.",
+        "Become an owner at your own pace, paying over a period of 6 to 24 months."
+      ),
+      highlight: tr("6 à 24 mois", "6 to 24 months"),
+    },
+  ] as const;
+
+  const conciergeServices = [
+    {
+      title: tr("Gardiennage sécurisé", "Secure safekeeping"),
+      body: tr(
+        "Vous vivez à l’étranger ? Votre véhicule est conservé en toute sécurité dans nos locaux, entretenu et prêt à rouler dès votre arrivée.",
+        "Living abroad? Your vehicle is safely kept on our premises, maintained and ready to drive the moment you arrive."
+      ),
+      icon: (
+        <path
+          d="M12 2l7 4v6c0 5-3.5 9.5-7 10-3.5-.5-7-5-7-10V6l7-4z"
+          strokeLinejoin="round"
+        />
+      ),
+    },
+    {
+      title: tr("Livraison sur mesure", "Bespoke delivery"),
+      body: tr(
+        "Acheminement à l’adresse de votre choix — domicile, bureau ou famille — partout en Côte d’Ivoire.",
+        "Delivery to the address of your choice — home, office or family — anywhere in Côte d’Ivoire."
+      ),
+      icon: <path d="M5 17h14l-1.5-5.5a2 2 0 00-1.9-1.5H8.4a2 2 0 00-1.9 1.5L5 17z" strokeLinejoin="round" />,
+    },
+    {
+      title: tr("Maintenance expert", "Expert maintenance"),
+      body: tr(
+        "En tant que concepteur, nous assurons un entretien certifié constructeur pour que votre véhicule reste neuf.",
+        "As the manufacturer, we provide manufacturer-certified maintenance so your vehicle stays like new."
+      ),
+      icon: (
+        <>
+          <circle cx="12" cy="12" r="3" />
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" strokeLinecap="round" />
+        </>
+      ),
+    },
+  ] as const;
+
+  const fleetBenefits = [
+    {
+      title: tr("Mise en activité privilégiée", "Privileged deployment"),
+      body: tr(
+        "Opportunité exclusive aux propriétaires de LATHAYE, DJETRAN et DJETRAN PLUS d’intégrer leur véhicule dans notre flotte de location Premium.",
+        "An exclusive opportunity for LATHAYE, DJETRAN and DJETRAN PLUS owners to enroll their vehicle in our Premium rental fleet."
+      ),
+    },
+    {
+      title: tr("Partenaires de prestige", "Prestige partners"),
+      body: tr(
+        "Votre véhicule sera mis à disposition de nos partenaires Elite : ambassades, multinationales, services VIP et délégations diplomatiques.",
+        "Your vehicle will be made available to our Elite partners: embassies, multinationals, VIP services and diplomatic delegations."
+      ),
+    },
+    {
+      title: tr("Gestion 100 % sereine", "100% worry-free management"),
+      body: tr(
+        "Kpandji Automobiles s’occupe de tout : recherche de clients sélectifs, entretien constructeur rigoureux et suivi technique complet.",
+        "Kpandji Automobiles handles everything: sourcing select clients, rigorous manufacturer maintenance and complete technical follow-up."
+      ),
+    },
+  ] as const;
+
+  const fleetRentability = [
+    {
+      title: tr("Transparence totale", "Total transparency"),
+      body: tr(
+        "Vous êtes informé en temps réel dès que votre véhicule est en mission.",
+        "You are informed in real time whenever your vehicle is on assignment."
+      ),
+    },
+    {
+      title: tr("Modèle gagnant-gagnant", "Win-win model"),
+      body: tr(
+        "Votre véhicule génère des revenus dès qu’il roule. S’il est à l’arrêt, vous n’avez aucun frais de gestion.",
+        "Your vehicle generates revenue as soon as it's on the road. If it's idle, you pay no management fees."
+      ),
+    },
+    {
+      title: tr("Liberté absolue", "Absolute freedom"),
+      body: tr(
+        "Vous restez maître de votre bien : récupérez-le pour un usage personnel ou continuez à percevoir vos dividendes tant qu’il est en activité.",
+        "You remain in control of your asset: take it back for personal use, or keep earning dividends while it's in service."
+      ),
+    },
+  ] as const;
+
+  const contacts = [
+    { icon: "📍", label: tr("Siège social", "Headquarters"), value: tr("Abidjan, Riviera Palmeraie (Côte d’Ivoire)", "Abidjan, Riviera Palmeraie (Côte d’Ivoire)") },
+    { icon: "📞", label: tr("Standard & fixe", "Landline & switchboard"), value: "+225 07 07 20 19 92", href: "tel:+225 07 07 20 19 92" },
+    {
+      icon: "💼",
+      label: tr("Service commercial", "Sales department"),
+      value: "+225 07 07 20 19 92",
+      href: WHATSAPP_COMMERCIAL,
+      note: "WhatsApp",
+    },
+    {
+      icon: "📣",
+      label: tr("Service marketing", "Marketing department"),
+      value: "+225 07 07 20 19 92",
+      href: WHATSAPP_COMMERCIAL,
+      note: "WhatsApp",
+    },
+    { icon: "📧", label: tr("E-mail", "Email"), value: "contact@kpandji.com", href: "mailto:contact@kpandji.com" },
+    {
+      icon: "🌐",
+      label: tr("Site web", "Website"),
+      value: "www.kpandjiautomobiles.com",
+      href: "https://www.kpandjiautomobiles.com",
+    },
+  ] as const;
+
+  const benefits = [
+    {
+      title: tr("Transparence digitale", "Digital transparency"),
+      body: tr(
+        "L'investissement à distance génère de l'anxiété chez la diaspora. Nous devons expliciter noir sur blanc les mesures de sécurité (traceur GPS actif 24h/7, assurance tous risques flotte incluse, et envoi automatisé de rapports d'entretien mensuels).",
+        "Investing from a distance can create anxiety for the diaspora. We spell out our security measures in black and white (active 24/7 GPS tracker, comprehensive fleet insurance included, and automated monthly maintenance reports)."
+      ),
+      icon: (
+        <>
+          <rect x="3" y="5" width="18" height="14" rx="2" />
+          <path d="M8 10h8M8 14h5" strokeLinecap="round" />
+        </>
+      ),
+      featured: true,
+    },
+    {
+      title: tr("Achat sécurisé", "Secure purchase"),
+      body: tr(
+        "Transaction directe avec le constructeur ivoirien, sans intermédiaire opaque.",
+        "A direct transaction with the Ivorian manufacturer, with no opaque middleman."
+      ),
+      icon: (
+        <path
+          d="M12 2l7 4v6c0 5-3.5 9.5-7 10-3.5-.5-7-5-7-10V6l7-4z"
+          strokeLinejoin="round"
+        />
+      ),
+      featured: false,
+    },
+    {
+      title: tr("Prêt à l’arrivée", "Ready on arrival"),
+      body: tr(
+        "Véhicule entretenu et disponible dès votre descente d’avion.",
+        "Vehicle maintained and available the moment you step off the plane."
+      ),
+      icon: <path d="M5 17h14l-1.5-5.5a2 2 0 00-1.9-1.5H8.4a2 2 0 00-1.9 1.5L5 17z" strokeLinejoin="round" />,
+      featured: false,
+    },
+    {
+      title: tr("Revenus locatifs", "Rental income"),
+      body: tr(
+        "Votre véhicule génère des revenus dès qu’il roule — aucun frais de gestion s’il est à l’arrêt.",
+        "Your vehicle generates income as soon as it's on the road — no management fees while it's idle."
+      ),
+      icon: (
+        <>
+          <circle cx="12" cy="12" r="9" />
+          <path d="M12 7v5l3 2" strokeLinecap="round" />
+        </>
+      ),
+      featured: false,
+    },
+  ];
+
+  const steps = [
+    {
+      num: "01",
+      title: tr("Choisissez votre modèle", "Choose your model"),
+      body: tr(
+        "Showroom virtuel ou conseiller dédié — sélectionnez le véhicule adapté à vos usages.",
+        "Virtual showroom or a dedicated advisor — select the vehicle suited to your needs."
+      ),
+    },
+    {
+      num: "02",
+      title: tr("Contractualisez à distance", "Sign remotely"),
+      body: tr(
+        "Signature et règlement depuis votre pays selon les modalités de l’équipe commerciale.",
+        "Sign and pay from your country of residence, per the sales team's terms."
+      ),
+    },
+    {
+      num: "03",
+      title: tr("KPANDJI prend le relais", "KPANDJI takes over"),
+      body: tr(
+        "Immatriculation, stockage, entretien : votre auto est gérée sur le territoire ivoirien.",
+        "Registration, storage, maintenance: your car is managed on Ivorian soil."
+      ),
+    },
+    {
+      num: "04",
+      title: tr("Choisissez votre usage", "Choose how to use it"),
+      body: tr(
+        "Récupération personnelle ou mise en location avec reversement des revenus.",
+        "Take personal delivery, or enroll it for rental with revenue paid back to you."
+      ),
+    },
+  ];
+
+  const flowNodes = [
+    {
+      label: tr("Vous", "You"),
+      sub: tr("À l’étranger", "Abroad"),
+      desc: tr("Achat & suivi à distance", "Remote purchase & follow-up"),
+    },
+    {
+      label: "KPANDJI",
+      sub: tr("Côte d’Ivoire", "Côte d’Ivoire"),
+      desc: tr("Préparation & gestion locale", "Local preparation & management"),
+    },
+    {
+      label: tr("Valorisation", "Value creation"),
+      sub: tr("Votre choix", "Your choice"),
+      desc: tr("Arrivée ou revenus locatifs", "Arrival or rental income"),
+    },
+  ];
+
+  const marqueeValues = [
+    tr("Kpandji Privilège", "Kpandji Privilège"),
+    tr("Diaspora ivoirienne", "Ivorian diaspora"),
+    tr("Paiement échelonné", "Installment payment"),
+    tr("Flotte élite", "Elite fleet"),
+    tr("Conciergerie", "Concierge service"),
+    tr("Côte d’Ivoire", "Côte d’Ivoire"),
+    tr("Investissement automobile", "Automotive investment"),
+    tr("La force d’une racine", "The strength of a root"),
+  ];
+
   return (
     <div className="min-h-screen bg-kp-bg font-sans text-kp-accent">
       <PrivilegeSectionNav />
@@ -402,13 +472,13 @@ export function PrestigePrivilege() {
         <div id="kpandji-privilege" aria-label="Kpandji Privilège">
         {/* ─── HERO ─── */}
         <section
-          aria-label="Kpandji Privilège — Offre exclusive"
+          aria-label={tr("Kpandji Privilège — Offre exclusive", "Kpandji Privilège — Exclusive offer")}
           className="relative isolate flex min-h-[88svh] items-end overflow-hidden pt-[88px] sm:min-h-[92svh] sm:pt-[100px] md:min-h-svh md:pt-[120px] lg:pt-[132px]"
         >
           <div className="absolute inset-0 -z-10">
             <Image
               src={HERO_BACKDROP}
-              alt="Kpandji Privilège — véhicule premium pour la diaspora"
+              alt={tr("Kpandji Privilège — véhicule premium pour la diaspora", "Kpandji Privilège — premium vehicle for the diaspora")}
               fill
               priority
               sizes="100vw"
@@ -441,7 +511,7 @@ export function PrestigePrivilege() {
           >
             <div className="flex flex-col items-center gap-4">
               <span className="text-[10px] font-semibold uppercase tracking-[0.4em] text-kp-gold/65 [writing-mode:vertical-rl]">
-                PRIVILÈGE
+                {tr("PRIVILÈGE", "PRIVILÈGE")}
               </span>
               <span className="h-24 w-px bg-linear-to-b from-kp-gold/70 via-kp-gold/25 to-transparent" />
             </div>
@@ -454,10 +524,10 @@ export function PrestigePrivilege() {
                   <div className="flex flex-wrap items-center gap-3">
                     <span className="inline-flex items-center gap-2 rounded-full border border-kp-gold/35 bg-kp-gold/10 px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.26em] text-kp-gold backdrop-blur-sm">
                       <span aria-hidden className="size-1.5 rounded-full bg-kp-gold shadow-[0_0_10px_rgba(201,169,98,0.6)]" />
-                      Offre exclusive
+                      {tr("Offre exclusive", "Exclusive offer")}
                     </span>
                     <span className="text-[11px] font-medium uppercase tracking-[0.22em] text-white/50">
-                      Côte d&apos;Ivoire · Diaspora
+                      {tr("Côte d'Ivoire · Diaspora", "Côte d'Ivoire · Diaspora")}
                     </span>
                   </div>
                 </Reveal>
@@ -465,7 +535,7 @@ export function PrestigePrivilege() {
                 <Reveal from="bottom" delayMs={60}>
                   <p className={`${eyebrow} mt-5`}>
                     <span aria-hidden className="h-px w-10 bg-kp-gold/80 sm:w-16" />
-                    Programme premium
+                    {tr("Programme premium", "Premium program")}
                   </p>
                 </Reveal>
 
@@ -487,7 +557,7 @@ export function PrestigePrivilege() {
                 <Reveal from="bottom" delayMs={240}>
                   <div className="mt-8 flex flex-col gap-3 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center">
                     <a href={WHATSAPP_COMMERCIAL} target="_blank" rel="noopener noreferrer" className={btnPrimary}>
-                      <span>Recevoir la brochure · INFOS</span>
+                      <span>{tr("Recevoir la brochure · INFOS", "Get the brochure · INFOS")}</span>
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="size-3.5 transition-transform duration-300 group-hover:translate-x-0.5" aria-hidden>
                         <path d="M5 12h14M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
@@ -506,17 +576,17 @@ export function PrestigePrivilege() {
                       className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-kp-gold/50 to-transparent"
                     />
                     <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-kp-gold/90">
-                      En bref
+                      {tr("En bref", "In brief")}
                     </p>
                     <p className="mt-3 font-serif text-xl leading-snug tracking-tight text-white sm:text-2xl">
-                      Acquérez en toute sérénité.
-                      <span className="text-white/55"> Roulez ou rentabilisez en Côte d&apos;Ivoire.</span>
+                      {tr("Acquérez en toute sérénité.", "Acquire with total peace of mind.")}
+                      <span className="text-white/55"> {tr("Roulez ou rentabilisez en Côte d'Ivoire.", "Drive it or make it profitable in Côte d'Ivoire.")}</span>
                     </p>
                     <ul className="mt-5 grid gap-2.5 sm:grid-cols-3 sm:gap-3">
                       {[
-                        "Paiement cash ou échelonné 6–24 mois",
-                        "Conciergerie & gardiennage diaspora",
-                        "Option flotte élite rentable",
+                        tr("Paiement cash ou échelonné 6–24 mois", "Cash or installment payment, 6–24 months"),
+                        tr("Conciergerie & gardiennage diaspora", "Diaspora concierge & safekeeping"),
+                        tr("Option flotte élite rentable", "Optional profitable elite fleet"),
                       ].map((item) => (
                         <li
                           key={item}
@@ -539,7 +609,7 @@ export function PrestigePrivilege() {
                       <span className="kp-scroll-dot mt-1.5 size-1 rounded-full bg-kp-gold/90" />
                     </span>
                     <span className="text-[10px] font-semibold uppercase tracking-[0.32em] text-white/50">
-                      Faire défiler
+                      {tr("Faire défiler", "Scroll")}
                     </span>
                   </div>
                 </Reveal>
@@ -553,17 +623,17 @@ export function PrestigePrivilege() {
                     className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-kp-gold/50 to-transparent"
                   />
                   <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-kp-gold/90">
-                    En bref
+                    {tr("En bref", "In brief")}
                   </p>
                   <p className="mt-4 font-serif text-2xl leading-snug tracking-tight text-white">
-                    Acquérez en toute sérénité.
-                    <span className="text-white/55"> Roulez ou rentabilisez en Côte d’Ivoire.</span>
+                    {tr("Acquérez en toute sérénité.", "Acquire with total peace of mind.")}
+                    <span className="text-white/55"> {tr("Roulez ou rentabilisez en Côte d’Ivoire.", "Drive it or make it profitable in Côte d’Ivoire.")}</span>
                   </p>
                   <ul className="mt-6 space-y-3 border-t border-white/8 pt-6">
                     {[
-                      "Paiement cash ou échelonné 6–24 mois",
-                      "Gardiennage sécurisé & livraison sur mesure",
-                      "Option flotte élite — 70 % des revenus pour vous",
+                      tr("Paiement cash ou échelonné 6–24 mois", "Cash or installment payment, 6–24 months"),
+                      tr("Gardiennage sécurisé & livraison sur mesure", "Secure safekeeping & bespoke delivery"),
+                      tr("Option flotte élite — 70 % des revenus pour vous", "Optional elite fleet — 70% of revenue for you"),
                     ].map((item) => (
                       <li key={item} className="flex items-start gap-3 text-[13px] text-white/65">
                         <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-kp-gold shadow-[0_0_8px_rgba(201,169,98,0.5)]" />
@@ -603,7 +673,7 @@ export function PrestigePrivilege() {
         </section>
 
         {/* Mobile stats */}
-        <section className="border-y border-white/8 bg-kp-surface md:hidden" aria-label="Chiffres clés Kpandji Privilège">
+        <section className="border-y border-white/8 bg-kp-surface md:hidden" aria-label={tr("Chiffres clés Kpandji Privilège", "Kpandji Privilège key figures")}>
           <div className={`grid grid-cols-2 gap-px bg-white/8 ${pageMax}`}>
             {stats.map((s) => (
               <div key={s.label} className="flex flex-col gap-1 bg-kp-surface px-5 py-7">
@@ -650,10 +720,13 @@ export function PrestigePrivilege() {
             <Reveal from="bottom">
               <SectionIntro
                 centered
-                label="Gamme premium"
-                title="Choisissez votre modèle"
+                label={tr("Gamme premium", "Premium range")}
+                title={tr("Choisissez votre modèle", "Choose your model")}
                 titleId="modeles-heading"
-                description="Sélectionnés pour leur excellence et leur confort supérieur — conçus pour nos routes."
+                description={tr(
+                  "Sélectionnés pour leur excellence et leur confort supérieur — conçus pour nos routes.",
+                  "Selected for their excellence and superior comfort — designed for our roads."
+                )}
               />
             </Reveal>
 
@@ -714,7 +787,7 @@ export function PrestigePrivilege() {
               </div>
               </div>
               <p className="mt-4 text-center text-[10px] uppercase tracking-[0.22em] text-white/35 lg:hidden">
-                Glissez pour découvrir la gamme
+                {tr("Glissez pour découvrir la gamme", "Swipe to discover the range")}
               </p>
             </div>
           </div>
@@ -733,10 +806,13 @@ export function PrestigePrivilege() {
           <div className={sectionPad}>
             <Reveal from="bottom">
               <SectionIntro
-                label="Flexibilité financière"
-                title="Une flexibilité de paiement unique"
+                label={tr("Flexibilité financière", "Financial flexibility")}
+                title={tr("Une flexibilité de paiement unique", "A unique payment flexibility")}
                 titleId="paiement-heading"
-                description="Nous adaptons l’achat à votre budget — que vous soyez en Côte d’Ivoire ou à l’étranger."
+                description={tr(
+                  "Nous adaptons l’achat à votre budget — que vous soyez en Côte d’Ivoire ou à l’étranger.",
+                  "We tailor the purchase to your budget — whether you're in Côte d’Ivoire or abroad."
+                )}
               />
             </Reveal>
 
@@ -765,7 +841,7 @@ export function PrestigePrivilege() {
             <Reveal from="bottom" delayMs={120}>
               <div className="mx-auto mt-12 max-w-3xl rounded-2xl border border-white/8 bg-kp-elevated/20 p-6 sm:p-8">
                 <p className="text-center text-[10px] font-semibold uppercase tracking-[0.24em] text-kp-gold/85">
-                  Plan échelonné Kpandji Privilège
+                  {tr("Plan échelonné Kpandji Privilège", "Kpandji Privilège installment plan")}
                 </p>
                 <div className="mt-6 flex h-3 overflow-hidden rounded-full bg-white/8">
                   <span className="flex w-[70%] items-center justify-center bg-linear-to-r from-kp-gold/90 to-kp-gold/60 text-[9px] font-bold uppercase tracking-wider text-black">
@@ -777,16 +853,19 @@ export function PrestigePrivilege() {
                 </div>
                 <div className="mt-4 flex justify-between gap-4 text-[12px] leading-relaxed text-white/55 sm:text-[13px]">
                   <span>
-                    <strong className="block text-white/85">Apport initial</strong>
-                    À la signature
+                    <strong className="block text-white/85">{tr("Apport initial", "Initial deposit")}</strong>
+                    {tr("À la signature", "At signing")}
                   </span>
                   <span className="text-right">
-                    <strong className="block text-white/85">Mensualités fixes</strong>
-                    6, 12 ou 24 mois
+                    <strong className="block text-white/85">{tr("Mensualités fixes", "Fixed installments")}</strong>
+                    {tr("6, 12 ou 24 mois", "6, 12 or 24 months")}
                   </span>
                 </div>
                 <p className="mt-5 text-center font-sans text-[12px] leading-relaxed text-white/40">
-                  Délai minimum de fabrication : 120 jours après validation du premier versement.
+                  {tr(
+                    "Délai minimum de fabrication : 120 jours après validation du premier versement.",
+                    "Minimum manufacturing time: 120 days after the first payment is validated."
+                  )}
                 </p>
               </div>
             </Reveal>
@@ -807,10 +886,13 @@ export function PrestigePrivilege() {
             <Reveal from="bottom">
               <SectionIntro
                 centered
-                label="Conciergerie & livraison"
-                title="Nous veillons sur votre bien"
+                label={tr("Conciergerie & livraison", "Concierge & delivery")}
+                title={tr("Nous veillons sur votre bien", "We take care of your asset")}
                 titleId="conciergerie-heading"
-                description="Ne vous souciez plus de la logistique — Kpandji Automobiles vous offre une liberté totale."
+                description={tr(
+                  "Ne vous souciez plus de la logistique — Kpandji Automobiles vous offre une liberté totale.",
+                  "Stop worrying about logistics — Kpandji Automobiles offers you total freedom."
+                )}
               />
             </Reveal>
 
@@ -846,10 +928,13 @@ export function PrestigePrivilege() {
             <Reveal from="bottom">
               <SectionIntro
                 centered
-                label="Le concept"
-                title="De l’étranger à Abidjan, en toute sérénité"
+                label={tr("Le concept", "The concept")}
+                title={tr("De l’étranger à Abidjan, en toute sérénité", "From abroad to Abidjan, with total peace of mind")}
                 titleId="concept-heading"
-                description="Vous investissez depuis votre pays de résidence — KPANDJI opère sur le terrain ivoirien."
+                description={tr(
+                  "Vous investissez depuis votre pays de résidence — KPANDJI opère sur le terrain ivoirien.",
+                  "You invest from your country of residence — KPANDJI operates on the ground in Côte d’Ivoire."
+                )}
               />
             </Reveal>
 
@@ -924,10 +1009,13 @@ export function PrestigePrivilege() {
           <div className={sectionPad}>
             <Reveal from="bottom">
               <SectionIntro
-                label="Avantages"
-                title="Transparence digitale & sérénité"
+                label={tr("Avantages", "Benefits")}
+                title={tr("Transparence digitale & sérénité", "Digital transparency & peace of mind")}
                 titleId="avantages-heading"
-                description="Restez connecté à votre acquisition — notifications, rapports d’entretien et suivi en temps réel."
+                description={tr(
+                  "Restez connecté à votre acquisition — notifications, rapports d’entretien et suivi en temps réel.",
+                  "Stay connected to your vehicle — notifications, maintenance reports and real-time tracking."
+                )}
               />
             </Reveal>
 
@@ -940,7 +1028,7 @@ export function PrestigePrivilege() {
                       <div className="absolute inset-0">
                         <Image
                           src={FEATURE_IMAGE}
-                          alt="Transparence digitale Kpandji Privilège"
+                          alt={tr("Transparence digitale Kpandji Privilège", "Kpandji Privilège digital transparency")}
                           fill
                           sizes="(max-width: 1024px) 100vw, 50vw"
                           className="object-cover object-center transition-transform duration-1000 group-hover:scale-[1.03]"
@@ -979,7 +1067,7 @@ export function PrestigePrivilege() {
                         aria-hidden
                         className="mt-6 inline-flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-kp-gold/55 transition-colors duration-300 group-hover:text-kp-gold/90"
                       >
-                        Privilège
+                        {tr("Privilège", "Privilège")}
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="size-3 transition-transform duration-300 group-hover:translate-x-0.5">
                           <path d="M5 12h14M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
@@ -1004,10 +1092,13 @@ export function PrestigePrivilege() {
           <div className={sectionPad}>
             <Reveal from="bottom">
               <SectionIntro
-                label="Parcours"
-                title="Quatre étapes vers votre KPANDJI"
+                label={tr("Parcours", "Journey")}
+                title={tr("Quatre étapes vers votre KPANDJI", "Four steps to your KPANDJI")}
                 titleId="parcours-heading"
-                description="De la sélection du modèle à la prise en main — ou à la mise en location — un processus clair et encadré."
+                description={tr(
+                  "De la sélection du modèle à la prise en main — ou à la mise en location — un processus clair et encadré.",
+                  "From choosing your model to taking the wheel — or enrolling it for rental — a clear, guided process."
+                )}
               />
             </Reveal>
 
@@ -1062,9 +1153,10 @@ export function PrestigePrivilege() {
               />
               <blockquote>
                 <p className="relative font-serif text-lg italic leading-[1.55] text-white/90 md:text-2xl md:leading-[1.45]">
-                  La force d’une racine, l’élan d’une nation. Kpandji Privilège relie
-                  la diaspora à l’excellence automobile ivoirienne — avec la garantie
-                  d’un constructeur présent sur le terrain.
+                  {tr(
+                    "La force d’une racine, l’élan d’une nation. Kpandji Privilège relie la diaspora à l’excellence automobile ivoirienne — avec la garantie d’un constructeur présent sur le terrain.",
+                    "The strength of a root, the drive of a nation. Kpandji Privilège connects the diaspora to Ivorian automotive excellence — backed by a manufacturer present on the ground."
+                  )}
                 </p>
                 <figcaption className="mt-6 flex items-center gap-3">
                   <span aria-hidden className="h-px w-8 bg-kp-gold/70" />
@@ -1094,20 +1186,25 @@ export function PrestigePrivilege() {
                   aria-hidden
                   className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-kp-gold/45 to-transparent"
                 />
-                <p className={`${eyebrow} justify-center`}>Prêt(e) à prendre le volant ?</p>
+                <p className={`${eyebrow} justify-center`}>{tr("Prêt(e) à prendre le volant ?", "Ready to take the wheel?")}</p>
                 <h2 id="privilege-cta-heading" className={`mt-5 ${sectionTitle}`}>
-                  Faites le choix de la qualité et de la sérénité
+                  {tr("Faites le choix de la qualité et de la sérénité", "Choose quality and peace of mind")}
                 </h2>
                 <p className={`mx-auto mt-5 max-w-2xl ${bodyText}`}>
-                  Répondez « INFOS » pour recevoir notre brochure détaillée et choisir votre plan de
-                  paiement de 6 à 24 mois.
+                  {tr(
+                    "Répondez « INFOS » pour recevoir notre brochure détaillée et choisir votre plan de paiement de 6 à 24 mois.",
+                    "Reply \"INFOS\" to receive our detailed brochure and choose your 6 to 24-month payment plan."
+                  )}
                 </p>
                 <p className="mt-4 font-serif text-lg text-white/75">
-                  Kpandji Automobiles : votre partenaire de confiance en Afrique.
+                  {tr(
+                    "Kpandji Automobiles : votre partenaire de confiance en Afrique.",
+                    "Kpandji Automobiles: your trusted partner in Africa."
+                  )}
                 </p>
                 <div className="mt-10 flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center">
                   <a href={WHATSAPP_COMMERCIAL} target="_blank" rel="noopener noreferrer" className={btnPrimary}>
-                    <span>WhatsApp · INFOS</span>
+                    <span>{tr("WhatsApp · INFOS", "WhatsApp · INFOS")}</span>
                   </a>
                   <div className="w-full sm:w-auto [&_button]:w-full sm:[&_button]:w-auto">
                     <PrestigeContactCTA />
@@ -1122,9 +1219,12 @@ export function PrestigePrivilege() {
         {/* ─── SECTION 2 : KPANDJI RENT ─── */}
         <SectionChapter
           part="02"
-          label="Investissement locatif"
+          label={tr("Investissement locatif", "Rental investment")}
           title="Kpandji Rent"
-          description="Transformez votre véhicule premium en source de revenus passifs."
+          description={tr(
+            "Transformez votre véhicule premium en source de revenus passifs.",
+            "Turn your premium vehicle into a source of passive income."
+          )}
           accent="emerald"
         />
         <div id="kpandji-rent" aria-label="Kpandji Rent" className="scroll-mt-28 md:scroll-mt-32">
@@ -1141,18 +1241,23 @@ export function PrestigePrivilege() {
             <Reveal from="bottom">
               <SectionIntro
                 centered
-                label="Offre exclusive · Kpandji Rent"
-                title="Votre véhicule de luxe devient un actif rentable"
+                label={tr("Offre exclusive · Kpandji Rent", "Exclusive offer · Kpandji Rent")}
+                title={tr("Votre véhicule de luxe devient un actif rentable", "Your luxury vehicle becomes a profitable asset")}
                 titleId="flotte-heading"
-                description="Vous avez fait le choix de l’excellence en acquérant un véhicule chez Kpandji Automobiles. Que vous résidiez en Côte d’Ivoire ou à l’étranger, transformez votre investissement en source de revenus passifs."
+                description={tr(
+                  "Vous avez fait le choix de l’excellence en acquérant un véhicule chez Kpandji Automobiles. Que vous résidiez en Côte d’Ivoire ou à l’étranger, transformez votre investissement en source de revenus passifs.",
+                  "You chose excellence when you acquired a vehicle from Kpandji Automobiles. Whether you live in Côte d’Ivoire or abroad, turn your investment into a source of passive income."
+                )}
               />
             </Reveal>
 
             <Reveal from="bottom" delayMs={60}>
               <p className={`mx-auto mt-10 max-w-3xl text-center ${bodyText}`}>
-                <strong className="text-white/80">Le concept : intégrez notre flotte élite.</strong>{" "}
-                Ne laissez pas votre véhicule perdre de la valeur au garage. Profitez de notre réseau
-                pour rentabiliser votre bien en toute sécurité.
+                <strong className="text-white/80">{tr("Le concept : intégrez notre flotte élite.", "The concept: join our elite fleet.")}</strong>{" "}
+                {tr(
+                  "Ne laissez pas votre véhicule perdre de la valeur au garage. Profitez de notre réseau pour rentabiliser votre bien en toute sécurité.",
+                  "Don't let your vehicle lose value in the garage. Take advantage of our network to safely make your asset profitable."
+                )}
               </p>
             </Reveal>
 
@@ -1165,21 +1270,24 @@ export function PrestigePrivilege() {
                     className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-kp-gold/60 to-transparent"
                   />
                   <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-kp-gold/90">
-                    Répartition des revenus 
+                    {tr("Répartition des revenus", "Revenue split")}
                   </p>
                   <div className="mt-6 flex items-end gap-4">
                     <div>
                       <p className="font-serif text-5xl font-medium tracking-tight text-white">70%</p>
-                      <p className="mt-1 text-[12px] uppercase tracking-[0.18em] text-white/55">Pour vous</p>
+                      <p className="mt-1 text-[12px] uppercase tracking-[0.18em] text-white/55">{tr("Pour vous", "For you")}</p>
                     </div>
                     <div className="mb-2 h-12 w-px bg-white/15" aria-hidden />
                     <div>
                       <p className="font-serif text-3xl font-medium tracking-tight text-white/70">30%</p>
-                      <p className="mt-1 text-[12px] uppercase tracking-[0.18em] text-white/45">Pour KPANDJI</p>
+                      <p className="mt-1 text-[12px] uppercase tracking-[0.18em] text-white/45">{tr("Pour KPANDJI", "For KPANDJI")}</p>
                     </div>
                   </div>
                   <p className="mt-6 font-sans text-[13px] leading-relaxed text-white/55">
-                    Entretien complet, gardiennage, assurance flotte et recherche de clients inclus dans la part KPANDJI.
+                    {tr(
+                      "Entretien complet, gardiennage, assurance flotte et recherche de clients inclus dans la part KPANDJI.",
+                      "Full maintenance, safekeeping, fleet insurance and client sourcing are all included in KPANDJI's share."
+                    )}
                   </p>
                   <a
                     href={WHATSAPP_FLOTTE}
@@ -1187,7 +1295,7 @@ export function PrestigePrivilege() {
                     rel="noopener noreferrer"
                     className={`${btnGold} mt-8`}
                   >
-                    <span>Simuler mes revenus</span>
+                    <span>{tr("Simuler mes revenus", "Simulate my income")}</span>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="size-3.5" aria-hidden>
                       <path d="M5 12h14M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
@@ -1214,7 +1322,7 @@ export function PrestigePrivilege() {
                   <div>
                     <p className={eyebrow}>
                       <span aria-hidden className="h-px w-8 bg-kp-gold/60" />
-                      Votre rentabilité garantie
+                      {tr("Votre rentabilité garantie", "Your guaranteed profitability")}
                     </p>
                     <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-3 xl:gap-5">
                       {fleetRentability.map((item, i) => (
@@ -1235,8 +1343,10 @@ export function PrestigePrivilege() {
 
                 <Reveal from="bottom" delayMs={160}>
                   <p className={`${bodyText} rounded-2xl border border-white/8 bg-kp-elevated/10 p-6 sm:p-7`}>
-                    En rejoignant la flotte Kpandji, vous participez à l’essor économique du continent
-                    tout en faisant fructifier votre patrimoine avec le partenaire de référence à Abidjan.
+                    {tr(
+                      "En rejoignant la flotte Kpandji, vous participez à l’essor économique du continent tout en faisant fructifier votre patrimoine avec le partenaire de référence à Abidjan.",
+                      "By joining the Kpandji fleet, you contribute to the continent's economic growth while growing your wealth with the leading partner in Abidjan."
+                    )}
                   </p>
                 </Reveal>
               </div>
@@ -1264,14 +1374,19 @@ export function PrestigePrivilege() {
                     id="rent-cta-heading"
                     className="mt-5 font-serif text-[clamp(1.85rem,4.5vw,3rem)] font-normal leading-[1.08] tracking-tight text-white"
                   >
-                    Faites passer votre investissement à la vitesse supérieure
+                    {tr("Faites passer votre investissement à la vitesse supérieure", "Take your investment to the next level")}
                   </h2>
                   <p className="mx-auto mt-6 max-w-2xl text-pretty text-[15px] leading-relaxed text-white/65">
-                    Intéressé(e) ? Répondez « FLOTTE » pour recevoir les modalités d’intégration et une
-                    simulation des revenus locatifs selon votre modèle.
+                    {tr(
+                      "Intéressé(e) ? Répondez « FLOTTE » pour recevoir les modalités d’intégration et une simulation des revenus locatifs selon votre modèle.",
+                      "Interested? Reply \"FLOTTE\" to receive the enrollment terms and an income simulation for your model."
+                    )}
                   </p>
                   <p className="mt-4 font-serif text-lg text-white/75">
-                    Kpandji Automobiles : investissez aujourd’hui, encaissez demain.
+                    {tr(
+                      "Kpandji Automobiles : investissez aujourd’hui, encaissez demain.",
+                      "Kpandji Automobiles: invest today, earn tomorrow."
+                    )}
                   </p>
                   <a
                     href={WHATSAPP_FLOTTE}
@@ -1279,7 +1394,7 @@ export function PrestigePrivilege() {
                     rel="noopener noreferrer"
                     className={`${btnGold} mx-auto mt-10`}
                   >
-                    <span>WhatsApp · FLOTTE</span>
+                    <span>{tr("WhatsApp · FLOTTE", "WhatsApp · FLOTTE")}</span>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="size-3.5" aria-hidden>
                       <path d="M5 12h14M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
@@ -1305,10 +1420,13 @@ export function PrestigePrivilege() {
             <Reveal from="bottom">
               <SectionIntro
                 centered
-                label="Coordonnées & contacts"
-                title="Retrouvez Kpandji Automobiles"
+                label={tr("Coordonnées & contacts", "Contact details")}
+                title={tr("Retrouvez Kpandji Automobiles", "Find Kpandji Automobiles")}
                 titleId="contact-heading"
-                description="Kpandji Automobiles : la force d’une racine, l’élan d’une nation."
+                description={tr(
+                  "Kpandji Automobiles : la force d’une racine, l’élan d’une nation.",
+                  "Kpandji Automobiles: the strength of a root, the drive of a nation."
+                )}
               />
             </Reveal>
 
@@ -1323,12 +1441,12 @@ export function PrestigePrivilege() {
                     📍
                   </p>
                   <p className="mt-4 text-[10px] font-semibold uppercase tracking-[0.24em] text-kp-gold/85">
-                    Siège social
+                    {tr("Siège social", "Headquarters")}
                   </p>
                   <p className="mt-2 font-serif text-xl leading-snug text-white sm:text-2xl">
                     Abidjan, Riviera Palmeraie
                   </p>
-                  <p className="mt-1 text-[14px] text-white/55">Côte d&apos;Ivoire</p>
+                  <p className="mt-1 text-[14px] text-white/55">{tr("Côte d'Ivoire", "Ivory Coast")}</p>
                   <div className="mt-8 space-y-3 border-t border-white/10 pt-8">
                     <a
                       href="tel:+2250707201992"
@@ -1355,7 +1473,7 @@ export function PrestigePrivilege() {
                     </a>
                   </div>
                   <p className="mt-8 font-serif text-base italic leading-relaxed text-white/70">
-                    La force d&apos;une racine, l&apos;élan d&apos;une nation.
+                    {tr("La force d'une racine, l'élan d'une nation.", "The strength of a root, the drive of a nation.")}
                   </p>
                 </div>
               </Reveal>

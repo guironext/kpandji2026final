@@ -1,6 +1,10 @@
 import { AdminPageHeader } from "@/components/kp/AdminPageHeader";
 
+import { AdminCountLine } from "@/components/kp/AdminCountLine";
+
 import { adminCardClass, adminCardGlow } from "@/components/kp/adminStyles";
+
+import { Tr } from "@/components/kp/Tr";
 
 import { prisma, UserStatus } from "@/lib/db";
 
@@ -58,9 +62,14 @@ export default async function ListeMembresPage() {
 
       <AdminPageHeader
 
-        title="Liste des membres"
+        title={<Tr fr="Liste des membres" en="Members list" />}
 
-        description="Consultez tous les membres approuvés de l’espace privé KPANDJI."
+        description={
+          <Tr
+            fr="Consultez tous les membres approuvés de l’espace privé KPANDJI."
+            en="View all approved members of the KPANDJI private area."
+          />
+        }
 
       />
 
@@ -70,17 +79,15 @@ export default async function ListeMembresPage() {
 
         <div className={adminCardGlow} aria-hidden />
 
-        <h2 className="font-serif text-2xl text-white">Membres approuvés</h2>
+        <h2 className="font-serif text-2xl text-white">
+          <Tr fr="Membres approuvés" en="Approved members" />
+        </h2>
 
-        <p className="mt-2 font-sans text-sm text-white/50">
-
-          {approvedMembers.length} membre
-
-          {approvedMembers.length !== 1 ? "s" : ""} approuvé
-
-          {approvedMembers.length !== 1 ? "s" : ""}.
-
-        </p>
+        <AdminCountLine
+          count={approvedMembers.length}
+          singular={{ fr: "{n} membre approuvé.", en: "{n} approved member." }}
+          plural={{ fr: "{n} membres approuvés.", en: "{n} approved members." }}
+        />
 
 
 
@@ -88,7 +95,10 @@ export default async function ListeMembresPage() {
 
           <p className="mt-6 font-sans text-sm text-white/50">
 
-            Aucun membre approuvé pour le moment.
+            <Tr
+              fr="Aucun membre approuvé pour le moment."
+              en="No approved members at the moment."
+            />
 
           </p>
 

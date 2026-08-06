@@ -6,6 +6,7 @@ import {
   adminPrimaryButtonClass,
   adminSecondaryButtonClass,
 } from "@/components/kp/adminStyles";
+import { useLocale } from "@/components/providers/KpLocaleProvider";
 
 export type PrivilegeContactRow = {
   id: string;
@@ -67,10 +68,10 @@ function displayValue(value: string) {
   return value.trim() || "—";
 }
 
-function formatDate(iso: string) {
+function formatDate(iso: string, locale: string) {
   const date = new Date(iso);
   if (Number.isNaN(date.getTime())) return "—";
-  return new Intl.DateTimeFormat("fr-FR", {
+  return new Intl.DateTimeFormat(locale === "en" ? "en-US" : "fr-FR", {
     day: "2-digit",
     month: "short",
     year: "numeric",
@@ -89,6 +90,7 @@ function PrivilegeContactModal({
   const panelRef = useRef<HTMLDivElement>(null);
   const titleId = useId();
   const [mounted, setMounted] = useState(false);
+  const { tr, locale } = useLocale();
 
   useEffect(() => {
     setMounted(true);
@@ -138,10 +140,10 @@ function PrivilegeContactModal({
       >
         <div className="border-b border-white/8 bg-kp-gold/10 px-6 py-5">
           <h3 id={titleId} className="font-serif text-xl text-white">
-            Contact privilégié
+            {tr("Contact privilégié", "Privileged contact")}
           </h3>
           <p className="mt-1 font-sans text-sm text-white/55">
-            {displayValue(row.name)} · {formatDate(row.createdAt)}
+            {displayValue(row.name)} · {formatDate(row.createdAt, locale)}
           </p>
         </div>
 
@@ -149,14 +151,14 @@ function PrivilegeContactModal({
           <dl className="space-y-4 font-sans text-sm">
             <div>
               <dt className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-                Nom
+                {tr("Nom", "Name")}
               </dt>
               <dd className="mt-1 text-white/85">{displayValue(row.name)}</dd>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <dt className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-                  Pays
+                  {tr("Pays", "Country")}
                 </dt>
                 <dd className="mt-1 text-white/85">
                   {displayValue(row.country)}
@@ -164,7 +166,7 @@ function PrivilegeContactModal({
               </div>
               <div>
                 <dt className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-                  Ville
+                  {tr("Ville", "City")}
                 </dt>
                 <dd className="mt-1 text-white/85">{displayValue(row.city)}</dd>
               </div>
@@ -172,7 +174,7 @@ function PrivilegeContactModal({
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <dt className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-                  Téléphone
+                  {tr("Téléphone", "Phone")}
                 </dt>
                 <dd className="mt-1 break-all text-white/85">
                   {displayValue(row.phone)}
@@ -180,7 +182,7 @@ function PrivilegeContactModal({
               </div>
               <div>
                 <dt className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-                  E-mail
+                  {tr("E-mail", "Email")}
                 </dt>
                 <dd className="mt-1 break-all text-white/85">
                   {displayValue(row.email)}
@@ -189,9 +191,11 @@ function PrivilegeContactModal({
             </div>
             <div>
               <dt className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-                Date de soumission
+                {tr("Date de soumission", "Submission date")}
               </dt>
-              <dd className="mt-1 text-white/85">{formatDate(row.createdAt)}</dd>
+              <dd className="mt-1 text-white/85">
+                {formatDate(row.createdAt, locale)}
+              </dd>
             </div>
           </dl>
         </div>
@@ -199,12 +203,12 @@ function PrivilegeContactModal({
         <div className="flex flex-wrap gap-3 border-t border-white/8 bg-black/20 px-6 py-4">
           {emailTrim ? (
             <a href={`mailto:${emailTrim}`} className={adminSecondaryButtonClass}>
-              Écrire
+              {tr("Écrire", "Email")}
             </a>
           ) : null}
           {phoneTrim ? (
             <a href={`tel:${phoneTrim}`} className={adminSecondaryButtonClass}>
-              Appeler
+              {tr("Appeler", "Call")}
             </a>
           ) : null}
           <button
@@ -212,7 +216,7 @@ function PrivilegeContactModal({
             onClick={onClose}
             className={adminPrimaryButtonClass}
           >
-            Fermer
+            {tr("Fermer", "Close")}
           </button>
         </div>
       </div>
@@ -231,6 +235,7 @@ function PrivilegeContactRowItem({
   const [open, setOpen] = useState(false);
   const [read, setRead] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const { tr, locale } = useLocale();
 
   const openModal = useCallback(() => {
     setOpen(true);
@@ -244,7 +249,10 @@ function PrivilegeContactRowItem({
   const handleDelete = useCallback(async () => {
     if (
       !window.confirm(
-        "Supprimer ce contact privilégié ? Cette action est irréversible."
+        tr(
+          "Supprimer ce contact privilégié ? Cette action est irréversible.",
+          "Delete this privileged contact? This action is irreversible."
+        )
       )
     ) {
       return;
@@ -263,10 +271,15 @@ function PrivilegeContactRowItem({
 
       onDelete(row.id);
     } catch {
-      window.alert("Impossible de supprimer ce contact. Réessayez.");
+      window.alert(
+        tr(
+          "Impossible de supprimer ce contact. Réessayez.",
+          "Unable to delete this contact. Please try again."
+        )
+      );
       setIsDeleting(false);
     }
-  }, [onDelete, row.id]);
+  }, [onDelete, row.id, tr]);
 
   return (
     <tr
@@ -287,7 +300,7 @@ function PrivilegeContactRowItem({
         {displayValue(row.email)}
       </td>
       <td className="whitespace-nowrap px-4 py-3.5 font-sans text-sm text-white/55">
-        {formatDate(row.createdAt)}
+        {formatDate(row.createdAt, locale)}
       </td>
       <td className="px-4 py-3.5">
         <div className="flex items-center gap-2">
@@ -295,8 +308,8 @@ function PrivilegeContactRowItem({
             type="button"
             onClick={openModal}
             aria-expanded={open}
-            aria-label={read ? "Contact déjà lu" : "Voir le contact"}
-            title={read ? "Déjà lu" : "Voir"}
+            aria-label={read ? tr("Contact déjà lu", "Contact already read") : tr("Voir le contact", "View contact")}
+            title={read ? tr("Déjà lu", "Already read") : tr("Voir", "View")}
             className={`${iconButtonClass} ${
               read
                 ? "border-kp-gold/45 bg-kp-gold/15 text-kp-gold hover:bg-kp-gold/25"
@@ -309,8 +322,8 @@ function PrivilegeContactRowItem({
             type="button"
             onClick={handleDelete}
             disabled={isDeleting}
-            aria-label="Supprimer le contact"
-            title="Supprimer"
+            aria-label={tr("Supprimer le contact", "Delete contact")}
+            title={tr("Supprimer", "Delete")}
             className={`${iconButtonClass} border-white/15 bg-white/3 text-white/55 hover:border-[#e85d5d]/45 hover:bg-[#e85d5d]/10 hover:text-[#e85d5d]`}
           >
             <IconTrash />
@@ -328,6 +341,7 @@ export function PrivilegeContactTable({
   rows: PrivilegeContactRow[];
 }) {
   const [rows, setRows] = useState(initialRows);
+  const { tr } = useLocale();
 
   useEffect(() => {
     setRows(initialRows);
@@ -340,7 +354,7 @@ export function PrivilegeContactTable({
   if (rows.length === 0) {
     return (
       <p className="mt-6 font-sans text-sm text-white/50">
-        Aucun contact privilégié pour le moment.
+        {tr("Aucun contact privilégié pour le moment.", "No privileged contacts at the moment.")}
       </p>
     );
   }
@@ -351,22 +365,22 @@ export function PrivilegeContactTable({
         <thead>
           <tr className="border-b border-white/8 bg-white/3">
             <th className="px-4 py-3 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-              Nom
+              {tr("Nom", "Name")}
             </th>
             <th className="px-4 py-3 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-              Pays
+              {tr("Pays", "Country")}
             </th>
             <th className="px-4 py-3 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-              Ville
+              {tr("Ville", "City")}
             </th>
             <th className="px-4 py-3 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-              E-mail
+              {tr("E-mail", "Email")}
             </th>
             <th className="px-4 py-3 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-              Date
+              {tr("Date", "Date")}
             </th>
             <th className="px-4 py-3 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-              Action
+              {tr("Action", "Action")}
             </th>
           </tr>
         </thead>

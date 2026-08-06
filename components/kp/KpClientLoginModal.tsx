@@ -9,6 +9,7 @@ import { kpClerkAppearance } from "@/components/kp/clerk-appearance";
 import { useAuthSync } from "@/components/kp/useAuthSync";
 import { useClerkAuthLinkInterceptor } from "@/components/kp/useClerkAuthLinkInterceptor";
 import { useClerkUiWarmup } from "@/components/providers/useClerkUiWarmup";
+import { useLocale } from "@/components/providers/KpLocaleProvider";
 
 type KpClientLoginModalProps = {
   open: boolean;
@@ -31,6 +32,7 @@ export function KpClientLoginModal({
   const reduceMotion = useReducedMotion();
   const easeLux = [0.22, 1, 0.36, 1] as const;
   const { isLoaded, isSignedIn } = useAuth();
+  const { tr } = useLocale();
 
   useClerkUiWarmup(prefetch || open);
   useAuthSync(open && isLoaded && isSignedIn);
@@ -136,20 +138,26 @@ export function KpClientLoginModal({
               id="kp-client-login-title"
               className="mt-1 font-serif text-2xl text-white"
             >
-              Espace client
+              {tr("Espace client", "Client area")}
             </h2>
             <p className="mt-2 font-sans text-sm text-white/70">
-              Connectez-vous avec votre e-mail et votre mot de passe.
+              {tr(
+                "Connectez-vous avec votre e-mail et votre mot de passe.",
+                "Sign in with your email and password."
+              )}
             </p>
             <p className="mt-2 font-sans text-xs text-white/45">
-              Pas encore de compte ? L’inscription nécessite une invitation.
+              {tr(
+                "Pas encore de compte ? L’inscription nécessite une invitation.",
+                "No account yet? Sign-up requires an invitation."
+              )}
             </p>
           </div>
           <button
             type="button"
             onClick={onClose}
             className="relative shrink-0 rounded-full p-2 text-white/70 transition hover:bg-white/10 hover:text-white"
-            aria-label="Fermer la connexion"
+            aria-label={tr("Fermer la connexion", "Close login")}
           >
             <span className="block text-2xl leading-none" aria-hidden>
               ×
@@ -160,14 +168,14 @@ export function KpClientLoginModal({
         <div className="relative kp-clerk-signin px-6 py-6 sm:px-8 sm:py-7">
           {isLoaded && isSignedIn ? (
             <p className="font-sans text-sm text-white/50">
-              Synchronisation de votre compte…
+              {tr("Synchronisation de votre compte…", "Syncing your account…")}
             </p>
           ) : (
             <ClerkMounted
               active={open}
               fallback={
                 <p className="font-sans text-sm text-white/45">
-                  Chargement de la connexion…
+                  {tr("Chargement de la connexion…", "Loading sign-in…")}
                 </p>
               }
             >

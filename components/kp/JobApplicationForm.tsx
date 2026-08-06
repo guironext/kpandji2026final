@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
+import { useLocale } from "@/components/providers/KpLocaleProvider";
 
 const EMPLOIS_EMAIL = "contact@kpandji.com";
 
@@ -30,6 +31,7 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
 }
 
 export function JobApplicationForm() {
+  const { tr } = useLocale();
   const reduceMotion = useReducedMotion();
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -53,73 +55,88 @@ export function JobApplicationForm() {
     const skillsTrim = skills.trim();
 
     if (!nameTrim) {
-      setError("Indiquez votre nom et prénom.");
+      setError(tr("Indiquez votre nom et prénom.", "Please enter your full name."));
       return;
     }
     if (!emailTrim) {
-      setError("Indiquez votre adresse e-mail.");
+      setError(tr("Indiquez votre adresse e-mail.", "Please enter your email address."));
       return;
     }
     if (!isValidEmail(emailTrim)) {
-      setError("Adresse e-mail invalide.");
+      setError(tr("Adresse e-mail invalide.", "Invalid email address."));
       return;
     }
     if (!positionTrim) {
-      setError("Indiquez le poste visé ou précisez « Candidature spontanée ».");
+      setError(tr("Indiquez le poste visé ou précisez « Candidature spontanée ».", "Please indicate the target position or specify \"Open application\"."));
       return;
     }
     if (!cvTrim) {
-      setError("Rédigez une courte synthèse de votre CV (parcours et expériences clés).");
+      setError(tr("Rédigez une courte synthèse de votre CV (parcours et expériences clés).", "Please write a short summary of your résumé (background and key experience)."));
       return;
     }
     if (!skillsTrim) {
-      setError("Listez vos compétences techniques et professionnelles.");
+      setError(tr("Listez vos compétences techniques et professionnelles.", "Please list your technical and professional skills."));
       return;
     }
 
     const mailSubject = encodeURIComponent(
-      `[KPANDJI Automobiles — Candidature] ${positionTrim} — ${nameTrim}`
+      tr(
+        `[KPANDJI Automobiles — Candidature] ${positionTrim} — ${nameTrim}`,
+        `[KPANDJI Automobiles — Application] ${positionTrim} — ${nameTrim}`
+      )
     );
-    const lines = [
-      "Bonjour,",
-      "",
-      "Je souhaite rejoindre l'équipe de Kpandji Automobiles. Voici les informations figurant aussi sur mon CV (pièce jointe à ajouter après ouverture de ce message).",
-      "",
-      "--- Coordonnées ---",
-      `Nom complet : ${nameTrim}`,
-      `E-mail : ${emailTrim}`,
-    ];
-    if (phone.trim()) {
-      lines.push(`Téléphone : ${phone.trim()}`);
-    }
-    lines.push("");
-    lines.push("--- Candidature ---");
-    lines.push(`Poste visé : ${positionTrim}`);
-    lines.push("");
-    lines.push("Synthèse du CV (parcours & expériences) :");
-    lines.push(cvTrim);
-    lines.push("");
-    lines.push("Compétences :");
-    lines.push(skillsTrim);
-    lines.push("");
-    if (languages.trim()) {
-      lines.push("Langues :");
-      lines.push(languages.trim());
-      lines.push("");
-    }
-    if (education.trim()) {
-      lines.push("Formation & certifications :");
-      lines.push(education.trim());
-      lines.push("");
-    }
-    if (extras.trim()) {
-      lines.push("Informations complémentaires :");
-      lines.push(extras.trim());
-      lines.push("");
-    }
-    lines.push("Cordialement,");
+    const lines = tr(
+      [
+        "Bonjour,",
+        "",
+        "Je souhaite rejoindre l'équipe de Kpandji Automobiles. Voici les informations figurant aussi sur mon CV (pièce jointe à ajouter après ouverture de ce message).",
+        "",
+        "--- Coordonnées ---",
+        `Nom complet : ${nameTrim}`,
+        `E-mail : ${emailTrim}`,
+        ...(phone.trim() ? [`Téléphone : ${phone.trim()}`] : []),
+        "",
+        "--- Candidature ---",
+        `Poste visé : ${positionTrim}`,
+        "",
+        "Synthèse du CV (parcours & expériences) :",
+        cvTrim,
+        "",
+        "Compétences :",
+        skillsTrim,
+        "",
+        ...(languages.trim() ? ["Langues :", languages.trim(), ""] : []),
+        ...(education.trim() ? ["Formation & certifications :", education.trim(), ""] : []),
+        ...(extras.trim() ? ["Informations complémentaires :", extras.trim(), ""] : []),
+        "Cordialement,",
+      ].join("\n"),
+      [
+        "Hello,",
+        "",
+        "I would like to join the Kpandji Automobiles team. Below is the information also included in my résumé (attachment to add after opening this message).",
+        "",
+        "--- Contact details ---",
+        `Full name: ${nameTrim}`,
+        `Email: ${emailTrim}`,
+        ...(phone.trim() ? [`Phone: ${phone.trim()}`] : []),
+        "",
+        "--- Application ---",
+        `Target position: ${positionTrim}`,
+        "",
+        "Résumé summary (background & experience):",
+        cvTrim,
+        "",
+        "Skills:",
+        skillsTrim,
+        "",
+        ...(languages.trim() ? ["Languages:", languages.trim(), ""] : []),
+        ...(education.trim() ? ["Education & certifications:", education.trim(), ""] : []),
+        ...(extras.trim() ? ["Additional information:", extras.trim(), ""] : []),
+        "Best regards,",
+      ].join("\n")
+    );
 
-    const body = encodeURIComponent(lines.join("\n"));
+    const body = encodeURIComponent(lines);
     window.location.href = `mailto:${EMPLOIS_EMAIL}?subject=${mailSubject}&body=${body}`;
   }
 
@@ -150,14 +167,16 @@ export function JobApplicationForm() {
 
         <div className="relative text-center lg:text-left">
           <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.32em] text-kp-gold/75 md:text-[11px]">
-            Candidature
+            {tr("Candidature", "Application")}
           </p>
           <p className="mt-3 font-serif text-2xl font-medium tracking-[-0.02em] text-kp-accent md:text-[1.75rem]">
-            Postuler chez Kpandji Automobiles
+            {tr("Postuler chez Kpandji Automobiles", "Apply at Kpandji Automobiles")}
           </p>
           <p className="mx-auto mt-3 max-w-lg text-[13px] leading-relaxed text-white/40 lg:mx-0">
-            Décrivez votre parcours et vos compétences. Le bouton final ouvre un brouillon
-            e-mail&nbsp;: joignez-y votre CV au format PDF avant d&apos;envoyer.
+            {tr(
+              "Décrivez votre parcours et vos compétences. Le bouton final ouvre un brouillon e-mail : joignez-y votre CV au format PDF avant d'envoyer.",
+              "Describe your background and skills. The final button opens an email draft: attach your résumé as a PDF before sending."
+            )}
           </p>
         </div>
 
@@ -166,11 +185,11 @@ export function JobApplicationForm() {
           className="relative mt-10 space-y-10"
           noValidate>
           <div>
-            <SectionTitle>Votre identité</SectionTitle>
+            <SectionTitle>{tr("Votre identité", "Your identity")}</SectionTitle>
             <div className="space-y-5">
               <div>
                 <label htmlFor="kp-cand-name" className={labelClass}>
-                  Nom complet <span className="text-kp-gold/90">*</span>
+                  {tr("Nom complet", "Full name")} <span className="text-kp-gold/90">*</span>
                 </label>
                 <input
                   id="kp-cand-name"
@@ -182,14 +201,14 @@ export function JobApplicationForm() {
                     setFullName(ev.target.value);
                     if (error) setError(null);
                   }}
-                  placeholder="Prénom et nom"
+                  placeholder={tr("Prénom et nom", "First and last name")}
                   className={inputClass}
                 />
               </div>
               <div className="grid gap-5 sm:grid-cols-2">
                 <div className="sm:col-span-2">
                   <label htmlFor="kp-cand-email" className={labelClass}>
-                    E-mail <span className="text-kp-gold/90">*</span>
+                    {tr("E-mail", "Email")} <span className="text-kp-gold/90">*</span>
                   </label>
                   <input
                     id="kp-cand-email"
@@ -208,9 +227,9 @@ export function JobApplicationForm() {
                 </div>
                 <div>
                   <label htmlFor="kp-cand-phone" className={labelClass}>
-                    Téléphone
+                    {tr("Téléphone", "Phone")}
                     <span className="ml-1.5 font-normal normal-case tracking-normal text-white/22">
-                      optionnel
+                      {tr("optionnel", "optional")}
                     </span>
                   </label>
                   <input
@@ -229,11 +248,11 @@ export function JobApplicationForm() {
           </div>
 
           <div>
-            <SectionTitle>Poste & candidature</SectionTitle>
+            <SectionTitle>{tr("Poste & candidature", "Position & application")}</SectionTitle>
             <div className="space-y-5">
               <div>
                 <label htmlFor="kp-cand-position" className={labelClass}>
-                  Poste visé <span className="text-kp-gold/90">*</span>
+                  {tr("Poste visé", "Target position")} <span className="text-kp-gold/90">*</span>
                 </label>
                 <input
                   id="kp-cand-position"
@@ -244,7 +263,10 @@ export function JobApplicationForm() {
                     setPositionTarget(ev.target.value);
                     if (error) setError(null);
                   }}
-                  placeholder="Ex. Mécanicien, commercial SAV, logistique… ou « Candidature spontanée »"
+                  placeholder={tr(
+                    "Ex. Mécanicien, commercial SAV, logistique… ou « Candidature spontanée »",
+                    "E.g. Mechanic, after-sales sales rep, logistics… or \"Open application\""
+                  )}
                   className={inputClass}
                 />
               </div>
@@ -252,11 +274,11 @@ export function JobApplicationForm() {
           </div>
 
           <div>
-            <SectionTitle>CV &amp; parcours</SectionTitle>
+            <SectionTitle>{tr("CV & parcours", "Résumé & background")}</SectionTitle>
             <div className="space-y-4">
               <div>
                 <label htmlFor="kp-cand-cv" className={labelClass}>
-                  Synthèse de votre CV <span className="text-kp-gold/90">*</span>
+                  {tr("Synthèse de votre CV", "Résumé summary")} <span className="text-kp-gold/90">*</span>
                 </label>
                 <textarea
                   id="kp-cand-cv"
@@ -267,15 +289,18 @@ export function JobApplicationForm() {
                     setCvSummary(ev.target.value);
                     if (error) setError(null);
                   }}
-                  placeholder="Résumé de votre formation, années d&apos;expérience, derniers employeurs ou secteurs, réalisations marquantes…"
+                  placeholder={tr(
+                    "Résumé de votre formation, années d'expérience, derniers employeurs ou secteurs, réalisations marquantes…",
+                    "Summary of your education, years of experience, recent employers or industries, notable achievements…"
+                  )}
                   className={`${inputClass} min-h-[144px] resize-y`}
                 />
               </div>
               <div>
                 <label htmlFor="kp-cand-education" className={labelClass}>
-                  Formation &amp; certifications
+                  {tr("Formation & certifications", "Education & certifications")}
                   <span className="ml-1.5 font-normal normal-case tracking-normal text-white/22">
-                    optionnel
+                    {tr("optionnel", "optional")}
                   </span>
                 </label>
                 <textarea
@@ -284,7 +309,7 @@ export function JobApplicationForm() {
                   rows={3}
                   value={education}
                   onChange={(ev) => setEducation(ev.target.value)}
-                  placeholder="Diplômes, habilitations, formations continues…"
+                  placeholder={tr("Diplômes, habilitations, formations continues…", "Degrees, certifications, continuing education…")}
                   className={`${inputClass} min-h-[88px] resize-y`}
                 />
               </div>
@@ -292,11 +317,11 @@ export function JobApplicationForm() {
           </div>
 
           <div>
-            <SectionTitle>Compétences</SectionTitle>
+            <SectionTitle>{tr("Compétences", "Skills")}</SectionTitle>
             <div className="space-y-4">
               <div>
                 <label htmlFor="kp-cand-skills" className={labelClass}>
-                  Compétences techniques &amp; métiers <span className="text-kp-gold/90">*</span>
+                  {tr("Compétences techniques & métiers", "Technical & professional skills")} <span className="text-kp-gold/90">*</span>
                 </label>
                 <textarea
                   id="kp-cand-skills"
@@ -307,15 +332,18 @@ export function JobApplicationForm() {
                     setSkills(ev.target.value);
                     if (error) setError(null);
                   }}
-                  placeholder="Listez vos savoir-faire (réparation véhicules, méthodes, ERP, CRM, gestion de stock, HSE…). Séparez par des virgules ou des lignes."
+                  placeholder={tr(
+                    "Listez vos savoir-faire (réparation véhicules, méthodes, ERP, CRM, gestion de stock, HSE…). Séparez par des virgules ou des lignes.",
+                    "List your skills (vehicle repair, methods, ERP, CRM, inventory management, HSE…). Separate with commas or line breaks."
+                  )}
                   className={`${inputClass} min-h-[120px] resize-y`}
                 />
               </div>
               <div>
                 <label htmlFor="kp-cand-lang" className={labelClass}>
-                  Langues
+                  {tr("Langues", "Languages")}
                   <span className="ml-1.5 font-normal normal-case tracking-normal text-white/22">
-                    optionnel
+                    {tr("optionnel", "optional")}
                   </span>
                 </label>
                 <input
@@ -324,15 +352,15 @@ export function JobApplicationForm() {
                   type="text"
                   value={languages}
                   onChange={(ev) => setLanguages(ev.target.value)}
-                  placeholder="Ex. Français (natif), anglais (B2)…"
+                  placeholder={tr("Ex. Français (natif), anglais (B2)…", "E.g. French (native), English (B2)…")}
                   className={inputClass}
                 />
               </div>
               <div>
                 <label htmlFor="kp-cand-extras" className={labelClass}>
-                  Message complémentaire
+                  {tr("Message complémentaire", "Additional message")}
                   <span className="ml-1.5 font-normal normal-case tracking-normal text-white/22">
-                    optionnel
+                    {tr("optionnel", "optional")}
                   </span>
                 </label>
                 <textarea
@@ -341,7 +369,7 @@ export function JobApplicationForm() {
                   rows={3}
                   value={extras}
                   onChange={(ev) => setExtras(ev.target.value)}
-                  placeholder="Disponibilité, mobilité, permis de conduire, lien LinkedIn…"
+                  placeholder={tr("Disponibilité, mobilité, permis de conduire, lien LinkedIn…", "Availability, mobility, driver's license, LinkedIn link…")}
                   className={`${inputClass} min-h-[88px] resize-y`}
                 />
               </div>
@@ -362,13 +390,16 @@ export function JobApplicationForm() {
               className="order-2 w-full rounded-full bg-kp-gold px-10 py-4 font-sans text-[11px] font-semibold uppercase tracking-[0.22em] text-black shadow-[0_16px_40px_-12px_rgba(201,169,98,0.45)] transition-colors duration-300 hover:bg-[#d4b56e] sm:order-1 sm:w-auto"
               whileHover={reduceMotion ? undefined : { scale: 1.02 }}
               whileTap={reduceMotion ? undefined : { scale: 0.98 }}>
-              Ouvrir l&apos;e-mail
+              {tr("Ouvrir l'e-mail", "Open the email")}
             </motion.button>
             <p className="order-1 max-w-xs text-center text-[11px] leading-relaxed text-white/30 sm:order-2 sm:text-right">
-              Destination :{" "}
+              {tr("Destination", "Destination")} :{" "}
               <span className="text-white/55">{EMPLOIS_EMAIL}</span>
               <br />
-              Pensez à joindre votre CV en PDF après ouverture de la fenêtre mail.
+              {tr(
+                "Pensez à joindre votre CV en PDF après ouverture de la fenêtre mail.",
+                "Remember to attach your résumé as a PDF after the mail window opens."
+              )}
             </p>
           </div>
         </form>

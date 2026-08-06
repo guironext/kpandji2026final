@@ -2,6 +2,8 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import Image from "next/image";
+import type { Copy } from "@/lib/i18n/pick";
+import { useLocale } from "@/components/providers/KpLocaleProvider";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -113,10 +115,11 @@ export function ModeleCaracteristiquesShowcase({
 	slideImage,
 }: {
 	name: string;
-	characteristics: string[];
+	characteristics: Copy[];
 	bgSlideImage: string;
 	slideImage: string;
 }) {
+	const { tr } = useLocale();
 	const reduce = useReducedMotion() === true;
 	const count = characteristics.length;
 
@@ -150,14 +153,14 @@ export function ModeleCaracteristiquesShowcase({
 				<div className="mx-auto inline-flex max-w-3xl flex-col items-center lg:mx-0 lg:items-start">
 					<div className="inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/4 px-4 py-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-sm">
 						<span className="font-sans text-[10px] font-semibold uppercase tracking-[0.38em] text-kp-muted">
-							Signature technique
+							{tr("Signature technique", "Technical signature")}
 						</span>
 						<span
 							className="hidden h-3 w-px bg-white/15 sm:block"
 							aria-hidden
 						/>
 						<span className="font-sans text-[10px] font-semibold tabular-nums tracking-[0.22em] text-kp-gold/90 sm:inline">
-							{count} points forts
+							{tr(`${count} points forts`, `${count} key strengths`)}
 						</span>
 					</div>
 					<span
@@ -165,7 +168,7 @@ export function ModeleCaracteristiquesShowcase({
 						aria-hidden
 					/>
 					<p className="mt-5 font-serif text-lg font-medium italic tracking-[-0.02em] text-kp-gold/90 md:text-xl">
-						Conçu pour performer
+						{tr("Conçu pour performer", "Built to perform")}
 					</p>
 					
 				</div>
@@ -197,20 +200,22 @@ export function ModeleCaracteristiquesShowcase({
 											<span className="absolute h-2 w-2 animate-ping rounded-full bg-kp-gold/35 motion-reduce:animate-none" />
 											<span className="relative h-1.5 w-1.5 rounded-full bg-kp-gold shadow-[0_0_16px_rgba(201,169,98,0.55)]" />
 										</span>
-										<p className="font-sans text-[10px] font-semibold uppercase tracking-[0.36em] text-kp-muted">
-											À retenir
-										</p>
+									<p className="font-sans text-[10px] font-semibold uppercase tracking-[0.36em] text-kp-muted">
+										{tr("À retenir", "Key facts")}
+									</p>
 									</div>
 									<span
 										className="mt-6 block h-px w-full max-w-[240px] bg-linear-to-r from-kp-gold via-kp-gold/25 to-transparent"
 										aria-hidden
 									/>
 									<h3 className="mt-5 font-serif text-xl font-medium leading-tight tracking-[-0.02em] text-kp-accent md:text-2xl">
-										Liste des atouts
+										{tr("Liste des atouts", "Key strengths")}
 									</h3>
 									<p className="mt-3 max-w-[36ch] text-[13px] leading-relaxed text-kp-muted md:text-sm">
-										Le meilleur du véhicule, en quelques lignes lisibles au
-										premier coup d’œil.
+										{tr(
+											"Le meilleur du véhicule, en quelques lignes lisibles au premier coup d’œil.",
+											"The best of the vehicle, in a few lines you can grasp at a glance.",
+										)}
 									</p>
 								</motion.div>
 								<motion.ul
@@ -218,7 +223,7 @@ export function ModeleCaracteristiquesShowcase({
 									variants={listRoot}>
 									{characteristics.map((item, index) => (
 										<motion.li
-											key={`${index}-${item}`}
+											key={`${index}-${item.fr}`}
 											variants={listRow(reduce)}
 											className="group relative overflow-hidden rounded-2xl border border-white/6 bg-linear-to-br from-white/6 to-transparent transition-[border-color,box-shadow,transform] duration-500 hover:border-kp-gold/28 hover:shadow-[0_28px_64px_-36px_rgba(0,0,0,0.85)] motion-safe:hover:-translate-y-px">
 											<div
@@ -236,7 +241,7 @@ export function ModeleCaracteristiquesShowcase({
 														{String(index + 1).padStart(2, "0")}
 													</p>
 													<p className="mt-1 text-sm leading-relaxed text-kp-silver transition-colors duration-500 group-hover:text-kp-accent md:text-[15px] md:leading-[1.65]">
-														{item}
+														{tr(item.fr, item.en)}
 													</p>
 												</div>
 											</div>
@@ -262,7 +267,7 @@ export function ModeleCaracteristiquesShowcase({
 								<div className="relative h-full min-h-[200px] w-full motion-safe:transition-transform motion-safe:duration-500 motion-safe:group-hover:-translate-y-1">
 									<Image
 										src={slideImage}
-										alt={`${name} — mise en avant`}
+										alt={`${name} — ${tr("mise en avant", "highlight")}`}
 										fill
 										sizes="(max-width: 1024px) 100vw, 28vw"
 										className="object-cover object-center transition duration-700 ease-out motion-safe:group-hover:scale-[1.04] overflow-visible -mt-[-70%] -ml-[-90%]"
@@ -278,7 +283,7 @@ export function ModeleCaracteristiquesShowcase({
 								className="relative z-1 h-full min-h-0 w-[68%] shrink-0 overflow-hidden rounded-[24px] border border-white/10 bg-white/5 shadow-[0_32px_80px_-40px_rgba(0,0,0,0.9)] ring-1 ring-white/5 md:w-[68%] md:rounded-[26px]">
 								<Image
 									src={bgSlideImage}
-									alt={`${name} — ambiance`}
+									alt={`${name} — ${tr("ambiance", "ambience")}`}
 									fill
 									sizes="(max-width: 1024px) 100vw, 42vw"
 									className="object-cover object-center transition duration-700 ease-out motion-safe:group-hover:scale-[1.02]"

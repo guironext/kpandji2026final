@@ -1,5 +1,7 @@
+import { AdminCountLine } from "@/components/kp/AdminCountLine";
 import { AdminPageHeader } from "@/components/kp/AdminPageHeader";
 import { adminCardClass, adminCardGlow } from "@/components/kp/adminStyles";
+import { Tr } from "@/components/kp/Tr";
 import { PrivilegeContactTable } from "@/app/(users)/admin/privilege-contact/PrivilegeContactTable";
 import { prisma } from "@/lib/db";
 
@@ -21,18 +23,31 @@ export default async function PrivilegeContactPage() {
   return (
     <div className="space-y-8">
       <AdminPageHeader
-        title="Contact Privilégié"
-        description="Consultez toutes les demandes de contact privilégié soumises depuis le site public."
+        title={<Tr fr="Contact Privilégié" en="Privileged contact" />}
+        description={
+          <Tr
+            fr="Consultez toutes les demandes de contact privilégié soumises depuis le site public."
+            en="View all privileged contact requests submitted from the public site."
+          />
+        }
       />
 
       <section className={adminCardClass}>
         <div className={adminCardGlow} aria-hidden />
-        <h2 className="font-serif text-2xl text-white">Contacts reçus</h2>
-        <p className="mt-2 font-sans text-sm text-white/50">
-          {contacts.length} contact
-          {contacts.length !== 1 ? "s" : ""} — triés par date (plus récents en
-          premier).
-        </p>
+        <h2 className="font-serif text-2xl text-white">
+          <Tr fr="Contacts reçus" en="Received contacts" />
+        </h2>
+        <AdminCountLine
+          count={contacts.length}
+          singular={{
+            fr: "{n} contact — trié par date (plus récents en premier).",
+            en: "{n} contact — sorted by date (most recent first).",
+          }}
+          plural={{
+            fr: "{n} contacts — triés par date (plus récents en premier).",
+            en: "{n} contacts — sorted by date (most recent first).",
+          }}
+        />
 
         <PrivilegeContactTable rows={rows} />
       </section>

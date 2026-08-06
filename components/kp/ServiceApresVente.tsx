@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { EcrireSavModal } from "@/components/kp/EcrireSavModal";
 import { Reveal } from "@/components/kp/Reveal";
+import { useLocale } from "@/components/providers/KpLocaleProvider";
 
 const easeOut = [0.22, 1, 0.36, 1] as const;
 
@@ -59,134 +60,6 @@ const pillarsContainer = {
 	},
 };
 
-const garageImages = [
-	{
-		src: "/garage5.jpeg",
-		alt: "Atelier KPANDJI — espace d’entretien et de réparation",
-		tag: "01 — Réception",
-		title: "Réception & diagnostic",
-		body: "Accueil, écoute et premier diagnostic pour cadrer chaque intervention.",
-		featured: true,
-	},
-	{
-		src: "/garage2.jpg",
-		alt: "Atelier KPANDJI — zone technique",
-		tag: "02 — Technique",
-		title: "Zone technique",
-		body: "Outillage professionnel et procédures constructeur.",
-		featured: false,
-	},
-	{
-		src: "/garage3.jpg",
-		alt: "Atelier KPANDJI — service après vente",
-		tag: "03 — Qualité",
-		title: "Contrôle qualité",
-		body: "Vérification systématique avant restitution du véhicule.",
-		featured: false,
-	},
-] as const;
-
-const pillars = [
-	{
-		title: "Diagnostic transparent",
-		description: "Évaluation claire, devis détaillé et validation avant intervention.",
-		icon: (
-			<>
-				<circle cx="12" cy="12" r="9" />
-				<path d="M12 8v4l2.5 2.5" strokeLinecap="round" />
-			</>
-		),
-	},
-	{
-		title: "Pièces d’origine",
-		description: "Qualité constructeur pour préserver fiabilité, sécurité et valeur.",
-		icon: (
-			<>
-				<path d="M12 2l7 4v6c0 5-3.5 9.5-7 10-3.5-.5-7-5-7-10V6l7-4z" strokeLinejoin="round" />
-			</>
-		),
-	},
-	{
-		title: "Techniciens qualifiés",
-		description: "Procédures maîtrisées, outillage adapté et contrôle systématique.",
-		icon: (
-			<>
-				<path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z" strokeLinejoin="round" />
-			</>
-		),
-	},
-	{
-		title: "Suivi & garantie",
-		description: "Traçabilité des opérations et conseils d’entretien personnalisés.",
-		icon: (
-			<>
-				<path d="M9 11l3 3L22 4" strokeLinecap="round" strokeLinejoin="round" />
-				<path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" strokeLinejoin="round" />
-			</>
-		),
-	},
-] as const;
-
-const services = [
-	{
-		title: "Entretien périodique",
-		body: "Révisions, vidanges et contrôles selon les préconisations constructeur.",
-	},
-	{
-		title: "Réparation mécanique",
-		body: "Diagnostic précis et remise en état avec pièces certifiées KPANDJI.",
-	},
-	{
-		title: "Carrosserie & esthétique",
-		body: "Finitions, retouches et soins pour préserver l’aspect de votre véhicule.",
-	},
-	{
-		title: "Diagnostic électronique",
-		body: "Lecture des systèmes embarqués et résolution des alertes techniques.",
-	},
-] as const;
-
-const steps = [
-	{
-		num: "01",
-		title: "Prise de contact",
-		body: "Par téléphone ou e-mail : décrivez votre besoin, nous planifions la suite.",
-	},
-	{
-		num: "02",
-		title: "Diagnostic & devis",
-		body: "Inspection en atelier, devis transparent et validation avant travaux.",
-	},
-	{
-		num: "03",
-		title: "Intervention",
-		body: "Réparation ou entretien réalisé par nos techniciens selon les standards KPANDJI.",
-	},
-	{
-		num: "04",
-		title: "Restitution",
-		body: "Contrôle final, conseils d’entretien et traçabilité des opérations effectuées.",
-	},
-] as const;
-
-const stats = [
-	{ value: "3", label: "Zones atelier" },
-	{ value: "100%", label: "Pièces d’origine" },
-	{ value: "CI", label: "Ancrage local" },
-	{ value: "24h", label: "Réponse S.A.V." },
-] as const;
-
-const marqueeValues = [
-	"Entretien constructeur",
-	"Pièces d’origine",
-	"Techniciens certifiés",
-	"Côte d’Ivoire",
-	"Diagnostic transparent",
-	"Garantie KPANDJI",
-	"Atelier équipé",
-	"Suivi personnalisé",
-] as const;
-
 const SAV_PHONE = "+225 07 07 20 19 92";
 const SAV_TEL = "+2250707201992";
 
@@ -223,8 +96,8 @@ function SectionIntro({
 	);
 }
 
-function MarqueeStrip() {
-	const items = [...marqueeValues, ...marqueeValues];
+function MarqueeStrip({ values }: { values: readonly string[] }) {
+	const items = [...values, ...values];
 
 	return (
 		<div
@@ -249,7 +122,176 @@ function MarqueeStrip() {
 }
 
 export function ServiceApresVente() {
+	const { tr } = useLocale();
 	const reduce = useReducedMotion() === true;
+
+	const garageImages = [
+		{
+			src: "/garage5.jpeg",
+			alt: tr("Atelier KPANDJI — espace d’entretien et de réparation", "KPANDJI workshop — maintenance and repair area"),
+			tag: tr("01 — Réception", "01 — Reception"),
+			title: tr("Réception & diagnostic", "Reception & diagnostics"),
+			body: tr(
+				"Accueil, écoute et premier diagnostic pour cadrer chaque intervention.",
+				"A warm welcome, careful listening, and an initial diagnosis to scope every intervention."
+			),
+			featured: true,
+		},
+		{
+			src: "/garage2.jpg",
+			alt: tr("Atelier KPANDJI — zone technique", "KPANDJI workshop — technical area"),
+			tag: tr("02 — Technique", "02 — Technical"),
+			title: tr("Zone technique", "Technical area"),
+			body: tr("Outillage professionnel et procédures constructeur.", "Professional tooling and manufacturer procedures."),
+			featured: false,
+		},
+		{
+			src: "/garage3.jpg",
+			alt: tr("Atelier KPANDJI — service après vente", "KPANDJI workshop — after-sales service"),
+			tag: tr("03 — Qualité", "03 — Quality"),
+			title: tr("Contrôle qualité", "Quality control"),
+			body: tr("Vérification systématique avant restitution du véhicule.", "Systematic checks before the vehicle is returned to you."),
+			featured: false,
+		},
+	] as const;
+
+	const pillars = [
+		{
+			title: tr("Diagnostic transparent", "Transparent diagnostics"),
+			description: tr(
+				"Évaluation claire, devis détaillé et validation avant intervention.",
+				"A clear assessment, a detailed quote, and your approval before any work begins."
+			),
+			icon: (
+				<>
+					<circle cx="12" cy="12" r="9" />
+					<path d="M12 8v4l2.5 2.5" strokeLinecap="round" />
+				</>
+			),
+		},
+		{
+			title: tr("Pièces d’origine", "Genuine parts"),
+			description: tr(
+				"Qualité constructeur pour préserver fiabilité, sécurité et valeur.",
+				"Manufacturer quality to preserve reliability, safety and resale value."
+			),
+			icon: (
+				<>
+					<path d="M12 2l7 4v6c0 5-3.5 9.5-7 10-3.5-.5-7-5-7-10V6l7-4z" strokeLinejoin="round" />
+				</>
+			),
+		},
+		{
+			title: tr("Techniciens qualifiés", "Qualified technicians"),
+			description: tr(
+				"Procédures maîtrisées, outillage adapté et contrôle systématique.",
+				"Mastered procedures, appropriate tooling and systematic checks."
+			),
+			icon: (
+				<>
+					<path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z" strokeLinejoin="round" />
+				</>
+			),
+		},
+		{
+			title: tr("Suivi & garantie", "Follow-up & warranty"),
+			description: tr(
+				"Traçabilité des opérations et conseils d’entretien personnalisés.",
+				"Full traceability of every operation and personalized maintenance advice."
+			),
+			icon: (
+				<>
+					<path d="M9 11l3 3L22 4" strokeLinecap="round" strokeLinejoin="round" />
+					<path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" strokeLinejoin="round" />
+				</>
+			),
+		},
+	] as const;
+
+	const services = [
+		{
+			title: tr("Entretien périodique", "Periodic maintenance"),
+			body: tr(
+				"Révisions, vidanges et contrôles selon les préconisations constructeur.",
+				"Servicing, oil changes and inspections per manufacturer recommendations."
+			),
+		},
+		{
+			title: tr("Réparation mécanique", "Mechanical repair"),
+			body: tr(
+				"Diagnostic précis et remise en état avec pièces certifiées KPANDJI.",
+				"Precise diagnostics and repair with KPANDJI-certified parts."
+			),
+		},
+		{
+			title: tr("Carrosserie & esthétique", "Bodywork & finish"),
+			body: tr(
+				"Finitions, retouches et soins pour préserver l’aspect de votre véhicule.",
+				"Finishing, touch-ups and care to preserve your vehicle's appearance."
+			),
+		},
+		{
+			title: tr("Diagnostic électronique", "Electronic diagnostics"),
+			body: tr(
+				"Lecture des systèmes embarqués et résolution des alertes techniques.",
+				"Reading onboard systems and resolving technical alerts."
+			),
+		},
+	] as const;
+
+	const steps = [
+		{
+			num: "01",
+			title: tr("Prise de contact", "Get in touch"),
+			body: tr(
+				"Par téléphone ou e-mail : décrivez votre besoin, nous planifions la suite.",
+				"By phone or email: describe your need, and we'll plan the next steps."
+			),
+		},
+		{
+			num: "02",
+			title: tr("Diagnostic & devis", "Diagnostics & quote"),
+			body: tr(
+				"Inspection en atelier, devis transparent et validation avant travaux.",
+				"Workshop inspection, transparent quote and your approval before any work."
+			),
+		},
+		{
+			num: "03",
+			title: tr("Intervention", "Service"),
+			body: tr(
+				"Réparation ou entretien réalisé par nos techniciens selon les standards KPANDJI.",
+				"Repair or maintenance carried out by our technicians to KPANDJI standards."
+			),
+		},
+		{
+			num: "04",
+			title: tr("Restitution", "Handover"),
+			body: tr(
+				"Contrôle final, conseils d’entretien et traçabilité des opérations effectuées.",
+				"Final inspection, maintenance advice and full traceability of work performed."
+			),
+		},
+	] as const;
+
+	const stats = [
+		{ value: "3", label: tr("Zones atelier", "Workshop zones") },
+		{ value: "100%", label: tr("Pièces d’origine", "Genuine parts") },
+		{ value: "CI", label: tr("Ancrage local", "Local presence") },
+		{ value: "24h", label: tr("Réponse S.A.V.", "Service response") },
+	] as const;
+
+	const marqueeValues = [
+		tr("Entretien constructeur", "Manufacturer maintenance"),
+		tr("Pièces d’origine", "Genuine parts"),
+		tr("Techniciens certifiés", "Certified technicians"),
+		tr("Côte d’Ivoire", "Côte d’Ivoire"),
+		tr("Diagnostic transparent", "Transparent diagnostics"),
+		tr("Garantie KPANDJI", "KPANDJI warranty"),
+		tr("Atelier équipé", "Fully equipped workshop"),
+		tr("Suivi personnalisé", "Personalized follow-up"),
+	] as const;
+
 	const [main, ...secondaryImages] = garageImages;
 
 	return (
@@ -304,14 +346,16 @@ export function ServiceApresVente() {
 								className="mt-3 max-w-[14ch] font-serif text-[clamp(2.35rem,6vw,4rem)] font-medium leading-[1.02] tracking-[-0.025em] text-white [text-shadow:0_2px_40px_rgba(0,0,0,0.35)] md:max-w-[18ch]"
 								variants={heroLine(reduce)}
 							>
-								Service après vente
+								{tr("Service après vente", "After-sales service")}
 							</motion.h1>
 							<motion.p
 								className="mt-5 max-w-lg text-pretty text-[15px] leading-[1.65] text-white/80 md:text-base md:leading-relaxed"
 								variants={heroLine(reduce)}
 							>
-								Entretien, pièces d’origine et suivi personnalisé — un atelier équipé et des
-								techniciens formés pour préserver performances, sécurité et valeur de votre véhicule.
+								{tr(
+									"Entretien, pièces d’origine et suivi personnalisé — un atelier équipé et des techniciens formés pour préserver performances, sécurité et valeur de votre véhicule.",
+									"Maintenance, genuine parts and personalized follow-up — a fully equipped workshop and trained technicians to preserve your vehicle's performance, safety and value."
+								)}
 							</motion.p>
 							<motion.div
 								className="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4"
@@ -323,7 +367,7 @@ export function ServiceApresVente() {
 									whileHover={reduce ? undefined : { scale: 1.03 }}
 									whileTap={reduce ? undefined : { scale: 0.98 }}
 								>
-									Appeler le S.A.V.
+									{tr("Appeler le S.A.V.", "Call after-sales service")}
 								</motion.a>
 								<motion.a
 									href="#sav-atelier"
@@ -331,7 +375,7 @@ export function ServiceApresVente() {
 									whileHover={reduce ? undefined : { scale: 1.03 }}
 									whileTap={reduce ? undefined : { scale: 0.98 }}
 								>
-									Découvrir l’atelier
+									{tr("Découvrir l’atelier", "Discover the workshop")}
 								</motion.a>
 							</motion.div>
 						</div>
@@ -341,15 +385,15 @@ export function ServiceApresVente() {
 							variants={heroLine(reduce)}
 						>
 							<p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-kp-gold/90">
-								Accès direct
+								{tr("Accès direct", "Direct access")}
 							</p>
 							<p className="mt-4 font-serif text-2xl tracking-tight text-white md:text-[1.65rem]">
-								Une équipe dédiée à votre véhicule
+								{tr("Une équipe dédiée à votre véhicule", "A team dedicated to your vehicle")}
 							</p>
 							<ul className="mt-6 flex flex-col gap-4 border-t border-white/10 pt-6">
 								<li>
 									<p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/40">
-										Ligne S.A.V.
+										{tr("Ligne S.A.V.", "Service line")}
 									</p>
 									<a
 										href={`tel:${SAV_TEL}`}
@@ -360,7 +404,7 @@ export function ServiceApresVente() {
 								</li>
 								<li>
 									<p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/40">
-										E-mail
+										{tr("E-mail", "Email")}
 									</p>
 									<a
 										href="mailto:contact@kpandji.com?subject=Service%20apr%C3%A8s%20vente"
@@ -388,12 +432,12 @@ export function ServiceApresVente() {
 				</motion.div>
 			</section>
 
-			<MarqueeStrip />
+			<MarqueeStrip values={marqueeValues} />
 
 			{/* Pillars */}
 			<section
 				className="relative overflow-hidden border-b border-white/8 bg-kp-surface/40 [content-visibility:auto] [contain-intrinsic-size:auto_640px]"
-				aria-label="Axes du service après vente"
+				aria-label={tr("Axes du service après vente", "After-sales service pillars")}
 			>
 				<div
 					className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_85%_55%_at_50%_-8%,rgba(201,169,98,0.07),transparent_58%)]"
@@ -402,15 +446,18 @@ export function ServiceApresVente() {
 				<div className={sectionPad}>
 					<Reveal from="bottom">
 						<SectionIntro
-							label="Notre engagement"
+							label={tr("Notre engagement", "Our commitment")}
 							title={
 								<>
-									<span className="text-kp-gold/90">Quatre piliers</span>
+									<span className="text-kp-gold/90">{tr("Quatre piliers", "Four pillars")}</span>
 									{" "}
-									<span className="text-white/95">pour rouler l’esprit tranquille</span>
+									<span className="text-white/95">{tr("pour rouler l’esprit tranquille", "for total peace of mind on the road")}</span>
 								</>
 							}
-							description="Chaque intervention suit les standards KPANDJI : transparence, qualité constructeur et accompagnement durable."
+							description={tr(
+								"Chaque intervention suit les standards KPANDJI : transparence, qualité constructeur et accompagnement durable.",
+								"Every intervention follows KPANDJI standards: transparency, manufacturer quality and lasting support."
+							)}
 						/>
 					</Reveal>
 
@@ -473,10 +520,13 @@ export function ServiceApresVente() {
 				<div className={sectionPad}>
 					<Reveal from="bottom">
 						<SectionIntro
-							label="Notre atelier"
+							label={tr("Notre atelier", "Our workshop")}
 							titleId="sav-atelier-title"
-							title="Là où votre véhicule est entre de bonnes mains."
-							description="Réception, zone technique et contrôle qualité : découvrez les espaces dédiés à l’entretien et à la réparation de votre KPANDJI en Côte d’Ivoire."
+							title={tr("Là où votre véhicule est entre de bonnes mains.", "Where your vehicle is in good hands.")}
+							description={tr(
+								"Réception, zone technique et contrôle qualité : découvrez les espaces dédiés à l’entretien et à la réparation de votre KPANDJI en Côte d’Ivoire.",
+								"Reception, technical area and quality control: discover the spaces dedicated to maintaining and repairing your KPANDJI in Côte d’Ivoire."
+							)}
 						/>
 					</Reveal>
 
@@ -554,10 +604,13 @@ export function ServiceApresVente() {
 						<Reveal from="left">
 							<SectionIntro
 								centered={false}
-								label="Prestations"
+								label={tr("Prestations", "Services")}
 								titleId="sav-services-title"
-								title="Tout ce dont votre KPANDJI a besoin."
-								description="De l’entretien courant aux réparations complexes, notre atelier couvre l’ensemble du cycle de vie de votre véhicule."
+								title={tr("Tout ce dont votre KPANDJI a besoin.", "Everything your KPANDJI needs.")}
+								description={tr(
+									"De l’entretien courant aux réparations complexes, notre atelier couvre l’ensemble du cycle de vie de votre véhicule.",
+									"From routine maintenance to complex repairs, our workshop covers your vehicle's entire life cycle."
+								)}
 							/>
 						</Reveal>
 
@@ -598,10 +651,13 @@ export function ServiceApresVente() {
 				<div className={sectionPad}>
 					<Reveal from="bottom">
 						<SectionIntro
-							label="Parcours client"
+							label={tr("Parcours client", "Customer journey")}
 							titleId="sav-process-title"
-							title="Simple, clair, sans surprise."
-							description="Quatre étapes pour planifier, valider et récupérer votre véhicule en toute confiance."
+							title={tr("Simple, clair, sans surprise.", "Simple, clear, no surprises.")}
+							description={tr(
+								"Quatre étapes pour planifier, valider et récupérer votre véhicule en toute confiance.",
+								"Four steps to schedule, approve and pick up your vehicle with complete confidence."
+							)}
 						/>
 					</Reveal>
 
@@ -667,19 +723,21 @@ export function ServiceApresVente() {
 							/>
 
 							<div className="relative text-center">
-								<p className={`${eyebrow} justify-center`}>Besoin d’assistance ?</p>
+								<p className={`${eyebrow} justify-center`}>{tr("Besoin d’assistance ?", "Need assistance?")}</p>
 								<h2
 									id="sav-cta-title"
 									className="mt-5 font-serif text-[clamp(1.85rem,4.5vw,3.25rem)] font-normal leading-[1.08] tracking-tight text-white"
 								>
-									Parlez à notre équipe S.A.V.
+									{tr("Parlez à notre équipe S.A.V.", "Talk to our after-sales team")}
 									<span className="block bg-linear-to-r from-amber-200 via-kp-gold to-white/85 bg-clip-text text-transparent">
-										dès aujourd’hui
+										{tr("dès aujourd’hui", "today")}
 									</span>
 								</h2>
 								<p className="mx-auto mt-6 max-w-2xl text-pretty text-[15px] leading-relaxed text-white/65 md:text-[16px]">
-									Entretien, réparation ou simple conseil : décrivez votre besoin par téléphone,
-									e-mail ou via notre formulaire de contact.
+									{tr(
+										"Entretien, réparation ou simple conseil : décrivez votre besoin par téléphone, e-mail ou via notre formulaire de contact.",
+										"Maintenance, repair or simple advice: describe your need by phone, email or through our contact form."
+									)}
 								</p>
 
 								<div className="mt-10 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center sm:gap-4">
@@ -687,22 +745,22 @@ export function ServiceApresVente() {
 										{SAV_PHONE}
 									</a>
 									<EcrireSavModal triggerClassName={`${btnGhost} w-full sm:w-auto`}>
-										Écrire au S.A.V.
+										{tr("Écrire au S.A.V.", "Write to after-sales")}
 									</EcrireSavModal>
 									<Link
 										href="/contact"
 										className="inline-flex w-full min-h-11 items-center justify-center rounded-full border border-white/10 px-8 py-3.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/60 transition duration-300 hover:border-white/20 hover:text-white/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-kp-gold/55 sm:w-auto"
 									>
-										Formulaire de contact
+										{tr("Formulaire de contact", "Contact form")}
 									</Link>
 								</div>
 
 								<div className="mt-12 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-[10px] uppercase tracking-[0.28em] text-white/38">
-									<span>Pièces d’origine</span>
+									<span>{tr("Pièces d’origine", "Genuine parts")}</span>
 									<span aria-hidden className="size-1 rounded-full bg-kp-gold/40" />
-									<span>Devis transparent</span>
+									<span>{tr("Devis transparent", "Transparent quote")}</span>
 									<span aria-hidden className="size-1 rounded-full bg-kp-gold/40" />
-									<span>Côte d&apos;Ivoire</span>
+									<span>{tr("Côte d'Ivoire", "Côte d'Ivoire")}</span>
 								</div>
 							</div>
 						</div>

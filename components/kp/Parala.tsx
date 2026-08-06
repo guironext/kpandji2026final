@@ -3,6 +3,7 @@
 import Image from "next/image";
 import React, { useRef } from "react";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { useLocale } from "@/components/providers/KpLocaleProvider";
 
 const images = [
   {
@@ -26,6 +27,7 @@ const images = [
 export default function Parala() {
   const sectionRef = useRef<HTMLElement | null>(null);
   const reduceMotion = useReducedMotion();
+  const { tr, locale } = useLocale();
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -236,11 +238,13 @@ export default function Parala() {
 
                     <p
                       className="mt-7 font-serif text-[clamp(32px,3.2vw,48px)] font-medium leading-[1.08] tracking-[-0.02em] text-balance text-kp-accent [text-shadow:0_2px_40px_rgba(0,0,0,0.55)]"
-                      lang="fr"
+                      lang={locale}
                     >
-                      <span className="block sm:inline">La force d&apos;une racine,</span>{" "}
+                      <span className="block sm:inline">
+                        {tr("La force d'une racine,", "The strength of a root,")}
+                      </span>{" "}
                       <span className="mt-1 block text-white/95 sm:mt-0 sm:inline">
-                        l&apos;élan d&apos;une nation
+                        {tr("l'élan d'une nation", "the drive of a nation")}
                       </span>
                     </p>
                     <div

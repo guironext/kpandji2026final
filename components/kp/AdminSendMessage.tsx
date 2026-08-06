@@ -9,6 +9,7 @@ import {
   adminLabelClass,
   adminPrimaryButtonClass,
 } from "@/components/kp/adminStyles";
+import { useLocale } from "@/components/providers/KpLocaleProvider";
 
 export function AdminSendMessage() {
   const [members, setMembers] = useState<AdminUser[]>([]);
@@ -19,6 +20,7 @@ export function AdminSendMessage() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const { tr } = useLocale();
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -52,11 +54,16 @@ export function AdminSendMessage() {
     try {
       // API endpoint to be wired when outbound messaging is persisted.
       await new Promise((resolve) => window.setTimeout(resolve, 400));
-      setSuccess("Message préparé pour envoi (connexion API à venir).");
+      setSuccess(
+        tr(
+          "Message préparé pour envoi (connexion API à venir).",
+          "Message prepared for sending (API connection coming soon)."
+        )
+      );
       setSubject("");
       setBody("");
     } catch {
-      setError("Impossible d’envoyer le message.");
+      setError(tr("Impossible d’envoyer le message.", "Unable to send the message."));
     } finally {
       setBusy(false);
     }
@@ -65,22 +72,30 @@ export function AdminSendMessage() {
   return (
     <section className={adminCardClass}>
       <div className={adminCardGlow} aria-hidden />
-      <h2 className="font-serif text-2xl text-white">Message à un membre Prestige</h2>
+      <h2 className="font-serif text-2xl text-white">
+        {tr("Message à un membre Prestige", "Message to a Prestige member")}
+      </h2>
       <p className="mt-2 font-sans text-sm text-white/50">
-        Rédigez un message destiné à un membre approuvé de l’espace Prestige.
+        {tr(
+          "Rédigez un message destiné à un membre approuvé de l’espace Prestige.",
+          "Write a message for an approved member of the Prestige area."
+        )}
       </p>
 
       {loading ? (
-        <p className="mt-8 font-sans text-sm text-white/50">Chargement…</p>
+        <p className="mt-8 font-sans text-sm text-white/50">{tr("Chargement…", "Loading…")}</p>
       ) : members.length === 0 ? (
         <p className="mt-8 font-sans text-sm text-white/45">
-          Aucun membre Prestige approuvé disponible pour le moment.
+          {tr(
+            "Aucun membre Prestige approuvé disponible pour le moment.",
+            "No approved Prestige member available at the moment."
+          )}
         </p>
       ) : (
         <form onSubmit={submit} className="mt-8 space-y-4">
           <div>
             <label htmlFor="admin-message-recipient" className={adminLabelClass}>
-              Destinataire
+              {tr("Destinataire", "Recipient")}
             </label>
             <select
               id="admin-message-recipient"
@@ -99,7 +114,7 @@ export function AdminSendMessage() {
 
           <div>
             <label htmlFor="admin-message-subject" className={adminLabelClass}>
-              Objet
+              {tr("Objet", "Subject")}
             </label>
             <input
               id="admin-message-subject"
@@ -107,14 +122,14 @@ export function AdminSendMessage() {
               required
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
-              placeholder="Objet du message"
+              placeholder={tr("Objet du message", "Message subject")}
               className={adminFieldClass()}
             />
           </div>
 
           <div>
             <label htmlFor="admin-message-body" className={adminLabelClass}>
-              Message
+              {tr("Message", "Message")}
             </label>
             <textarea
               id="admin-message-body"
@@ -122,13 +137,13 @@ export function AdminSendMessage() {
               rows={8}
               value={body}
               onChange={(e) => setBody(e.target.value)}
-              placeholder="Votre message…"
+              placeholder={tr("Votre message…", "Your message…")}
               className={`${adminFieldClass()} min-h-[180px] resize-y`}
             />
           </div>
 
           <button type="submit" disabled={busy} className={adminPrimaryButtonClass}>
-            {busy ? "Envoi…" : "Envoyer le message"}
+            {busy ? tr("Envoi…", "Sending…") : tr("Envoyer le message", "Send message")}
           </button>
         </form>
       )}

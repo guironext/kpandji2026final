@@ -3,6 +3,8 @@ import { Cormorant, DM_Sans } from "next/font/google";
 import "./globals.css";
 import { KpAppShell } from "@/components/kp/KpAppShell";
 import { KpClerkProvider } from "@/components/providers/KpClerkProvider";
+import { KpLocaleProvider } from "@/components/providers/KpLocaleProvider";
+import { getRequestLocale } from "@/lib/i18n/get-locale";
 
 const dmSans = DM_Sans({
 	subsets: ["latin", "latin-ext"],
@@ -51,14 +53,16 @@ export const viewport = {
   themeColor: "#050505",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = await getRequestLocale();
+
   return (
     <html
-      lang="fr"
+      lang={locale}
       className={`relative h-full antialiased ${dmSans.variable} ${cormorant.variable}`}
       data-scroll-behavior="auto"
       suppressHydrationWarning
@@ -68,7 +72,9 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <KpClerkProvider>
-          <KpAppShell>{children}</KpAppShell>
+          <KpLocaleProvider initialLocale={locale}>
+            <KpAppShell>{children}</KpAppShell>
+          </KpLocaleProvider>
         </KpClerkProvider>
       </body>
     </html>

@@ -6,6 +6,7 @@ import {
   adminPrimaryButtonClass,
   adminSecondaryButtonClass,
 } from "@/components/kp/adminStyles";
+import { useLocale } from "@/components/providers/KpLocaleProvider";
 
 export type EssaiRequestRow = {
   id: string;
@@ -78,6 +79,7 @@ function EssaiRequestModal({
   const panelRef = useRef<HTMLDivElement>(null);
   const titleId = useId();
   const [mounted, setMounted] = useState(false);
+  const { tr } = useLocale();
 
   useEffect(() => {
     setMounted(true);
@@ -124,7 +126,7 @@ function EssaiRequestModal({
       >
         <div className="border-b border-white/8 bg-kp-gold/10 px-6 py-5">
           <h3 id={titleId} className="font-serif text-xl text-white">
-            Demande d&apos;essai
+            {tr("Demande d'essai", "Test drive request")}
           </h3>
           <p className="mt-1 font-sans text-sm text-white/55">
             {displayValue(request.name)} · {displayValue(request.models)}
@@ -136,7 +138,7 @@ function EssaiRequestModal({
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <dt className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-                  Téléphone
+                  {tr("Téléphone", "Phone")}
                 </dt>
                 <dd className="mt-1 text-white/85">
                   {displayValue(request.phone)}
@@ -144,7 +146,7 @@ function EssaiRequestModal({
               </div>
               <div>
                 <dt className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-                  E-mail
+                  {tr("E-mail", "Email")}
                 </dt>
                 <dd className="mt-1 break-all text-white/85">
                   {displayValue(request.email)}
@@ -154,7 +156,7 @@ function EssaiRequestModal({
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <dt className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-                  Date souhaitée
+                  {tr("Date souhaitée", "Preferred date")}
                 </dt>
                 <dd className="mt-1 text-white/85">
                   {displayValue(request.preferredDate)}
@@ -162,7 +164,7 @@ function EssaiRequestModal({
               </div>
               <div>
                 <dt className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-                  Créneau
+                  {tr("Créneau", "Time slot")}
                 </dt>
                 <dd className="mt-1 text-white/85">
                   {displayValue(request.timeSlot)}
@@ -173,7 +175,7 @@ function EssaiRequestModal({
 
           <div className="mt-6">
             <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-              Message
+              {tr("Message", "Message")}
             </p>
             <div className="mt-3 rounded-xl border border-white/10 bg-black/35 p-4">
               <p className="whitespace-pre-wrap font-sans text-sm leading-relaxed text-white/90">
@@ -189,7 +191,7 @@ function EssaiRequestModal({
               href={`mailto:${request.email.trim()}`}
               className={adminSecondaryButtonClass}
             >
-              Écrire
+              {tr("Écrire", "Email")}
             </a>
           ) : null}
           {request.phone.trim() ? (
@@ -197,7 +199,7 @@ function EssaiRequestModal({
               href={`tel:${request.phone.trim()}`}
               className={adminSecondaryButtonClass}
             >
-              Appeler
+              {tr("Appeler", "Call")}
             </a>
           ) : null}
           <button
@@ -205,7 +207,7 @@ function EssaiRequestModal({
             onClick={onClose}
             className={adminPrimaryButtonClass}
           >
-            Fermer
+            {tr("Fermer", "Close")}
           </button>
         </div>
       </div>
@@ -224,6 +226,7 @@ function EssaiRequestRowItem({
   const [open, setOpen] = useState(false);
   const [read, setRead] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const { tr } = useLocale();
 
   const openModal = useCallback(() => {
     setOpen(true);
@@ -237,7 +240,10 @@ function EssaiRequestRowItem({
   const handleDelete = useCallback(async () => {
     if (
       !window.confirm(
-        "Supprimer cette demande d'essai ? Cette action est irréversible."
+        tr(
+          "Supprimer cette demande d'essai ? Cette action est irréversible.",
+          "Delete this test drive request? This action is irreversible."
+        )
       )
     ) {
       return;
@@ -256,10 +262,15 @@ function EssaiRequestRowItem({
 
       onDelete(request.id);
     } catch {
-      window.alert("Impossible de supprimer cette demande. Réessayez.");
+      window.alert(
+        tr(
+          "Impossible de supprimer cette demande. Réessayez.",
+          "Unable to delete this request. Please try again."
+        )
+      );
       setIsDeleting(false);
     }
-  }, [onDelete, request.id]);
+  }, [onDelete, request.id, tr]);
 
   return (
     <tr
@@ -285,8 +296,12 @@ function EssaiRequestRowItem({
             type="button"
             onClick={openModal}
             aria-expanded={open}
-            aria-label={read ? "Demande déjà lue" : "Voir la demande"}
-            title={read ? "Déjà lu" : "Voir"}
+            aria-label={
+              read
+                ? tr("Demande déjà lue", "Request already read")
+                : tr("Voir la demande", "View request")
+            }
+            title={read ? tr("Déjà lu", "Already read") : tr("Voir", "View")}
             className={`${iconButtonClass} ${
               read
                 ? "border-kp-gold/45 bg-kp-gold/15 text-kp-gold hover:bg-kp-gold/25"
@@ -299,8 +314,8 @@ function EssaiRequestRowItem({
             type="button"
             onClick={handleDelete}
             disabled={isDeleting}
-            aria-label="Supprimer la demande"
-            title="Supprimer"
+            aria-label={tr("Supprimer la demande", "Delete request")}
+            title={tr("Supprimer", "Delete")}
             className={`${iconButtonClass} border-white/15 bg-white/3 text-white/55 hover:border-[#e85d5d]/45 hover:bg-[#e85d5d]/10 hover:text-[#e85d5d]`}
           >
             <IconTrash />
@@ -318,6 +333,7 @@ export function EssaiRequestsTable({
   requests: EssaiRequestRow[];
 }) {
   const [requests, setRequests] = useState(initialRequests);
+  const { tr } = useLocale();
 
   useEffect(() => {
     setRequests(initialRequests);
@@ -330,7 +346,10 @@ export function EssaiRequestsTable({
   if (requests.length === 0) {
     return (
       <p className="mt-6 font-sans text-sm text-white/50">
-        Aucune demande d&apos;essai pour le moment.
+        {tr(
+          "Aucune demande d'essai pour le moment.",
+          "No test drive requests at the moment."
+        )}
       </p>
     );
   }
@@ -341,19 +360,19 @@ export function EssaiRequestsTable({
         <thead>
           <tr className="border-b border-white/8 bg-white/3">
             <th className="px-4 py-3 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-              Nom
+              {tr("Nom", "Name")}
             </th>
             <th className="px-4 py-3 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-              Téléphone
+              {tr("Téléphone", "Phone")}
             </th>
             <th className="px-4 py-3 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-              Modèle
+              {tr("Modèle", "Model")}
             </th>
             <th className="px-4 py-3 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-              Date souhaitée
+              {tr("Date souhaitée", "Preferred date")}
             </th>
             <th className="px-4 py-3 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-              Action
+              {tr("Action", "Action")}
             </th>
           </tr>
         </thead>

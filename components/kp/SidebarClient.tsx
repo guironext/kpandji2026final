@@ -3,13 +3,16 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
+import { useLocale } from "@/components/providers/KpLocaleProvider";
+
+type LocalizedText = { fr: string; en: string };
 
 type ClientNavItem = {
-  label: string;
+  label: LocalizedText;
   href: string;
-  description: string;
+  description: LocalizedText;
   icon: ReactNode;
-  shortLabel?: string;
+  shortLabel?: LocalizedText;
 };
 
 function IconOpportunity({ className }: { className?: string }) {
@@ -103,31 +106,43 @@ function IconMessage({ className }: { className?: string }) {
 
 const NAV_ITEMS: ClientNavItem[] = [
   {
-    label: "Opportunité",
-    shortLabel: "Opport.",
+    label: { fr: "Opportunité", en: "Opportunity" },
+    shortLabel: { fr: "Opport.", en: "Opport." },
     href: "/client-prestige/opportunite",
-    description: "Découvrez les offres et projets disponibles",
+    description: {
+      fr: "Découvrez les offres et projets disponibles",
+      en: "Discover available offers and projects",
+    },
     icon: <IconOpportunity />,
   },
   {
-    label: "Souscription",
-    shortLabel: "Souscrip.",
+    label: { fr: "Souscription", en: "Subscription" },
+    shortLabel: { fr: "Souscrip.", en: "Subscr." },
     href: "/client-prestige/souscription",
-    description: "Gérez votre adhésion au programme Prestige",
+    description: {
+      fr: "Gérez votre adhésion au programme Prestige",
+      en: "Manage your Prestige program membership",
+    },
     icon: <IconSubscription />,
   },
   {
-    label: "Versement",
-    shortLabel: "Versement",
+    label: { fr: "Versement", en: "Payment" },
+    shortLabel: { fr: "Versement", en: "Payment" },
     href: "/client-prestige/versement",
-    description: "Suivez vos paiements et reversements",
+    description: {
+      fr: "Suivez vos paiements et reversements",
+      en: "Track your payments and payouts",
+    },
     icon: <IconPayment />,
   },
   {
-    label: "Message",
-    shortLabel: "Message",
+    label: { fr: "Message", en: "Message" },
+    shortLabel: { fr: "Message", en: "Message" },
     href: "/client-prestige/message",
-    description: "Échangez avec l’équipe KPANDJI",
+    description: {
+      fr: "Échangez avec l’équipe KPANDJI",
+      en: "Chat with the KPANDJI team",
+    },
     icon: <IconMessage />,
   },
 ];
@@ -142,6 +157,7 @@ type SidebarClientProps = {
 
 export function SidebarClient({ userEmail }: SidebarClientProps) {
   const pathname = usePathname();
+  const { tr } = useLocale();
 
   return (
     <aside className="w-full shrink-0 lg:w-72 xl:w-80">
@@ -158,18 +174,21 @@ export function SidebarClient({ userEmail }: SidebarClientProps) {
 
           <div className="relative">
             <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.28em] text-white/45">
-              Espace Prestige
+              {tr("Espace Prestige", "Prestige area")}
             </p>
             <p className="mt-2 font-serif text-2xl text-white sm:text-[1.65rem]">
-              Mon espace client
+              {tr("Mon espace client", "My client area")}
             </p>
             <p className="mt-2 hidden font-sans text-sm leading-relaxed text-white/45 lg:block">
-              Accédez à vos opportunités, souscriptions, versements et messages.
+              {tr(
+                "Accédez à vos opportunités, souscriptions, versements et messages.",
+                "Access your opportunities, subscriptions, payments and messages."
+              )}
             </p>
           </div>
 
           <nav
-            aria-label="Navigation espace client"
+            aria-label={tr("Navigation espace client", "Client area navigation")}
             className="relative mt-6 grid grid-cols-2 gap-2 sm:grid-cols-4 lg:mt-8 lg:grid-cols-1 lg:gap-1.5"
           >
             {NAV_ITEMS.map((item) => {
@@ -203,11 +222,18 @@ export function SidebarClient({ userEmail }: SidebarClientProps) {
                           : "text-white/85 group-hover:text-white"
                       }`}
                     >
-                      <span className="lg:hidden">{item.shortLabel ?? item.label}</span>
-                      <span className="hidden lg:inline">{item.label}</span>
+                      <span className="lg:hidden">
+                        {tr(
+                          (item.shortLabel ?? item.label).fr,
+                          (item.shortLabel ?? item.label).en
+                        )}
+                      </span>
+                      <span className="hidden lg:inline">
+                        {tr(item.label.fr, item.label.en)}
+                      </span>
                     </span>
                     <span className="mt-1 hidden font-sans text-xs leading-snug text-white/45 lg:block">
-                      {item.description}
+                      {tr(item.description.fr, item.description.en)}
                     </span>
                   </span>
                 </Link>
@@ -218,7 +244,7 @@ export function SidebarClient({ userEmail }: SidebarClientProps) {
           {userEmail && (
             <div className="relative mt-6 hidden border-t border-white/8 pt-5 lg:block">
               <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.22em] text-white/35">
-                Session
+                {tr("Session", "Session")}
               </p>
               <p className="mt-2 truncate font-sans text-sm text-white/70">{userEmail}</p>
             </div>

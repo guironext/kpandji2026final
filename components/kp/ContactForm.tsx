@@ -1,15 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-
-const SUBJECT_PRESETS = [
-  "Reserver un essai",
-  "Découvrir l'offre SIRA",
-  "Investir depuis l'étranger",
-  "Demande d'information",
-  "Contacter S.A.V",
-  "Demande de devis",
-] as const;
+import { useLocale } from "@/components/providers/KpLocaleProvider";
 
 function isValidEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
@@ -36,6 +28,15 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
 }
 
 export function ContactForm() {
+  const { tr } = useLocale();
+  const SUBJECT_PRESETS = [
+    tr("Reserver un essai", "Book a test drive"),
+    tr("Découvrir l'offre SIRA", "Discover the SIRA offer"),
+    tr("Investir depuis l'étranger", "Invest from abroad"),
+    tr("Demande d'information", "Request information"),
+    tr("Contacter S.A.V", "Contact after-sales"),
+    tr("Demande de devis", "Request a quote"),
+  ] as const;
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -55,23 +56,23 @@ export function ContactForm() {
     const messageTrim = message.trim();
 
     if (!nameTrim) {
-      setError("Indiquez votre nom.");
+      setError(tr("Indiquez votre nom.", "Please enter your name."));
       return;
     }
     if (!emailTrim) {
-      setError("Indiquez votre adresse e-mail.");
+      setError(tr("Indiquez votre adresse e-mail.", "Please enter your email address."));
       return;
     }
     if (!isValidEmail(emailTrim)) {
-      setError("Adresse e-mail invalide.");
+      setError(tr("Adresse e-mail invalide.", "Invalid email address."));
       return;
     }
     if (!subjectTrim) {
-      setError("Indiquez un sujet.");
+      setError(tr("Indiquez un sujet.", "Please enter a subject."));
       return;
     }
     if (!messageTrim) {
-      setError("Écrivez votre message.");
+      setError(tr("Écrivez votre message.", "Please write your message."));
       return;
     }
 
@@ -95,13 +96,13 @@ export function ContactForm() {
       } | null;
 
       if (!response.ok) {
-        setError(data?.error ?? "Une erreur est survenue. Réessayez plus tard.");
+        setError(data?.error ?? tr("Une erreur est survenue. Réessayez plus tard.", "An error occurred. Please try again later."));
         return;
       }
 
       setIsSuccess(true);
     } catch {
-      setError("Impossible d'envoyer le message. Vérifiez votre connexion.");
+      setError(tr("Impossible d'envoyer le message. Vérifiez votre connexion.", "Unable to send the message. Please check your connection."));
     } finally {
       setIsSubmitting(false);
     }
@@ -134,14 +135,16 @@ export function ContactForm() {
 
         <div className="relative text-center lg:text-left">
           <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.32em] text-kp-gold/75 md:text-[11px]">
-            Formulaire
+            {tr("Formulaire", "Form")}
           </p>
           <p className="mt-3 font-serif text-2xl font-medium tracking-[-0.02em] text-kp-accent md:text-[1.75rem]">
-            Votre message
+            {tr("Votre message", "Your message")}
           </p>
           <p className="mx-auto mt-3 max-w-md text-[13px] leading-relaxed text-white/40 lg:mx-0">
-            Les champs marqués d’un astérisque sont obligatoires. Notre équipe
-            vous répondra dans les meilleurs délais.
+            {tr(
+              "Les champs marqués d’un astérisque sont obligatoires. Notre équipe vous répondra dans les meilleurs délais.",
+              "Fields marked with an asterisk are required. Our team will respond as soon as possible."
+            )}
           </p>
         </div>
 
@@ -150,11 +153,13 @@ export function ContactForm() {
             role="status"
             className="relative mt-10 rounded-2xl border border-kp-gold/30 bg-kp-gold/8 px-6 py-10 text-center">
             <p className="font-serif text-2xl font-medium text-kp-accent">
-              Message envoyé
+              {tr("Message envoyé", "Message sent")}
             </p>
             <p className="mx-auto mt-4 max-w-sm text-[14px] leading-relaxed text-white/50">
-              Merci. Nous avons bien reçu votre message et vous recontacterons
-              par e-mail ou téléphone.
+              {tr(
+                "Merci. Nous avons bien reçu votre message et vous recontacterons par e-mail ou téléphone.",
+                "Thank you. We've received your message and will get back to you by email or phone."
+              )}
             </p>
           </div>
         ) : null}
@@ -164,11 +169,11 @@ export function ContactForm() {
           className={`relative mt-10 space-y-10 ${isSuccess ? "hidden" : ""}`}
           noValidate>
           <div>
-            <SectionTitle>Identité & coordonnées</SectionTitle>
+            <SectionTitle>{tr("Identité & coordonnées", "Identity & contact details")}</SectionTitle>
             <div className="space-y-5">
               <div>
                 <label htmlFor="kp-contact-name" className={labelClass}>
-                  Nom et prénom <span className="text-kp-gold/90">*</span>
+                  {tr("Nom et prénom", "Full name")} <span className="text-kp-gold/90">*</span>
                 </label>
                 <input
                   id="kp-contact-name"
@@ -188,7 +193,7 @@ export function ContactForm() {
               <div className="grid gap-5 sm:grid-cols-2">
                 <div>
                   <label htmlFor="kp-contact-email-full" className={labelClass}>
-                    E-mail <span className="text-kp-gold/90">*</span>
+                    {tr("E-mail", "Email")} <span className="text-kp-gold/90">*</span>
                   </label>
                   <input
                     id="kp-contact-email-full"
@@ -207,9 +212,9 @@ export function ContactForm() {
                 </div>
                 <div>
                   <label htmlFor="kp-contact-phone" className={labelClass}>
-                    Téléphone
+                    {tr("Téléphone", "Phone")}
                     <span className="ml-1.5 font-normal normal-case tracking-normal text-white/22">
-                      optionnel
+                      {tr("optionnel", "optional")}
                     </span>
                   </label>
                   <input
@@ -228,11 +233,11 @@ export function ContactForm() {
           </div>
 
           <div>
-            <SectionTitle>Message</SectionTitle>
+            <SectionTitle>{tr("Message", "Message")}</SectionTitle>
             <div className="space-y-4">
               <div>
                 <label htmlFor="kp-contact-subject" className={labelClass}>
-                  Sujet <span className="text-kp-gold/90">*</span>
+                  {tr("Sujet", "Subject")} <span className="text-kp-gold/90">*</span>
                 </label>
                 <div className="flex flex-wrap gap-2">
                   {SUBJECT_PRESETS.map((preset) => {
@@ -264,14 +269,14 @@ export function ContactForm() {
                     setSubject(ev.target.value);
                     if (error) setError(null);
                   }}
-                  placeholder="Choisissez une option ci-dessus Ou précisez votre sujet…"
+                  placeholder={tr("Choisissez une option ci-dessus Ou précisez votre sujet…", "Choose an option above or specify your subject…")}
                   className={`${inputClass} mt-3`}
                 />
               </div>
 
               <div>
                 <label htmlFor="kp-contact-message" className={labelClass}>
-                  Votre texte <span className="text-kp-gold/90">*</span>
+                  {tr("Votre texte", "Your message")} <span className="text-kp-gold/90">*</span>
                 </label>
                 <textarea
                   id="kp-contact-message"
@@ -282,7 +287,7 @@ export function ContactForm() {
                     setMessage(ev.target.value);
                     if (error) setError(null);
                   }}
-                  placeholder="Décrivez votre demande : modèle souhaité, délai, questions…"
+                  placeholder={tr("Décrivez votre demande : modèle souhaité, délai, questions…", "Describe your request: desired model, timeline, questions…")}
                   className={`${inputClass} min-h-[168px] resize-y`}
                 />
               </div>
@@ -302,10 +307,10 @@ export function ContactForm() {
               type="submit"
               disabled={isSubmitting}
               className="order-2 w-full rounded-full bg-kp-gold px-10 py-4 font-sans text-[11px] font-semibold uppercase tracking-[0.22em] text-black shadow-[0_16px_40px_-12px_rgba(201,169,98,0.45)] transition-[transform,colors] duration-300 hover:scale-[1.02] hover:bg-[#d4b56e] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 motion-reduce:transform-none sm:order-1 sm:w-auto">
-              {isSubmitting ? "Envoi en cours…" : "Envoyer le message"}
+              {isSubmitting ? tr("Envoi en cours…", "Sending…") : tr("Envoyer le message", "Send message")}
             </button>
             <p className="order-1 max-w-xs text-center text-[11px] leading-relaxed text-white/30 sm:order-2 sm:text-right">
-              Données utilisées uniquement pour vous répondre.
+              {tr("Données utilisées uniquement pour vous répondre.", "Your data is only used to respond to you.")}
             </p>
           </div>
         </form>

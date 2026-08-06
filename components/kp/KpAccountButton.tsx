@@ -3,6 +3,7 @@
 import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import { useMemo } from "react";
+import { useLocale } from "@/components/providers/KpLocaleProvider";
 import {
   getApprovalStatusFromMetadata,
   getUserRoleFromMetadata,
@@ -40,6 +41,7 @@ export function KpAccountButton({
   variant = "icon",
 }: KpAccountButtonProps) {
   const { user } = useUser();
+  const { tr } = useLocale();
 
   const accountHref = useMemo(() => {
     const metadata = user?.publicMetadata as Record<string, unknown> | undefined;
@@ -74,10 +76,10 @@ export function KpAccountButton({
           ? "inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/15 px-6 py-3 font-sans text-[11px] font-semibold uppercase tracking-[0.22em] text-white/90 transition hover:border-white/30 hover:bg-white/5"
           : "flex h-11 w-11 items-center justify-center overflow-hidden rounded-full text-white/85 ring-1 ring-white/15 transition hover:bg-white/10 hover:text-white hover:ring-white/30")
       }
-      aria-label="Accéder à mon espace"
+      aria-label={tr("Accéder à mon espace", "Go to my account")}
     >
       {avatar}
-      {variant === "menu" ? "Mon espace" : null}
+      {variant === "menu" ? tr("Mon espace", "My account") : null}
     </Link>
   );
 }

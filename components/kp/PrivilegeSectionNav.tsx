@@ -1,18 +1,20 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
-const links = [
-  { href: "#modeles", label: "Modèles" },
-  { href: "#paiement", label: "Paiement" },
-  { href: "#conciergerie", label: "Conciergerie" },
-  { href: "#parcours", label: "Parcours" },
-  { href: "#kpandji-rent", label: "Rent" },
-  { href: "#flotte-elite", label: "Flotte" },
-  { href: "#contact", label: "Contact" },
-] as const;
+import { useLocale } from "@/components/providers/KpLocaleProvider";
 
 export function PrivilegeSectionNav() {
+  const { tr } = useLocale();
+  const links = [
+    { href: "#modeles", label: tr("Modèles", "Models") },
+    { href: "#paiement", label: tr("Paiement", "Payment") },
+    { href: "#conciergerie", label: tr("Conciergerie", "Concierge") },
+    { href: "#parcours", label: tr("Parcours", "Journey") },
+    { href: "#kpandji-rent", label: "Rent" },
+    { href: "#flotte-elite", label: tr("Flotte", "Fleet") },
+    { href: "#contact", label: tr("Contact", "Contact") },
+  ] as const;
+
   const [active, setActive] = useState("");
   const [visible, setVisible] = useState(false);
 
@@ -40,7 +42,7 @@ export function PrivilegeSectionNav() {
 
   return (
     <nav
-      aria-label="Navigation Kpandji Privilège"
+      aria-label={tr("Navigation Kpandji Privilège", "Kpandji Privilège navigation")}
       className={`fixed inset-x-0 top-[72px] z-40 border-b border-white/8 bg-kp-bg/80 font-sans backdrop-blur-xl transition-all duration-500 md:top-[88px] ${
         visible ? "translate-y-0 opacity-100" : "pointer-events-none -translate-y-2 opacity-0"
       }`}

@@ -1,10 +1,15 @@
+"use client";
+
 import Image from "next/image";
+import { useLocale } from "@/components/providers/KpLocaleProvider";
 
 const SAV_PHONE = "+225 07 07 20 19 92";
 const SAV_TEL = "+2250707201992";
 const SAV_EMAIL = "contact@kpandji.com";
 
 const Sav = () => {
+  const { tr } = useLocale();
+
   return (
     <section
       id="sav"
@@ -22,7 +27,7 @@ const Sav = () => {
           <div className="relative aspect-4/3 w-full">
             <Image
               src="/garage5.jpeg"
-              alt="Atelier KPANDJI — service après vente"
+              alt={tr("Atelier KPANDJI — service après vente", "KPANDJI Workshop — after-sales service")}
               fill
               sizes="(max-width: 1024px) 100vw, 50vw"
               quality={70}
@@ -39,20 +44,24 @@ const Sav = () => {
         <div className="max-w-xl">
           <p className="inline-flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.28em] text-kp-gold/95">
             <span aria-hidden className="h-px w-8 bg-kp-gold/60" />
-            Service après vente
+            {tr("Service après vente", "After-sales service")}
           </p>
 
           <h2
             id="sav-title"
             className="mt-5 font-serif text-[clamp(1.75rem,4.2vw,3rem)] font-normal leading-[1.1] tracking-tight text-white"
           >
-            Un accompagnement durable pour votre véhicule
+            {tr(
+              "Un accompagnement durable pour votre véhicule",
+              "Long-term care for your vehicle",
+            )}
           </h2>
 
           <p className="mt-5 text-pretty text-[14px] leading-relaxed text-white/55 md:text-[15px]">
-            Entretien, pièces d&apos;origine et techniciens qualifiés : notre atelier
-            en Côte d&apos;Ivoire prend soin de votre KPANDJI pour préserver
-            performances, sécurité et valeur dans le temps.
+            {tr(
+              "Entretien, pièces d'origine et techniciens qualifiés : notre atelier en Côte d'Ivoire prend soin de votre KPANDJI pour préserver performances, sécurité et valeur dans le temps.",
+              "Maintenance, genuine parts, and qualified technicians: our workshop in Côte d'Ivoire takes care of your KPANDJI to preserve performance, safety, and value over time.",
+            )}
           </p>
 
           <ul className="mt-9 flex flex-col gap-5 border-t border-white/10 pt-8">
@@ -73,7 +82,7 @@ const Sav = () => {
               </span>
               <div>
                 <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/40">
-                  Ligne S.A.V.
+                  {tr("Ligne S.A.V.", "After-sales line")}
                 </p>
                 <a
                   href={`tel:${SAV_TEL}`}
@@ -102,7 +111,7 @@ const Sav = () => {
               </span>
               <div>
                 <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/40">
-                  E-mail
+                  {tr("E-mail", "Email")}
                 </p>
                 <a
                   href={`mailto:${SAV_EMAIL}?subject=Service%20apr%C3%A8s%20vente`}
@@ -119,7 +128,7 @@ const Sav = () => {
               href={`tel:${SAV_TEL}`}
               className="inline-flex min-h-11 items-center justify-center rounded-full bg-kp-gold px-8 py-3.5 font-sans text-[11px] font-semibold uppercase tracking-[0.18em] text-black shadow-[0_12px_40px_-12px_rgba(201,169,98,0.55)] transition duration-300 hover:bg-[#d4b56e] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-kp-gold/55"
             >
-              Contacter le S.A.V.
+              {tr("Contacter le S.A.V.", "Contact after-sales")}
             </a>
           </div>
          

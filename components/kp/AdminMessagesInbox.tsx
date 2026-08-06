@@ -7,6 +7,7 @@ import {
   adminCardGlow,
   adminPrimaryButtonClass,
 } from "@/components/kp/adminStyles";
+import { useLocale } from "@/components/providers/KpLocaleProvider";
 
 type InboxMessage = {
   id: string;
@@ -24,6 +25,7 @@ export function AdminMessagesInbox() {
   const [reply, setReply] = useState("");
   const [busy, setBusy] = useState(false);
   const [feedback, setFeedback] = useState<string | null>(null);
+  const { tr } = useLocale();
 
   const selected = messages.find((m) => m.id === selectedId) ?? null;
 
@@ -35,7 +37,12 @@ export function AdminMessagesInbox() {
     try {
       // API endpoint to be wired when messaging is persisted.
       await new Promise((resolve) => window.setTimeout(resolve, 400));
-      setFeedback("Réponse enregistrée (connexion API à venir).");
+      setFeedback(
+        tr(
+          "Réponse enregistrée (connexion API à venir).",
+          "Reply saved (API connection coming soon)."
+        )
+      );
       setReply("");
     } finally {
       setBusy(false);
@@ -46,15 +53,22 @@ export function AdminMessagesInbox() {
     <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
       <section className={adminCardClass}>
         <div className={adminCardGlow} aria-hidden />
-        <h2 className="font-serif text-2xl text-white">Messages reçus</h2>
+        <h2 className="font-serif text-2xl text-white">
+          {tr("Messages reçus", "Received messages")}
+        </h2>
         <p className="mt-2 font-sans text-sm text-white/50">
-          Consultez et répondez aux messages des membres Prestige.
+          {tr(
+            "Consultez et répondez aux messages des membres Prestige.",
+            "View and reply to messages from Prestige members."
+          )}
         </p>
 
         {messages.length === 0 ? (
           <p className="mt-8 font-sans text-sm text-white/45">
-            Aucun message pour le moment. Les demandes des membres Prestige
-            apparaîtront ici.
+            {tr(
+              "Aucun message pour le moment. Les demandes des membres Prestige apparaîtront ici.",
+              "No messages yet. Requests from Prestige members will appear here."
+            )}
           </p>
         ) : (
           <ul className="mt-6 divide-y divide-white/8">
@@ -84,17 +98,20 @@ export function AdminMessagesInbox() {
 
       <section className={adminCardClass}>
         <div className={adminCardGlow} aria-hidden />
-        <h2 className="font-serif text-2xl text-white">Répondre</h2>
+        <h2 className="font-serif text-2xl text-white">{tr("Répondre", "Reply")}</h2>
 
         {!selected ? (
           <p className="mt-6 font-sans text-sm text-white/45">
-            Sélectionnez un message pour rédiger une réponse.
+            {tr(
+              "Sélectionnez un message pour rédiger une réponse.",
+              "Select a message to write a reply."
+            )}
           </p>
         ) : (
           <>
             <div className="mt-6 rounded-xl border border-white/8 bg-black/30 p-4">
               <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-white/40">
-                Message original
+                {tr("Message original", "Original message")}
               </p>
               <p className="mt-2 font-sans text-sm text-white/85">{selected.body}</p>
             </div>
@@ -105,7 +122,7 @@ export function AdminMessagesInbox() {
                 rows={6}
                 value={reply}
                 onChange={(e) => setReply(e.target.value)}
-                placeholder="Votre réponse…"
+                placeholder={tr("Votre réponse…", "Your reply…")}
                 className={`${adminFieldClass()} resize-y min-h-[140px]`}
               />
               <button
@@ -113,7 +130,7 @@ export function AdminMessagesInbox() {
                 disabled={busy}
                 className={adminPrimaryButtonClass}
               >
-                {busy ? "Envoi…" : "Envoyer la réponse"}
+                {busy ? tr("Envoi…", "Sending…") : tr("Envoyer la réponse", "Send reply")}
               </button>
             </form>
 

@@ -10,6 +10,7 @@ import {
   useState,
 } from "react";
 import { motion, useReducedMotion } from "framer-motion";
+import { useLocale } from "@/components/providers/KpLocaleProvider";
 
 const CATALOGUE_URL = "/catalogue2026.pdf";
 const CATALOGUE_FILENAME = "KPANDJI-Catalogue-2026.pdf";
@@ -102,6 +103,7 @@ const navBtn =
   "inline-flex size-11 shrink-0 items-center justify-center rounded-full border border-white/14 bg-black/45 text-white/85 backdrop-blur-md transition hover:border-kp-gold/40 hover:bg-kp-gold/15 hover:text-kp-accent disabled:cursor-not-allowed disabled:opacity-35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-kp-gold/55";
 
 export default function Catalogue() {
+  const { tr } = useLocale();
   const reduceMotion = useReducedMotion();
   const [pageIndex, setPageIndex] = useState(0);
   const thumbRefs = useRef<(HTMLButtonElement | null)[]>([]);
@@ -184,15 +186,17 @@ export default function Catalogue() {
               Catalogue 2026
             </h1>
             <p className="mx-auto mt-4 max-w-md text-pretty text-sm leading-relaxed text-white/50 sm:mt-5 sm:text-[15px]">
-              Feuilletez les {PAGE_COUNT} pages en ligne, ou téléchargez le PDF
-              officiel.
+              {tr(
+                `Feuilletez les ${PAGE_COUNT} pages en ligne, ou téléchargez le PDF officiel.`,
+                `Browse all ${PAGE_COUNT} pages online, or download the official PDF.`,
+              )}
             </p>
           </div>
 
           <div className="mt-8 hidden items-center justify-center gap-3 sm:flex">
             <Link href="/" className={btnSecondary}>
               <IconArrowLeft />
-              Retour
+              {tr("Retour", "Back")}
             </Link>
             <a
               href={CATALOGUE_URL}
@@ -200,7 +204,7 @@ export default function Catalogue() {
               className={btnPrimary}
             >
               <IconDownload />
-              Télécharger
+              {tr("Télécharger", "Download")}
             </a>
           </div>
         </motion.header>
@@ -224,7 +228,7 @@ export default function Catalogue() {
           >
             <div className="relative flex items-center justify-between gap-3 border-b border-white/8 px-4 py-3 sm:px-5">
               <p className="font-sans text-[12px] font-medium text-kp-accent sm:text-[13px]">
-                Page {pageIndex + 1}
+                {tr("Page", "Page")} {pageIndex + 1}
                 <span className="text-white/35"> / {PAGE_COUNT}</span>
               </p>
               <div className="flex items-center gap-2">
@@ -233,7 +237,7 @@ export default function Catalogue() {
                   className={navBtn}
                   onClick={goPrev}
                   disabled={pageIndex === 0}
-                  aria-label="Page précédente"
+                  aria-label={tr("Page précédente", "Previous page")}
                 >
                   <IconChevron direction="left" />
                 </button>
@@ -242,7 +246,7 @@ export default function Catalogue() {
                   className={navBtn}
                   onClick={goNext}
                   disabled={pageIndex === PAGE_COUNT - 1}
-                  aria-label="Page suivante"
+                  aria-label={tr("Page suivante", "Next page")}
                 >
                   <IconChevron direction="right" />
                 </button>
@@ -269,7 +273,10 @@ export default function Catalogue() {
                 <Image
                   key={page.src}
                   src={page.src}
-                  alt={`Catalogue KPANDJI 2026 — page ${pageIndex + 1}`}
+                  alt={tr(
+                    `Catalogue KPANDJI 2026 — page ${pageIndex + 1}`,
+                    `KPANDJI 2026 Catalogue — page ${pageIndex + 1}`,
+                  )}
                   fill
                   priority={pageIndex < 2}
                   sizes="(max-width: 768px) 100vw, 768px"
@@ -295,14 +302,14 @@ export default function Catalogue() {
                 className="absolute inset-y-0 left-0 hidden w-[22%] cursor-w-resize bg-transparent md:block"
                 onClick={goPrev}
                 disabled={pageIndex === 0}
-                aria-label="Page précédente"
+                aria-label={tr("Page précédente", "Previous page")}
               />
               <button
                 type="button"
                 className="absolute inset-y-0 right-0 hidden w-[22%] cursor-e-resize bg-transparent md:block"
                 onClick={goNext}
                 disabled={pageIndex === PAGE_COUNT - 1}
-                aria-label="Page suivante"
+                aria-label={tr("Page suivante", "Next page")}
               />
             </div>
 
@@ -311,7 +318,7 @@ export default function Catalogue() {
               <div
                 className="flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
                 role="listbox"
-                aria-label="Pages du catalogue"
+                aria-label={tr("Pages du catalogue", "Catalogue pages")}
               >
                 {PAGES.map((p, i) => {
                   const active = i === pageIndex;
@@ -321,7 +328,7 @@ export default function Catalogue() {
                       type="button"
                       role="option"
                       aria-selected={active}
-                      aria-label={`Aller à la page ${i + 1}`}
+                      aria-label={tr(`Aller à la page ${i + 1}`, `Go to page ${i + 1}`)}
                       ref={(el) => {
                         thumbRefs.current[i] = el;
                       }}
@@ -356,7 +363,7 @@ export default function Catalogue() {
             className={navBtn}
             onClick={goPrev}
             disabled={pageIndex === 0}
-            aria-label="Page précédente"
+            aria-label={tr("Page précédente", "Previous page")}
           >
             <IconChevron direction="left" />
           </button>
@@ -368,7 +375,7 @@ export default function Catalogue() {
             className={navBtn}
             onClick={goNext}
             disabled={pageIndex === PAGE_COUNT - 1}
-            aria-label="Page suivante"
+            aria-label={tr("Page suivante", "Next page")}
           >
             <IconChevron direction="right" />
           </button>
@@ -376,7 +383,7 @@ export default function Catalogue() {
         <div className="mx-auto flex max-w-md gap-2.5">
           <Link href="/" className={btnSecondary}>
             <IconArrowLeft />
-            Retour
+            {tr("Retour", "Back")}
           </Link>
           <a
             href={CATALOGUE_URL}
@@ -384,7 +391,7 @@ export default function Catalogue() {
             className={btnPrimary}
           >
             <IconDownload />
-            Télécharger
+            {tr("Télécharger", "Download")}
           </a>
         </div>
       </div>

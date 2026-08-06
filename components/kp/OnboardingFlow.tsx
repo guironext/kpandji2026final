@@ -16,6 +16,7 @@ import {
 } from "@/lib/auth/roles";
 import { homePathForRole, PRESTIGE_HOME_PATH } from "@/lib/auth/routes";
 import { useAuthSync } from "@/components/kp/useAuthSync";
+import { useLocale } from "@/components/providers/KpLocaleProvider";
 
 const inputClass =
   "w-full rounded-xl border border-white/[0.11] bg-black/40 px-4 py-3.5 font-sans text-[15px] text-kp-accent shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] placeholder:text-white/28 transition-[border-color,box-shadow] duration-200 focus:border-kp-gold/45 focus:outline-none focus:shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_0_0_1px_rgba(201,169,98,0.12)]";
@@ -35,10 +36,12 @@ type OnboardingState = {
 const ROLE_OPTIONS = [
   {
     value: PRESTIGE_USER_ROLE,
-    label: "Membre Prestige",
-    description: "Accès à l'espace client privé KPANDJI.",
+    label: { fr: "Membre Prestige", en: "Prestige member" },
+    description: {
+      fr: "Accès à l'espace client privé KPANDJI.",
+      en: "Access to the KPANDJI private client area.",
+    },
   },
- 
 ] as const;
 
 function postOnboardingPath(role: KpUserRole | null | undefined) {
@@ -87,30 +90,37 @@ function PendingApprovalMessage({
   fullName: string | null;
   role: KpUserRole | null;
 }) {
-  const greeting = fullName?.trim() ? `Merci ${fullName.trim()}.` : "Merci.";
-  const spaceLabel =
-    role === ADMIN_ROLE ? "administration" : "prestige";
+  const { tr } = useLocale();
+  const name = fullName?.trim();
+  const greeting = name
+    ? tr(`Merci ${name}.`, `Thank you ${name}.`)
+    : tr("Merci.", "Thank you.");
+  const spaceLabel = role === ADMIN_ROLE ? "administration" : "prestige";
 
   return (
     <div className="mt-8 rounded-xl border border-white/8 bg-white/2 p-6 sm:p-8">
       <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.28em] text-kp-gold/80">
-        Profil enregistré
+        {tr("Profil enregistré", "Profile saved")}
       </p>
       <h2 className="mt-3 font-serif text-2xl text-white">
-        En attente de validation
+        {tr("En attente de validation", "Awaiting approval")}
       </h2>
       <p className="mt-3 font-sans text-sm leading-relaxed text-white/55">
-        {greeting} Votre profil a bien été enregistré. Un administrateur KPANDJI
-        doit maintenant approuver votre accès à l&apos;espace {spaceLabel}.
-        Veuillez patienter — vous serez redirigé automatiquement dès que votre
-        compte sera validé.
+        {greeting}{" "}
+        {tr(
+          `Votre profil a bien été enregistré. Un administrateur KPANDJI doit maintenant approuver votre accès à l'espace ${spaceLabel}. Veuillez patienter — vous serez redirigé automatiquement dès que votre compte sera validé.`,
+          `Your profile has been saved. A KPANDJI administrator must now approve your access to the ${spaceLabel} area. Please wait — you'll be redirected automatically once your account is approved.`
+        )}
       </p>
       <div className="mt-6 flex items-center gap-3 font-sans text-sm text-white/40">
         <span
           className="inline-block h-2 w-2 animate-pulse rounded-full bg-kp-gold/70"
           aria-hidden
         />
-        En attente de l&apos;approbation de l&apos;administrateur…
+        {tr(
+          "En attente de l'approbation de l'administrateur…",
+          "Waiting for administrator approval…"
+        )}
       </div>
     </div>
   );
@@ -124,6 +134,7 @@ export function OnboardingFlow() {
   const { session } = useSession();
   const { user } = useUser();
   const reduceMotion = useReducedMotion();
+  const { tr } = useLocale();
 
   useAuthSync(authLoaded && isSignedIn);
 
@@ -215,15 +226,22 @@ export function OnboardingFlow() {
     const phoneTrim = phone.trim();
     const countryTrim = residenceCountry.trim();
     if (!nameTrim) {
-      setError("Indiquez votre nom complet.");
+      setError(tr("Indiquez votre nom complet.", "Enter your full name."));
       return;
     }
     if (!phoneTrim) {
-      setError("Indiquez votre numéro de téléphone.");
+      setError(
+        tr("Indiquez votre numéro de téléphone.", "Enter your phone number.")
+      );
       return;
     }
     if (!countryTrim) {
-      setError("Indiquez votre pays de résidence.");
+      setError(
+        tr(
+          "Indiquez votre pays de résidence.",
+          "Enter your country of residence."
+        )
+      );
       return;
     }
 
@@ -244,7 +262,13 @@ export function OnboardingFlow() {
         error?: string;
       };
       if (!res.ok) {
-        setError(data.error ?? "Impossible d'enregistrer votre profil.");
+        setError(
+          data.error ??
+            tr(
+              "Impossible d'enregistrer votre profil.",
+              "Unable to save your profile."
+            )
+        );
         return;
       }
 
@@ -267,7 +291,9 @@ export function OnboardingFlow() {
         await redirectAfterApproval(data.role);
       }
     } catch {
-      setError("Impossible de joindre le serveur.");
+      setError(
+        tr("Impossible de joindre le serveur.", "Unable to reach the server.")
+      );
     } finally {
       setSubmitting(false);
     }
@@ -277,11 +303,16 @@ export function OnboardingFlow() {
     return (
       <>
         <PageIntro
-          eyebrow="KPANDJI — Espace privé"
-          title="Finaliser votre profil"
-          description="Complétez vos informations pour accéder à votre espace membre."
+          eyebrow={tr("KPANDJI — Espace privé", "KPANDJI — Private area")}
+          title={tr("Finaliser votre profil", "Complete your profile")}
+          description={tr(
+            "Complétez vos informations pour accéder à votre espace membre.",
+            "Complete your information to access your member area."
+          )}
         />
-        <p className="mt-8 font-sans text-sm text-white/50">Chargement…</p>
+        <p className="mt-8 font-sans text-sm text-white/50">
+          {tr("Chargement…", "Loading…")}
+        </p>
       </>
     );
   }
@@ -290,16 +321,19 @@ export function OnboardingFlow() {
     return (
       <>
         <PageIntro
-          eyebrow="KPANDJI — Espace privé"
-          title="Finaliser votre profil"
-          description="Connectez-vous pour finaliser votre inscription."
+          eyebrow={tr("KPANDJI — Espace privé", "KPANDJI — Private area")}
+          title={tr("Finaliser votre profil", "Complete your profile")}
+          description={tr(
+            "Connectez-vous pour finaliser votre inscription.",
+            "Sign in to complete your registration."
+          )}
         />
         <div className="mt-8">
           <Link
             href={`/sign-in?redirect_url=${encodeURIComponent("/onboarding")}`}
             className="inline-flex rounded-full border border-white/20 px-7 py-3 font-sans text-[11px] font-semibold uppercase tracking-[0.2em] text-white/90 transition hover:border-white/40 hover:bg-white/5"
           >
-            Se connecter
+            {tr("Se connecter", "Sign in")}
           </Link>
         </div>
       </>
@@ -310,19 +344,25 @@ export function OnboardingFlow() {
     return (
       <>
         <PageIntro
-          eyebrow="KPANDJI — Espace privé"
-          title="Demande refusée"
-          description="Votre demande d'accès n'a pas été acceptée."
+          eyebrow={tr("KPANDJI — Espace privé", "KPANDJI — Private area")}
+          title={tr("Demande refusée", "Request denied")}
+          description={tr(
+            "Votre demande d'accès n'a pas été acceptée.",
+            "Your access request was not accepted."
+          )}
         />
         <div className="mt-8">
           <p className="font-sans text-sm text-white/60">
-            Contactez l&apos;administrateur KPANDJI pour plus d&apos;informations.
+            {tr(
+              "Contactez l'administrateur KPANDJI pour plus d'informations.",
+              "Contact the KPANDJI administrator for more information."
+            )}
           </p>
           <Link
             href="/"
             className="mt-7 inline-flex rounded-full border border-white/20 px-7 py-3 font-sans text-[11px] font-semibold uppercase tracking-[0.2em] text-white/90 transition hover:border-white/40 hover:bg-white/5"
           >
-            Retour à l&apos;accueil
+            {tr("Retour à l'accueil", "Back to home")}
           </Link>
         </div>
       </>
@@ -338,9 +378,12 @@ export function OnboardingFlow() {
     return (
       <>
         <PageIntro
-          eyebrow="KPANDJI — Espace privé"
-          title="Profil enregistré"
-          description="Votre demande est en cours d'examen par un administrateur."
+          eyebrow={tr("KPANDJI — Espace privé", "KPANDJI — Private area")}
+          title={tr("Profil enregistré", "Profile saved")}
+          description={tr(
+            "Votre demande est en cours d'examen par un administrateur.",
+            "Your request is being reviewed by an administrator."
+          )}
         />
         <PendingApprovalMessage
           fullName={onboarding?.fullName ?? fullName}
@@ -353,17 +396,21 @@ export function OnboardingFlow() {
   return (
     <>
       <PageIntro
-        eyebrow="KPANDJI — Espace privé"
-        title="Finaliser votre profil"
-        description="Complétez vos informations pour accéder à votre espace membre."
+        eyebrow={tr("KPANDJI — Espace privé", "KPANDJI — Private area")}
+        title={tr("Finaliser votre profil", "Complete your profile")}
+        description={tr(
+          "Complétez vos informations pour accéder à votre espace membre.",
+          "Complete your information to access your member area."
+        )}
       />
       <form onSubmit={handleSubmit} className="mt-8 space-y-8">
       <div>
-        <SectionTitle>Identité</SectionTitle>
+        <SectionTitle>{tr("Identité", "Identity")}</SectionTitle>
         <div className="space-y-5">
           <div>
             <label htmlFor="kp-onboard-name" className={labelClass}>
-              Nom complet <span className="text-kp-gold/90">*</span>
+              {tr("Nom complet", "Full name")}{" "}
+              <span className="text-kp-gold/90">*</span>
             </label>
             <input
               id="kp-onboard-name"
@@ -375,13 +422,14 @@ export function OnboardingFlow() {
                 setFullName(ev.target.value);
                 if (error) setError(null);
               }}
-              placeholder="Prénom et nom"
+              placeholder={tr("Prénom et nom", "First and last name")}
               className={inputClass}
             />
           </div>
           <div>
             <label htmlFor="kp-onboard-phone" className={labelClass}>
-              Téléphone <span className="text-kp-gold/90">*</span>
+              {tr("Téléphone", "Phone")}{" "}
+              <span className="text-kp-gold/90">*</span>
             </label>
             <input
               id="kp-onboard-phone"
@@ -399,7 +447,8 @@ export function OnboardingFlow() {
           </div>
           <div>
             <label htmlFor="kp-onboard-country" className={labelClass}>
-              Pays de résidence <span className="text-kp-gold/90">*</span>
+              {tr("Pays de résidence", "Country of residence")}{" "}
+              <span className="text-kp-gold/90">*</span>
             </label>
             <input
               id="kp-onboard-country"
@@ -411,7 +460,7 @@ export function OnboardingFlow() {
                 setResidenceCountry(ev.target.value);
                 if (error) setError(null);
               }}
-              placeholder="France, USA, Canada…"
+              placeholder={tr("France, USA, Canada…", "France, USA, Canada…")}
               className={inputClass}
             />
           </div>
@@ -419,8 +468,14 @@ export function OnboardingFlow() {
       </div>
 
       <div>
-        <SectionTitle>Vous être un client Prestige</SectionTitle>
-        <div className="space-y-3" role="radiogroup" aria-label="Choisir un rôle">
+        <SectionTitle>
+          {tr("Vous être un client Prestige", "You are a Prestige client")}
+        </SectionTitle>
+        <div
+          className="space-y-3"
+          role="radiogroup"
+          aria-label={tr("Choisir un rôle", "Choose a role")}
+        >
           {ROLE_OPTIONS.map((option) => {
             const selected = role === option.value;
             return (
@@ -445,10 +500,10 @@ export function OnboardingFlow() {
                 />
                 <span>
                   <span className="block font-sans text-sm font-medium text-white/90">
-                    {option.label}
+                    {tr(option.label.fr, option.label.en)}
                   </span>
                   <span className="mt-1 block font-sans text-sm text-white/45">
-                    {option.description}
+                    {tr(option.description.fr, option.description.en)}
                   </span>
                 </span>
               </label>
@@ -473,10 +528,15 @@ export function OnboardingFlow() {
           className="inline-flex items-center justify-center rounded-full bg-white px-8 py-3.5 font-sans text-[11px] font-semibold uppercase tracking-[0.2em] text-black transition hover:bg-white/90 disabled:opacity-50"
           whileTap={reduceMotion ? undefined : { scale: 0.98 }}
         >
-          {submitting ? "Enregistrement…" : "Finaliser mon inscription"}
+          {submitting
+            ? tr("Enregistrement…", "Saving…")
+            : tr("Finaliser mon inscription", "Complete my registration")}
         </motion.button>
         <p className="max-w-xs font-sans text-xs leading-relaxed text-white/35">
-          Votre accès sera activé après validation par un administrateur KPANDJI.
+          {tr(
+            "Votre accès sera activé après validation par un administrateur KPANDJI.",
+            "Your access will be activated once a KPANDJI administrator approves it."
+          )}
         </p>
       </div>
     </form>

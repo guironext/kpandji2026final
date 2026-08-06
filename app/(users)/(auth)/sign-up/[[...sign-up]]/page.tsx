@@ -11,19 +11,41 @@ import {
 } from "@/components/kp/clerk-appearance";
 import { useAuthSync } from "@/components/kp/useAuthSync";
 import { useInvitationValidation } from "@/components/kp/useInvitationValidation";
+import { useLocale } from "@/components/providers/KpLocaleProvider";
 
 const INVITE_TOKEN_KEY = "kp-invite-token";
 
-const REASON_COPY: Record<string, string> = {
-  invalid: "Cette invitation est introuvable ou a été révoquée.",
-  used: "Cette invitation a déjà été utilisée.",
-  expired: "Cette invitation a expiré.",
+const REASON_COPY: Record<string, { fr: string; en: string }> = {
+  invalid: {
+    fr: "Cette invitation est introuvable ou a été révoquée.",
+    en: "This invitation could not be found or has been revoked.",
+  },
+  used: {
+    fr: "Cette invitation a déjà été utilisée.",
+    en: "This invitation has already been used.",
+  },
+  expired: {
+    fr: "Cette invitation a expiré.",
+    en: "This invitation has expired.",
+  },
 };
 
 const SIGNUP_STEPS = [
-  { id: "account", label: "Compte", hint: "Identifiants" },
-  { id: "verify", label: "E-mail", hint: "Vérification" },
-  { id: "profile", label: "Profil", hint: "Finalisation" },
+  {
+    id: "account",
+    label: { fr: "Compte", en: "Account" },
+    hint: { fr: "Identifiants", en: "Credentials" },
+  },
+  {
+    id: "verify",
+    label: { fr: "E-mail", en: "Email" },
+    hint: { fr: "Vérification", en: "Verification" },
+  },
+  {
+    id: "profile",
+    label: { fr: "Profil", en: "Profile" },
+    hint: { fr: "Finalisation", en: "Finalize" },
+  },
 ] as const;
 
 function readPersistedInviteToken(urlToken: string | null): string | null {
@@ -53,8 +75,12 @@ function isClerkSignUpSubRoute(pathname: string) {
 }
 
 function VerticalSteps({ current }: { current: number }) {
+  const { tr } = useLocale();
   return (
-    <ol className="hidden space-y-1 lg:block" aria-label="Étapes d'inscription">
+    <ol
+      className="hidden space-y-1 lg:block"
+      aria-label={tr("Étapes d'inscription", "Sign-up steps")}
+    >
       {SIGNUP_STEPS.map((step, index) => {
         const done = index < current;
         const active = index === current;
@@ -84,14 +110,14 @@ function VerticalSteps({ current }: { current: number }) {
                   active ? "text-white" : done ? "text-white/60" : "text-white/30"
                 }`}
               >
-                {step.label}
+                {tr(step.label.fr, step.label.en)}
               </p>
               <p
                 className={`mt-0.5 font-sans text-xs ${
                   active ? "text-white/50" : "text-white/25"
                 }`}
               >
-                {step.hint}
+                {tr(step.hint.fr, step.hint.en)}
               </p>
             </div>
             {done && (
@@ -118,10 +144,11 @@ function VerticalSteps({ current }: { current: number }) {
 }
 
 function MobileSteps({ current }: { current: number }) {
+  const { tr } = useLocale();
   return (
     <div
       className="flex gap-2 overflow-x-auto pb-1 lg:hidden kp-hide-scrollbar"
-      aria-label="Étapes d'inscription"
+      aria-label={tr("Étapes d'inscription", "Sign-up steps")}
     >
       {SIGNUP_STEPS.map((step, index) => {
         const done = index < current;
@@ -138,7 +165,7 @@ function MobileSteps({ current }: { current: number }) {
                   : "bg-white/4 text-white/30"
             }`}
           >
-            {step.label}
+            {tr(step.label.fr, step.label.en)}
           </span>
         );
       })}
@@ -182,23 +209,25 @@ function LoadingPulse({ message }: { message: string }) {
 }
 
 function InviteConfirmedBanner({ email }: { email: string }) {
+  const { tr } = useLocale();
   return (
     <div className="mb-8 flex flex-col gap-1 border-l-2 border-kp-gold pl-5 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
       <div>
         <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.22em] text-kp-gold">
-          Invitation validée
+          {tr("Invitation validée", "Invitation confirmed")}
         </p>
         <p className="mt-1 font-serif text-lg text-white/90">{email}</p>
       </div>
       <span className="inline-flex w-fit items-center gap-2 rounded-full bg-kp-gold/10 px-3 py-1.5 font-sans text-[10px] font-semibold uppercase tracking-[0.16em] text-kp-gold">
         <span className="h-1.5 w-1.5 rounded-full bg-kp-gold kp-pulse-dot" />
-        Prêt à continuer
+        {tr("Prêt à continuer", "Ready to continue")}
       </span>
     </div>
   );
 }
 
 function VerifyEmailIntro() {
+  const { tr } = useLocale();
   return (
     <div className="mb-8 max-w-xl rounded-xl border border-white/10 bg-white/[0.03] p-6 sm:p-7">
       <div className="flex items-start gap-4">
@@ -222,15 +251,19 @@ function VerifyEmailIntro() {
         </span>
         <div className="min-w-0">
           <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.22em] text-kp-gold">
-            Code de vérification
+            {tr("Code de vérification", "Verification code")}
           </p>
           <p className="mt-2 font-sans text-sm leading-relaxed text-white/70">
-            Consultez votre boîte de réception et saisissez le code à 6 chiffres
-            reçu par e-mail.
+            {tr(
+              "Consultez votre boîte de réception et saisissez le code à 6 chiffres reçu par e-mail.",
+              "Check your inbox and enter the 6-digit code you received by email."
+            )}
           </p>
           <p className="mt-3 font-sans text-xs leading-relaxed text-white/40">
-            Le code expire après quelques minutes. Pensez à vérifier vos courriers
-            indésirables si vous ne le trouvez pas.
+            {tr(
+              "Le code expire après quelques minutes. Pensez à vérifier vos courriers indésirables si vous ne le trouvez pas.",
+              "The code expires after a few minutes. Check your spam folder if you can't find it."
+            )}
           </p>
         </div>
       </div>
@@ -294,6 +327,7 @@ function SignUpFlow() {
   const isClerkSignUpStep = isClerkSignUpSubRoute(pathname);
   const onSignUpFlow = pathname.startsWith("/sign-up");
   const isVerifyEmailStep = pathname.includes("verify-email");
+  const { tr } = useLocale();
 
   useAuthSync(clerkLoaded && isSignedIn && !onSignUpFlow);
 
@@ -321,11 +355,17 @@ function SignUpFlow() {
 
   const currentStep = isVerifyEmailStep ? 1 : 0;
   const pageTitle = isVerifyEmailStep
-    ? "Vérifier votre e-mail"
-    : "Créer votre compte";
+    ? tr("Vérifier votre e-mail", "Verify your email")
+    : tr("Créer votre compte", "Create your account");
   const pageSubtitle = isVerifyEmailStep
-    ? "Entrez le code à 6 chiffres envoyé à votre adresse e-mail."
-    : "Rejoignez l'espace client réservé aux membres invités.";
+    ? tr(
+        "Entrez le code à 6 chiffres envoyé à votre adresse e-mail.",
+        "Enter the 6-digit code sent to your email address."
+      )
+    : tr(
+        "Rejoignez l'espace client réservé aux membres invités.",
+        "Join the client area reserved for invited members."
+      );
 
   return (
     <div className="relative min-h-[calc(100dvh-110px)] md:min-h-[calc(100dvh-132px)]">
@@ -358,7 +398,7 @@ function SignUpFlow() {
             <div className="relative flex flex-1 flex-col justify-between p-6 sm:p-8 lg:p-10">
               <div>
                 <p className="kp-hero-reveal kp-hero-delay-1 font-sans text-[10px] font-semibold uppercase tracking-[0.3em] text-kp-gold/90">
-                  KPANDJI — Espace privé
+                  {tr("KPANDJI — Espace privé", "KPANDJI — Private area")}
                 </p>
                 <h1 className="kp-hero-reveal kp-hero-delay-2 mt-4 max-w-xs font-serif text-3xl leading-tight text-white sm:text-4xl lg:mt-6 lg:text-[2.75rem] lg:leading-[1.1]">
                   {pageTitle}
@@ -374,7 +414,10 @@ function SignUpFlow() {
               <div className="relative mt-8 hidden lg:mt-0 lg:block">
                 <VerticalSteps current={currentStep} />
                 <p className="mt-10 font-sans text-[11px] leading-relaxed text-white/30">
-                  Votre accès personnel aux services exclusifs KPANDJI.
+                  {tr(
+                    "Votre accès personnel aux services exclusifs KPANDJI.",
+                    "Your personal access to KPANDJI's exclusive services."
+                  )}
                 </p>
               </div>
             </div>
@@ -385,14 +428,23 @@ function SignUpFlow() {
             <div className="mb-8 flex items-center justify-between gap-4 border-b border-white/8 pb-6">
               <div>
                 <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.22em] text-white/35">
-                  Étape {currentStep + 1} sur {SIGNUP_STEPS.length}
+                  {tr("Étape", "Step")} {currentStep + 1}{" "}
+                  {tr("sur", "of")} {SIGNUP_STEPS.length}
                 </p>
                 <p className="mt-1 font-serif text-xl text-white/85">
-                  {SIGNUP_STEPS[currentStep]?.label}
+                  {SIGNUP_STEPS[currentStep] &&
+                    tr(
+                      SIGNUP_STEPS[currentStep].label.fr,
+                      SIGNUP_STEPS[currentStep].label.en
+                    )}
                 </p>
                 {isVerifyEmailStep && (
                   <p className="mt-1 font-sans text-xs text-white/45">
-                    {SIGNUP_STEPS[currentStep]?.hint}
+                    {SIGNUP_STEPS[currentStep] &&
+                      tr(
+                        SIGNUP_STEPS[currentStep].hint.fr,
+                        SIGNUP_STEPS[currentStep].hint.en
+                      )}
                   </p>
                 )}
               </div>
@@ -400,58 +452,74 @@ function SignUpFlow() {
                 href="/sign-in"
                 className="hidden shrink-0 font-sans text-[10px] font-semibold uppercase tracking-[0.18em] text-white/40 transition hover:text-kp-gold sm:inline-flex"
               >
-                Déjà membre →
+                {tr("Déjà membre →", "Already a member →")}
               </Link>
             </div>
 
             <div className="flex flex-1 flex-col">
               {state.phase === "loading" && !isClerkSignUpStep && (
-                <LoadingPulse message="Vérification de votre invitation…" />
+                <LoadingPulse
+                  message={tr(
+                    "Vérification de votre invitation…",
+                    "Checking your invitation…"
+                  )}
+                />
               )}
 
               {state.phase === "invite-only" && !isClerkSignUpStep && (
                 <StatusPanel
-                  title="Accès sur invitation"
+                  title={tr("Accès sur invitation", "Invite-only access")}
                   actions={
                     <>
                       <AuthActionLink href="/sign-in" variant="primary">
-                        Se connecter
+                        {tr("Se connecter", "Sign in")}
                       </AuthActionLink>
                       <AuthActionLink href="/" variant="secondary">
-                        Accueil
+                        {tr("Accueil", "Home")}
                       </AuthActionLink>
                     </>
                   }
                 >
                   <p>
-                    Ouvrez le lien d&apos;invitation reçu par e-mail pour
-                    accéder au formulaire d&apos;inscription.
+                    {tr(
+                      "Ouvrez le lien d'invitation reçu par e-mail pour accéder au formulaire d'inscription.",
+                      "Open the invitation link you received by email to access the sign-up form."
+                    )}
                   </p>
                   <p className="text-white/40">
-                    L&apos;espace client KPANDJI est réservé aux clients
-                    invités.
+                    {tr(
+                      "L'espace client KPANDJI est réservé aux clients invités.",
+                      "The KPANDJI client area is reserved for invited clients."
+                    )}
                   </p>
                 </StatusPanel>
               )}
 
               {state.phase === "invalid" && !isClerkSignUpStep && (
                 <StatusPanel
-                  title="Invitation indisponible"
+                  title={tr("Invitation indisponible", "Invitation unavailable")}
                   actions={
                     <>
                       <AuthActionLink href="/" variant="primary">
-                        Retour à l&apos;accueil
+                        {tr("Retour à l'accueil", "Back to home")}
                       </AuthActionLink>
                       <AuthActionLink href="/sign-in" variant="secondary">
-                        Se connecter
+                        {tr("Se connecter", "Sign in")}
                       </AuthActionLink>
                     </>
                   }
                 >
-                  <p>{REASON_COPY[state.reason] ?? REASON_COPY.invalid}</p>
+                  <p>
+                    {tr(
+                      (REASON_COPY[state.reason] ?? REASON_COPY.invalid).fr,
+                      (REASON_COPY[state.reason] ?? REASON_COPY.invalid).en
+                    )}
+                  </p>
                   <p className="text-white/40">
-                    Contactez l&apos;administrateur pour recevoir un nouveau
-                    lien d&apos;invitation.
+                    {tr(
+                      "Contactez l'administrateur pour recevoir un nouveau lien d'invitation.",
+                      "Contact the administrator to receive a new invitation link."
+                    )}
                   </p>
                 </StatusPanel>
               )}
@@ -461,15 +529,30 @@ function SignUpFlow() {
               )}
 
               {!clerkLoaded && state.phase === "valid" && !isClerkSignUpStep && (
-                <LoadingPulse message="Chargement du formulaire…" />
+                <LoadingPulse
+                  message={tr(
+                    "Chargement du formulaire…",
+                    "Loading the form…"
+                  )}
+                />
               )}
 
               {clerkLoaded && isSignedIn && !onSignUpFlow && (
-                <LoadingPulse message="Synchronisation de votre compte…" />
+                <LoadingPulse
+                  message={tr(
+                    "Synchronisation de votre compte…",
+                    "Syncing your account…"
+                  )}
+                />
               )}
 
               {!showSignUp && isClerkSignUpStep && (
-                <LoadingPulse message="Chargement de la vérification…" />
+                <LoadingPulse
+                  message={tr(
+                    "Chargement de la vérification…",
+                    "Loading verification…"
+                  )}
+                />
               )}
 
               {showSignUp && (
@@ -482,7 +565,12 @@ function SignUpFlow() {
                   >
                     <ClerkMounted
                       fallback={
-                        <LoadingPulse message="Chargement de l’inscription…" />
+                        <LoadingPulse
+                          message={tr(
+                            "Chargement de l'inscription…",
+                            "Loading sign-up…"
+                          )}
+                        />
                       }
                     >
                       <SignUp
@@ -512,12 +600,12 @@ function SignUpFlow() {
             </div>
 
             <p className="mt-10 border-t border-white/8 pt-6 text-center font-sans text-sm text-white/35 sm:hidden">
-              Déjà un compte ?{" "}
+              {tr("Déjà un compte ?", "Already have an account?")}{" "}
               <Link
                 href="/sign-in"
                 className="text-kp-gold/90 underline-offset-4 hover:text-kp-gold hover:underline"
               >
-                Se connecter
+                {tr("Se connecter", "Sign in")}
               </Link>
             </p>
           </section>
@@ -528,6 +616,7 @@ function SignUpFlow() {
 }
 
 export default function SignUpPage() {
+  const { tr } = useLocale();
   return (
     <Suspense
       fallback={
@@ -535,7 +624,7 @@ export default function SignUpPage() {
           className="mx-auto flex min-h-[70vh] max-w-6xl items-center justify-center px-6"
           aria-hidden
         >
-          <LoadingPulse message="Chargement…" />
+          <LoadingPulse message={tr("Chargement…", "Loading…")} />
         </main>
       }
     >

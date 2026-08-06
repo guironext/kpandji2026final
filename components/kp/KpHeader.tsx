@@ -9,6 +9,8 @@ import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { KpClientLoginModal } from "@/components/kp/KpClientLoginModal";
 import { KpClientSignUpModal } from "@/components/kp/KpClientSignUpModal";
+import { KpLocaleSwitch } from "@/components/kp/KpLocaleSwitch";
+import { useLocale } from "@/components/providers/KpLocaleProvider";
 
 type NavItem = {
   label: string;
@@ -16,6 +18,7 @@ type NavItem = {
 };
 
 function KpAnimatedLogo() {
+  const { t } = useLocale();
   const reduceMotion = useReducedMotion();
   const [showLayout, setShowLayout] = useState(() => reduceMotion !== true);
   const [showLogo, setShowLogo] = useState(() => reduceMotion === true);
@@ -129,10 +132,10 @@ function KpAnimatedLogo() {
                   }}
                 >
                   <p className="font-sans text-[10px] font-medium uppercase leading-snug tracking-[0.18em] text-white/72 sm:text-[11px] md:text-xs">
-                    La force d&apos;une racine
+                    {t.brand.taglineTop}
                   </p>
                   <p className="mt-1 font-sans text-[10px] font-medium uppercase leading-snug tracking-[0.18em] text-white/55 sm:text-[11px] md:text-xs">
-                    l&apos;élan d&apos;une nation
+                    {t.brand.taglineBottom}
                   </p>
                 </motion.div>
               </div>
@@ -221,14 +224,6 @@ function KpAnimatedLogo() {
   );
 }
 
-const nav: NavItem[] = [
-  { label: "Accueil", href: "/" },
-  { label: "ShowRoom", href: "/showroom" },   
-  { label: "Privilège & Rent", href: "/privilege" },
-  { label: "S.A.V.", href: "/sav" },
-  { label: "Contact", href: "/contact" },
-];
-
 function IconSearch({ className }: { className?: string }) {
   return (
     <svg
@@ -268,6 +263,7 @@ function IconUser({ className }: { className?: string }) {
 }
 
 export function KpHeader() {
+  const { t } = useLocale();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -280,6 +276,14 @@ export function KpHeader() {
   const searchParams = useSearchParams();
   const searchId = useId();
   const searchInputRef = useRef<HTMLInputElement>(null);
+
+  const nav: NavItem[] = [
+    { label: t.nav.home, href: "/" },
+    { label: t.nav.showroom, href: "/showroom" },
+    { label: t.nav.privilege, href: "/privilege" },
+    { label: t.nav.sav, href: "/sav" },
+    { label: t.nav.contact, href: "/contact" },
+  ];
 
   const closeOverlays = useCallback(() => {
     setMenuOpen(false);
@@ -414,22 +418,18 @@ export function KpHeader() {
           <div className="overflow-hidden">
             <div className="mx-auto flex max-w-[1680px] items-center justify-end gap-6 px-5 py-2.5 text-sm font-medium uppercase tracking-widest text-white/45 md:px-10">
               <Link href="/kpandji-automobiles" className="transition-colors hover:text-white/80">
-                KPANDJI AUTOMOBILES
+                {t.utility.automobiles}
               </Link>
               <span className="hidden h-3 w-px bg-white/15 sm:block" aria-hidden />
               <Link href="/ecologie" className="transition-colors hover:text-white/80">
-                Eco-Kpandji 
+                {t.utility.ecology}
               </Link>
               <span className="hidden h-3 w-px bg-white/15 sm:block" aria-hidden />
-             
-
               <Link href="/emplois" className="transition-colors hover:text-white/80">
-               Kpandji-Emplois
+                {t.utility.careers}
               </Link>
-              
-             
               <span className="hidden h-3 w-px bg-white/15 md:block" aria-hidden />
-              <span className="hidden text-white/35 md:inline">FR</span>
+              <KpLocaleSwitch className="hidden md:inline-flex" />
             </div>
           </div>
         </div>
@@ -438,7 +438,7 @@ export function KpHeader() {
           <Link
             href="/"
             className="relative z-10 flex shrink-0 items-center"
-            aria-label="KPANDJI — accueil"
+            aria-label={t.brand.homeAria}
           >
             <motion.div
               whileHover={{ scale: 1.02 }}
@@ -452,7 +452,7 @@ export function KpHeader() {
           {/* Center nav — desktop */}
           <nav
             className="absolute left-1/2 hidden -translate-x-1/2 xl:flex xl:items-center xl:gap-1 2xl:gap-2"
-            aria-label="Navigation principale"
+            aria-label={t.a11y.mainNav}
           >
             {nav.map((item) => (
               <Link
@@ -472,17 +472,24 @@ export function KpHeader() {
 
           {/* Right icon cluster — Mercedes search / account / menu */}
           <div className="ml-auto flex items-center gap-0.5 sm:gap-1">
+            {scrolled &&
+              !menuOpen &&
+              !searchOpen &&
+              !loginModalOpen &&
+              !signupModalOpen && (
+                <KpLocaleSwitch className="mr-1 hidden md:inline-flex" />
+              )}
             <Link
               href="/essai"
               className="hidden items-center rounded-full border border-white/15 bg-white/6 px-5 py-2 font-sans text-[11px] font-semibold uppercase tracking-[0.22em] text-white/90 backdrop-blur-sm transition hover:border-white/30 hover:bg-white/9 hover:text-white xl:inline-flex"
             >
-              Réserver un essai
+              {t.actions.bookTrial}
             </Link>
             <button
               type="button"
               onClick={() => setSearchOpen(true)}
               className="flex h-11 w-11 items-center justify-center rounded-full text-white/85 transition-colors hover:bg-white/10 hover:text-white"
-              aria-label="Ouvrir la recherche"
+              aria-label={t.actions.search}
             >
               <IconSearch />
             </button>
@@ -503,7 +510,7 @@ export function KpHeader() {
                 onFocus={() => setLoginPrefetch(true)}
                 onTouchStart={() => setLoginPrefetch(true)}
                 className="hidden h-11 w-11 items-center justify-center rounded-full text-white/85 transition-colors hover:bg-white/10 hover:text-white sm:flex"
-                aria-label="Ouvrir l'espace client"
+                aria-label={t.actions.account}
                 aria-haspopup="dialog"
               >
                 <IconUser />
@@ -516,7 +523,7 @@ export function KpHeader() {
               }}
               className="relative flex h-11 w-11 flex-col items-center justify-center gap-[5px] rounded-full bg-white text-black transition-colors hover:bg-white/90 xl:hidden"
               aria-expanded={menuOpen}
-              aria-label={menuOpen ? "Fermer le menu" : "Ouvrir le menu"}
+              aria-label={menuOpen ? t.actions.closeMenu : t.actions.openMenu}
             >
               <span
                 className={`block h-px w-[18px] origin-center bg-current transition-[transform,opacity] duration-300 ease-out ${
@@ -573,11 +580,11 @@ export function KpHeader() {
         }`}
         role="dialog"
         aria-modal="true"
-        aria-label="Recherche"
+        aria-label={t.a11y.searchDialog}
       >
         <div className="flex items-center justify-between border-b border-white/10 px-5 py-5 md:px-10">
           <label htmlFor={searchId} className="sr-only">
-            Rechercher sur le site
+            {t.search.label}
           </label>
           <div className="flex flex-1 items-center gap-4">
             <IconSearch className="shrink-0 text-white/50" />
@@ -585,7 +592,7 @@ export function KpHeader() {
               ref={searchInputRef}
               id={searchId}
               type="search"
-              placeholder="Rechercher un modèle, une thématique…"
+              placeholder={t.search.placeholder}
               className="w-full bg-transparent font-sans text-lg text-white outline-none placeholder:text-white/35 md:text-xl"
             />
           </div>
@@ -594,18 +601,18 @@ export function KpHeader() {
             onClick={() => setSearchOpen(false)}
             className="ml-4 rounded-full px-4 py-2 font-sans text-[11px] font-semibold uppercase tracking-[0.2em] text-white/70 transition hover:text-white"
           >
-            Fermer
+            {t.actions.close}
           </button>
         </div>
         <div className="mx-auto mt-16 max-w-2xl px-6 text-center">
           <p className="font-serif text-2xl text-white/90 md:text-3xl">
-            Que souhaitez-vous découvrir ?
+            {t.search.headline}
           </p>
           <p className="mt-3 font-sans text-sm text-white/45">
-            Saisissez un mot-clé ou explorez les rubriques ci-dessous.
+            {t.search.hint}
           </p>
           <div className="mt-10 flex flex-wrap justify-center gap-3">
-            {["DJET", "LATHAYE", "Innovation", "Marque"].map((tag) => (
+            {t.search.tags.map((tag) => (
               <button
                 key={tag}
                 type="button"
@@ -632,7 +639,7 @@ export function KpHeader() {
             menuOpen ? "opacity-100" : "opacity-0"
           }`}
           onClick={() => setMenuOpen(false)}
-          aria-label="Fermer le menu"
+          aria-label={t.actions.closeMenu}
         />
         <div
           className={`absolute inset-y-0 right-0 flex w-[min(100%,420px)] flex-col bg-[#060606] shadow-[-24px_0_80px_rgba(0,0,0,0.75)] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
@@ -652,7 +659,7 @@ export function KpHeader() {
               type="button"
               onClick={() => setMenuOpen(false)}
               className="rounded-full p-2 text-white/70 transition hover:bg-white/10 hover:text-white"
-              aria-label="Fermer"
+              aria-label={t.actions.close}
             >
               <span className="block text-xl leading-none">×</span>
             </button>
@@ -689,7 +696,7 @@ export function KpHeader() {
                   className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/15 px-6 py-3 font-sans text-[11px] font-semibold uppercase tracking-[0.22em] text-white/90 transition hover:border-white/30 hover:bg-white/5"
                 >
                   <IconUser className="h-4 w-4" />
-                  Espace client
+                  {t.actions.clientSpace}
                 </button>
               )}
               {isLoaded && isSignedIn && (
@@ -703,12 +710,15 @@ export function KpHeader() {
                 onClick={() => setMenuOpen(false)}
                 className="inline-flex w-full items-center justify-center rounded-full bg-white px-6 py-3 font-sans text-[11px] font-semibold uppercase tracking-[0.22em] text-black transition hover:bg-white/95"
               >
-                Réserver un essai
+                {t.actions.bookTrial}
               </Link>
+              <div className="flex items-center justify-center pt-2">
+                <KpLocaleSwitch size="md" />
+              </div>
             </div>
           </div>
           <p className="border-t border-white/10 px-6 py-4 font-sans text-[10px] uppercase tracking-[0.25em] text-white/35">
-            KPANDJI — Constructeur automobile
+            {t.mobile.tagline}
           </p>
         </div>
       </div>

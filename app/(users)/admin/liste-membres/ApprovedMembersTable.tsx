@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { adminPrimaryButtonClass } from "@/components/kp/adminStyles";
+import { useLocale } from "@/components/providers/KpLocaleProvider";
 
 export type ApprovedMemberRow = {
   id: string;
@@ -23,15 +24,15 @@ export type ApprovedMemberRow = {
 const iconButtonClass =
   "inline-flex size-9 items-center justify-center rounded-full border transition-colors duration-300 disabled:cursor-not-allowed disabled:opacity-50";
 
-const ROLE_LABEL: Record<ApprovedMemberRow["role"], string> = {
-  ADMIN: "Administrateur",
-  PRESTIGE_USER: "Membre Prestige",
+const ROLE_LABEL: Record<ApprovedMemberRow["role"], { fr: string; en: string }> = {
+  ADMIN: { fr: "Administrateur", en: "Administrator" },
+  PRESTIGE_USER: { fr: "Membre Prestige", en: "Prestige member" },
 };
 
-const STATUS_LABEL: Record<ApprovedMemberRow["status"], string> = {
-  PENDING: "En attente",
-  APPROVED: "Approuvé",
-  REJECTED: "Refusé",
+const STATUS_LABEL: Record<ApprovedMemberRow["status"], { fr: string; en: string }> = {
+  PENDING: { fr: "En attente", en: "Pending" },
+  APPROVED: { fr: "Approuvé", en: "Approved" },
+  REJECTED: { fr: "Refusé", en: "Rejected" },
 };
 
 function IconEye({ className }: { className?: string }) {
@@ -81,11 +82,11 @@ function displayValue(value: string) {
   return value.trim() || "—";
 }
 
-function formatDate(iso: string) {
+function formatDate(iso: string, locale: string) {
   if (!iso.trim()) return "—";
   const date = new Date(iso);
   if (Number.isNaN(date.getTime())) return "—";
-  return new Intl.DateTimeFormat("fr-FR", {
+  return new Intl.DateTimeFormat(locale === "en" ? "en-US" : "fr-FR", {
     day: "2-digit",
     month: "short",
     year: "numeric",
@@ -104,6 +105,7 @@ function MemberDetailModal({
   const panelRef = useRef<HTMLDivElement>(null);
   const titleId = useId();
   const [mounted, setMounted] = useState(false);
+  const { tr, locale } = useLocale();
 
   useEffect(() => {
     setMounted(true);
@@ -150,11 +152,11 @@ function MemberDetailModal({
       >
         <div className="border-b border-white/8 bg-kp-gold/10 px-6 py-5">
           <h3 id={titleId} className="font-serif text-xl text-white">
-            Fiche membre
+            {tr("Fiche membre", "Member profile")}
           </h3>
           <p className="mt-1 font-sans text-sm text-white/55">
             {displayValue(member.fullName || member.email)} ·{" "}
-            {ROLE_LABEL[member.role]}
+            {tr(ROLE_LABEL[member.role].fr, ROLE_LABEL[member.role].en)}
           </p>
         </div>
 
@@ -162,7 +164,7 @@ function MemberDetailModal({
           <dl className="space-y-4 font-sans text-sm">
             <div>
               <dt className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-                Nom complet
+                {tr("Nom complet", "Full name")}
               </dt>
               <dd className="mt-1 text-white/85">
                 {displayValue(member.fullName)}
@@ -171,7 +173,7 @@ function MemberDetailModal({
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <dt className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-                  E-mail
+                  {tr("E-mail", "Email")}
                 </dt>
                 <dd className="mt-1 break-all text-white/85">
                   {displayValue(member.email)}
@@ -179,7 +181,7 @@ function MemberDetailModal({
               </div>
               <div>
                 <dt className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-                  Téléphone
+                  {tr("Téléphone", "Phone")}
                 </dt>
                 <dd className="mt-1 text-white/85">
                   {displayValue(member.phone)}
@@ -189,7 +191,7 @@ function MemberDetailModal({
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <dt className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-                  Pays de résidence
+                  {tr("Pays de résidence", "Country of residence")}
                 </dt>
                 <dd className="mt-1 text-white/85">
                   {displayValue(member.residenceCountry)}
@@ -197,25 +199,28 @@ function MemberDetailModal({
               </div>
               <div>
                 <dt className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-                  Statut
+                  {tr("Statut", "Status")}
                 </dt>
                 <dd className="mt-1 text-white/85">
-                  {STATUS_LABEL[member.status]}
+                  {tr(
+                    STATUS_LABEL[member.status].fr,
+                    STATUS_LABEL[member.status].en
+                  )}
                 </dd>
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <dt className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-                  Approuvé le
+                  {tr("Approuvé le", "Approved on")}
                 </dt>
                 <dd className="mt-1 text-white/85">
-                  {formatDate(member.approvedAt)}
+                  {formatDate(member.approvedAt, locale)}
                 </dd>
               </div>
               <div>
                 <dt className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-                  Approuvé par
+                  {tr("Approuvé par", "Approved by")}
                 </dt>
                 <dd className="mt-1 break-all text-white/85">
                   {displayValue(member.approvedBy)}
@@ -225,37 +230,39 @@ function MemberDetailModal({
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <dt className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-                  Créé le
+                  {tr("Créé le", "Created on")}
                 </dt>
                 <dd className="mt-1 text-white/85">
-                  {formatDate(member.createdAt)}
+                  {formatDate(member.createdAt, locale)}
                 </dd>
               </div>
               <div>
                 <dt className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-                  Mis à jour le
+                  {tr("Mis à jour le", "Updated on")}
                 </dt>
                 <dd className="mt-1 text-white/85">
-                  {formatDate(member.updatedAt)}
+                  {formatDate(member.updatedAt, locale)}
                 </dd>
               </div>
             </div>
             <div>
               <dt className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-                Identifiants
+                {tr("Identifiants", "Identifiers")}
               </dt>
               <dd className="mt-2 space-y-1 rounded-xl border border-white/10 bg-black/35 p-3 font-mono text-xs text-white/70">
                 <p>
-                  <span className="text-white/45">ID : </span>
+                  <span className="text-white/45">ID{tr(" : ", ": ")}</span>
                   {member.id}
                 </p>
                 <p className="break-all">
-                  <span className="text-white/45">Clerk : </span>
+                  <span className="text-white/45">Clerk{tr(" : ", ": ")}</span>
                   {member.clerkUserId}
                 </p>
                 {member.invitationId.trim() ? (
                   <p className="break-all">
-                    <span className="text-white/45">Invitation : </span>
+                    <span className="text-white/45">
+                      {tr("Invitation", "Invitation")} :{" "}
+                    </span>
                     {member.invitationId}
                   </p>
                 ) : null}
@@ -270,7 +277,7 @@ function MemberDetailModal({
             onClick={onClose}
             className={adminPrimaryButtonClass}
           >
-            Fermer
+            {tr("Fermer", "Close")}
           </button>
         </div>
       </div>
@@ -288,6 +295,7 @@ function ApprovedMemberRowItem({
 }) {
   const [open, setOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const { tr } = useLocale();
 
   const openModal = useCallback(() => {
     setOpen(true);
@@ -298,10 +306,16 @@ function ApprovedMemberRowItem({
   }, []);
 
   const handleDelete = useCallback(async () => {
-    const label = member.fullName.trim() || member.email.trim() || "ce membre";
+    const label =
+      member.fullName.trim() ||
+      member.email.trim() ||
+      tr("ce membre", "this member");
     if (
       !window.confirm(
-        `Supprimer ${label} ? Cette action est irréversible et supprimera aussi le compte Clerk associé.`
+        tr(
+          `Supprimer ${label} ? Cette action est irréversible et supprimera aussi le compte Clerk associé.`,
+          `Delete ${label}? This action is irreversible and will also delete the associated Clerk account.`
+        )
       )
     ) {
       return;
@@ -326,11 +340,14 @@ function ApprovedMemberRowItem({
       const message =
         error instanceof Error && error.message
           ? error.message
-          : "Impossible de supprimer ce membre. Réessayez.";
+          : tr(
+              "Impossible de supprimer ce membre. Réessayez.",
+              "Unable to delete this member. Please try again."
+            );
       window.alert(message);
       setIsDeleting(false);
     }
-  }, [member.email, member.fullName, member.id, onDelete]);
+  }, [member.email, member.fullName, member.id, onDelete, tr]);
 
   return (
     <tr className="transition-colors duration-300 hover:bg-white/2">
@@ -352,8 +369,8 @@ function ApprovedMemberRowItem({
             type="button"
             onClick={openModal}
             aria-expanded={open}
-            aria-label="Voir le membre"
-            title="Voir"
+            aria-label={tr("Voir le membre", "View member")}
+            title={tr("Voir", "View")}
             className={`${iconButtonClass} border-white/20 bg-white/5 text-white/80 hover:border-white/40 hover:bg-white/10 hover:text-white`}
           >
             <IconEye />
@@ -362,8 +379,8 @@ function ApprovedMemberRowItem({
             type="button"
             onClick={handleDelete}
             disabled={isDeleting}
-            aria-label="Supprimer le membre"
-            title="Supprimer"
+            aria-label={tr("Supprimer le membre", "Delete member")}
+            title={tr("Supprimer", "Delete")}
             className={`${iconButtonClass} border-white/15 bg-white/3 text-white/55 hover:border-[#e85d5d]/45 hover:bg-[#e85d5d]/10 hover:text-[#e85d5d]`}
           >
             <IconTrash />
@@ -381,6 +398,7 @@ export function ApprovedMembersTable({
   members: ApprovedMemberRow[];
 }) {
   const [members, setMembers] = useState(initialMembers);
+  const { tr } = useLocale();
 
   useEffect(() => {
     setMembers(initialMembers);
@@ -396,19 +414,19 @@ export function ApprovedMembersTable({
         <thead>
           <tr className="border-b border-white/8 bg-white/3">
             <th className="px-4 py-3 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-              Nom
+              {tr("Nom", "Name")}
             </th>
             <th className="px-4 py-3 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-              E-mail
+              {tr("E-mail", "Email")}
             </th>
             <th className="px-4 py-3 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-              Téléphone
+              {tr("Téléphone", "Phone")}
             </th>
             <th className="px-4 py-3 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-              Pays
+              {tr("Pays", "Country")}
             </th>
             <th className="px-4 py-3 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-              Action
+              {tr("Action", "Action")}
             </th>
           </tr>
         </thead>

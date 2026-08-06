@@ -1,11 +1,14 @@
+import type { ReactNode } from "react";
+import { Tr } from "@/components/kp/Tr";
+
 type KpPageHeaderProps = {
-  eyebrow?: string;
-  title: string;
-  description: string;
+  eyebrow?: ReactNode;
+  title: ReactNode;
+  description: ReactNode;
 };
 
 export function KpPageHeader({
-  eyebrow = "Administration",
+  eyebrow = <Tr fr="Administration" en="Administration" />,
   title,
   description,
 }: KpPageHeaderProps) {

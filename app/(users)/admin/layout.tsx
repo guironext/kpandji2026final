@@ -1,8 +1,8 @@
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { SidebarAdmin } from "@/components/kp/SidebarAdmin";
+import { Tr } from "@/components/kp/Tr";
 import {
-  ADMIN_ROLE,
   canAccessAdminRoute,
   getUserRoleFromMetadata,
 } from "@/lib/auth/roles";
@@ -46,9 +46,9 @@ export default async function AdminLayout({
         <div className="min-w-0 flex-1">
           <div className="mb-6 flex items-center justify-between gap-4 lg:hidden">
             <div>
-              <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.28em] text-white/45">
-                Espace {ADMIN_ROLE}
-              </p>
+            <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.28em] text-white/45">
+              <Tr fr="Espace admin" en="Admin area" />
+            </p>
               <p className="mt-1 truncate font-sans text-sm text-white/55">{userEmail}</p>
             </div>
           </div>

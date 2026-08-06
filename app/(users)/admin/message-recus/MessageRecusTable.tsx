@@ -6,6 +6,7 @@ import {
   adminPrimaryButtonClass,
   adminSecondaryButtonClass,
 } from "@/components/kp/adminStyles";
+import { useLocale } from "@/components/providers/KpLocaleProvider";
 
 export type MessageRecusRow = {
   id: string;
@@ -67,10 +68,10 @@ function displayValue(value: string | null | undefined) {
   return value?.trim() || "—";
 }
 
-function formatDate(iso: string) {
+function formatDate(iso: string, locale: string) {
   const date = new Date(iso);
   if (Number.isNaN(date.getTime())) return "—";
-  return new Intl.DateTimeFormat("fr-FR", {
+  return new Intl.DateTimeFormat(locale === "en" ? "en-US" : "fr-FR", {
     day: "2-digit",
     month: "short",
     year: "numeric",
@@ -89,6 +90,7 @@ function MessageRecusModal({
   const panelRef = useRef<HTMLDivElement>(null);
   const titleId = useId();
   const [mounted, setMounted] = useState(false);
+  const { tr, locale } = useLocale();
 
   useEffect(() => {
     setMounted(true);
@@ -138,11 +140,11 @@ function MessageRecusModal({
       >
         <div className="border-b border-white/8 bg-kp-gold/10 px-6 py-5">
           <h3 id={titleId} className="font-serif text-xl text-white">
-            Message de contact
+            {tr("Message de contact", "Contact message")}
           </h3>
           <p className="mt-1 font-sans text-sm text-white/55">
             {displayValue(row.nom)} · {displayValue(row.sujet)} ·{" "}
-            {formatDate(row.createdAt)}
+            {formatDate(row.createdAt, locale)}
           </p>
         </div>
 
@@ -150,14 +152,14 @@ function MessageRecusModal({
           <dl className="space-y-4 font-sans text-sm">
             <div>
               <dt className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-                Nom
+                {tr("Nom", "Name")}
               </dt>
               <dd className="mt-1 text-white/85">{displayValue(row.nom)}</dd>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <dt className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-                  E-mail
+                  {tr("E-mail", "Email")}
                 </dt>
                 <dd className="mt-1 break-all text-white/85">
                   {displayValue(row.email)}
@@ -165,7 +167,7 @@ function MessageRecusModal({
               </div>
               <div>
                 <dt className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-                  Téléphone
+                  {tr("Téléphone", "Phone")}
                 </dt>
                 <dd className="mt-1 break-all text-white/85">
                   {displayValue(row.telephone)}
@@ -174,21 +176,21 @@ function MessageRecusModal({
             </div>
             <div>
               <dt className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-                Sujet
+                {tr("Sujet", "Subject")}
               </dt>
               <dd className="mt-1 text-white/85">{displayValue(row.sujet)}</dd>
             </div>
             <div>
               <dt className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-                Date de soumission
+                {tr("Date de soumission", "Submission date")}
               </dt>
-              <dd className="mt-1 text-white/85">{formatDate(row.createdAt)}</dd>
+              <dd className="mt-1 text-white/85">{formatDate(row.createdAt, locale)}</dd>
             </div>
           </dl>
 
           <div className="mt-6">
             <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-              Message
+              {tr("Message", "Message")}
             </p>
             <div className="mt-3 rounded-xl border border-white/10 bg-black/35 p-4">
               <p className="whitespace-pre-wrap font-sans text-sm leading-relaxed text-white/90">
@@ -201,12 +203,12 @@ function MessageRecusModal({
         <div className="flex flex-wrap gap-3 border-t border-white/8 bg-black/20 px-6 py-4">
           {emailTrim ? (
             <a href={`mailto:${emailTrim}`} className={adminSecondaryButtonClass}>
-              Écrire
+              {tr("Écrire", "Email")}
             </a>
           ) : null}
           {phoneTrim ? (
             <a href={`tel:${phoneTrim}`} className={adminSecondaryButtonClass}>
-              Appeler
+              {tr("Appeler", "Call")}
             </a>
           ) : null}
           <button
@@ -214,7 +216,7 @@ function MessageRecusModal({
             onClick={onClose}
             className={adminPrimaryButtonClass}
           >
-            Fermer
+            {tr("Fermer", "Close")}
           </button>
         </div>
       </div>
@@ -233,6 +235,7 @@ function MessageRecusRowItem({
   const [open, setOpen] = useState(false);
   const [read, setRead] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const { tr } = useLocale();
 
   const openModal = useCallback(() => {
     setOpen(true);
@@ -246,7 +249,10 @@ function MessageRecusRowItem({
   const handleDelete = useCallback(async () => {
     if (
       !window.confirm(
-        "Supprimer ce message ? Cette action est irréversible."
+        tr(
+          "Supprimer ce message ? Cette action est irréversible.",
+          "Delete this message? This action is irreversible."
+        )
       )
     ) {
       return;
@@ -265,10 +271,15 @@ function MessageRecusRowItem({
 
       onDelete(row.id);
     } catch {
-      window.alert("Impossible de supprimer ce message. Réessayez.");
+      window.alert(
+        tr(
+          "Impossible de supprimer ce message. Réessayez.",
+          "Unable to delete this message. Please try again."
+        )
+      );
       setIsDeleting(false);
     }
-  }, [onDelete, row.id]);
+  }, [onDelete, row.id, tr]);
 
   return (
     <tr
@@ -291,8 +302,8 @@ function MessageRecusRowItem({
             type="button"
             onClick={openModal}
             aria-expanded={open}
-            aria-label={read ? "Message déjà lu" : "Voir le message"}
-            title={read ? "Déjà lu" : "Voir"}
+            aria-label={read ? tr("Message déjà lu", "Message already read") : tr("Voir le message", "View message")}
+            title={read ? tr("Déjà lu", "Already read") : tr("Voir", "View")}
             className={`${iconButtonClass} ${
               read
                 ? "border-kp-gold/45 bg-kp-gold/15 text-kp-gold hover:bg-kp-gold/25"
@@ -305,8 +316,8 @@ function MessageRecusRowItem({
             type="button"
             onClick={handleDelete}
             disabled={isDeleting}
-            aria-label="Supprimer le message"
-            title="Supprimer"
+            aria-label={tr("Supprimer le message", "Delete message")}
+            title={tr("Supprimer", "Delete")}
             className={`${iconButtonClass} border-white/15 bg-white/3 text-white/55 hover:border-[#e85d5d]/45 hover:bg-[#e85d5d]/10 hover:text-[#e85d5d]`}
           >
             <IconTrash />
@@ -324,6 +335,7 @@ export function MessageRecusTable({
   rows: MessageRecusRow[];
 }) {
   const [rows, setRows] = useState(initialRows);
+  const { tr } = useLocale();
 
   useEffect(() => {
     setRows(initialRows);
@@ -336,7 +348,7 @@ export function MessageRecusTable({
   if (rows.length === 0) {
     return (
       <p className="mt-6 font-sans text-sm text-white/50">
-        Aucun message reçu pour le moment.
+        {tr("Aucun message reçu pour le moment.", "No messages received at the moment.")}
       </p>
     );
   }
@@ -347,16 +359,16 @@ export function MessageRecusTable({
         <thead>
           <tr className="border-b border-white/8 bg-white/3">
             <th className="px-4 py-3 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-              Nom
+              {tr("Nom", "Name")}
             </th>
             <th className="px-4 py-3 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-              E-mail
+              {tr("E-mail", "Email")}
             </th>
             <th className="px-4 py-3 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-              Sujet
+              {tr("Sujet", "Subject")}
             </th>
             <th className="px-4 py-3 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-              Action
+              {tr("Action", "Action")}
             </th>
           </tr>
         </thead>

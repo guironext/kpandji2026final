@@ -1,6 +1,7 @@
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { SidebarClient } from "@/components/kp/SidebarClient";
+import { Tr } from "@/components/kp/Tr";
 import { resolveMembership } from "@/lib/auth/membership";
 import { ONBOARDING_PATH, PRESTIGE_HOME_PATH } from "@/lib/auth/routes";
 import {
@@ -56,9 +57,9 @@ export default async function ClientPrestigeLayout({
         <div className="min-w-0 flex-1">
           <div className="mb-6 flex items-center justify-between gap-4 lg:hidden">
             <div>
-              <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.28em] text-white/45">
-                Espace Prestige
-              </p>
+            <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.28em] text-white/45">
+              <Tr fr="Espace Prestige" en="Prestige area" />
+            </p>
               <p className="mt-1 truncate font-sans text-sm text-white/55">{userEmail}</p>
             </div>
           </div>

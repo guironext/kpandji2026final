@@ -1,13 +1,17 @@
+"use client";
+
+import { useLocale } from "@/components/providers/KpLocaleProvider";
+
 export type VisitorEmailRow = {
   id: string;
   email: string;
   createdAt: string;
 };
 
-function formatDate(iso: string) {
+function formatDate(iso: string, locale: string) {
   const date = new Date(iso);
   if (Number.isNaN(date.getTime())) return "—";
-  return new Intl.DateTimeFormat("fr-FR", {
+  return new Intl.DateTimeFormat(locale === "en" ? "en-US" : "fr-FR", {
     day: "2-digit",
     month: "short",
     year: "numeric",
@@ -17,10 +21,15 @@ function formatDate(iso: string) {
 }
 
 export function VisitorEmailsTable({ emails }: { emails: VisitorEmailRow[] }) {
+  const { tr, locale } = useLocale();
+
   if (emails.length === 0) {
     return (
       <p className="mt-6 font-sans text-sm text-white/50">
-        Aucun e-mail visiteur pour le moment.
+        {tr(
+          "Aucun e-mail visiteur pour le moment.",
+          "No visitor emails at the moment."
+        )}
       </p>
     );
   }
@@ -31,10 +40,10 @@ export function VisitorEmailsTable({ emails }: { emails: VisitorEmailRow[] }) {
         <thead>
           <tr className="border-b border-white/8 bg-white/3">
             <th className="px-4 py-3 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-              E-mail
+              {tr("E-mail", "Email")}
             </th>
             <th className="px-4 py-3 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
-              Date d&apos;inscription
+              {tr("Date d'inscription", "Sign-up date")}
             </th>
           </tr>
         </thead>
@@ -50,7 +59,7 @@ export function VisitorEmailsTable({ emails }: { emails: VisitorEmailRow[] }) {
                 </a>
               </td>
               <td className="whitespace-nowrap px-4 py-3.5 font-sans text-sm text-white/55">
-                {formatDate(row.createdAt)}
+                {formatDate(row.createdAt, locale)}
               </td>
             </tr>
           ))}

@@ -1,8 +1,13 @@
+"use client";
+
+import { useLocale } from "@/components/providers/KpLocaleProvider";
+
 export function ContactFormSkeleton() {
+  const { tr } = useLocale();
   return (
     <div
       aria-busy="true"
-      aria-label="Chargement du formulaire"
+      aria-label={tr("Chargement du formulaire", "Loading the form")}
       className="relative mx-auto max-w-xl lg:mx-0 lg:max-w-none"
       style={{
         boxShadow:

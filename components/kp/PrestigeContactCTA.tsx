@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
+import { useLocale } from "@/components/providers/KpLocaleProvider";
 
 const btnPrimary =
   "group inline-flex items-center justify-center gap-2 rounded-full bg-white px-7 py-3.5 text-[12px] font-semibold uppercase tracking-[0.2em] text-black transition-all duration-300 hover:scale-[1.02] hover:bg-white/90 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-kp-gold/55";
@@ -16,6 +17,7 @@ function isValidEmail(value: string) {
 }
 
 export function PrestigeContactCTA() {
+  const { tr } = useLocale();
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
   const [country, setCountry] = useState("");
@@ -67,27 +69,27 @@ export function PrestigeContactCTA() {
     const emailTrim = email.trim();
 
     if (!nameTrim) {
-      setError("Indiquez votre nom.");
+      setError(tr("Indiquez votre nom.", "Please enter your name."));
       return;
     }
     if (!countryTrim) {
-      setError("Indiquez votre pays de résidence.");
+      setError(tr("Indiquez votre pays de résidence.", "Please enter your country of residence."));
       return;
     }
     if (!cityTrim) {
-      setError("Indiquez votre ville.");
+      setError(tr("Indiquez votre ville.", "Please enter your city."));
       return;
     }
     if (!phoneTrim) {
-      setError("Indiquez votre numéro de téléphone.");
+      setError(tr("Indiquez votre numéro de téléphone.", "Please enter your phone number."));
       return;
     }
     if (!emailTrim) {
-      setError("Indiquez votre adresse e-mail.");
+      setError(tr("Indiquez votre adresse e-mail.", "Please enter your email address."));
       return;
     }
     if (!isValidEmail(emailTrim)) {
-      setError("Adresse e-mail invalide.");
+      setError(tr("Adresse e-mail invalide.", "Invalid email address."));
       return;
     }
 
@@ -111,13 +113,13 @@ export function PrestigeContactCTA() {
       } | null;
 
       if (!response.ok) {
-        setError(data?.error ?? "Une erreur est survenue. Réessayez plus tard.");
+        setError(data?.error ?? tr("Une erreur est survenue. Réessayez plus tard.", "An error occurred. Please try again later."));
         return;
       }
 
       setIsSuccess(true);
     } catch {
-      setError("Impossible d'envoyer la demande. Vérifiez votre connexion.");
+      setError(tr("Impossible d'envoyer la demande. Vérifiez votre connexion.", "Unable to send the request. Please check your connection."));
     } finally {
       setIsSubmitting(false);
     }
@@ -134,7 +136,7 @@ export function PrestigeContactCTA() {
         }}
         className={`${btnPrimary} w-full sm:w-auto`}
       >
-        <span>Nous contacter</span>
+        <span>{tr("Nous contacter", "Contact us")}</span>
         <svg
           viewBox="0 0 24 24"
           fill="none"
@@ -169,17 +171,20 @@ export function PrestigeContactCTA() {
                   Kpandji Privilège
                 </p>
                 <h2 id="prestige-contact-title" className="mt-1 font-serif text-2xl text-white">
-                  Nous contacter
+                  {tr("Nous contacter", "Contact us")}
                 </h2>
                 <p className="mt-2 font-sans text-sm text-white/50">
-                  Renseignez vos coordonnées — notre équipe vous recontacte depuis l’étranger.
+                  {tr(
+                    "Renseignez vos coordonnées — notre équipe vous recontacte depuis l’étranger.",
+                    "Enter your details — our team will get back to you wherever you are."
+                  )}
                 </p>
               </div>
               <button
                 type="button"
                 onClick={close}
                 className="shrink-0 rounded-full p-2 text-white/60 transition hover:bg-white/10 hover:text-white"
-                aria-label="Fermer le formulaire"
+                aria-label={tr("Fermer le formulaire", "Close the form")}
               >
                 <span className="block text-2xl leading-none" aria-hidden>
                   ×
@@ -192,17 +197,19 @@ export function PrestigeContactCTA() {
                 role="status"
                 className="px-6 py-10 text-center sm:px-10 sm:py-12 lg:px-12"
               >
-                <p className="font-serif text-2xl text-white">Demande envoyée</p>
+                <p className="font-serif text-2xl text-white">{tr("Demande envoyée", "Request sent")}</p>
                 <p className="mx-auto mt-4 max-w-sm text-[14px] leading-relaxed text-white/50">
-                  Merci. Nous avons bien reçu vos coordonnées et vous recontacterons
-                  depuis l&apos;étranger.
+                  {tr(
+                    "Merci. Nous avons bien reçu vos coordonnées et vous recontacterons depuis l'étranger.",
+                    "Thank you. We've received your details and will get back to you wherever you are."
+                  )}
                 </p>
                 <button
                   type="button"
                   onClick={close}
                   className="mt-8 rounded-full border border-white/15 px-8 py-3 font-sans text-[11px] font-semibold uppercase tracking-[0.22em] text-white/70 transition hover:border-white/25 hover:text-white"
                 >
-                  Fermer
+                  {tr("Fermer", "Close")}
                 </button>
               </div>
             ) : null}
@@ -214,7 +221,7 @@ export function PrestigeContactCTA() {
             >
               <div>
                 <label htmlFor="prestige-contact-name" className={labelClass}>
-                  Nom <span className="text-kp-gold/90">*</span>
+                  {tr("Nom", "Name")} <span className="text-kp-gold/90">*</span>
                 </label>
                 <input
                   id="prestige-contact-name"
@@ -234,7 +241,7 @@ export function PrestigeContactCTA() {
               <div className="grid gap-5 md:grid-cols-2">
                 <div>
                   <label htmlFor="prestige-contact-country" className={labelClass}>
-                    Pays de résidence <span className="text-kp-gold/90">*</span>
+                    {tr("Pays de résidence", "Country of residence")} <span className="text-kp-gold/90">*</span>
                   </label>
                   <input
                     id="prestige-contact-country"
@@ -246,13 +253,13 @@ export function PrestigeContactCTA() {
                       setCountry(ev.target.value);
                       if (error) setError(null);
                     }}
-                    placeholder="France, USA, Canada…"
+                    placeholder={tr("France, USA, Canada…", "France, USA, Canada…")}
                     className={inputClass}
                   />
                 </div>
                 <div>
                   <label htmlFor="prestige-contact-city" className={labelClass}>
-                    Ville <span className="text-kp-gold/90">*</span>
+                    {tr("Ville", "City")} <span className="text-kp-gold/90">*</span>
                   </label>
                   <input
                     id="prestige-contact-city"
@@ -264,7 +271,7 @@ export function PrestigeContactCTA() {
                       setCity(ev.target.value);
                       if (error) setError(null);
                     }}
-                    placeholder="Paris, Montréal…"
+                    placeholder={tr("Paris, Montréal…", "Paris, Montreal…")}
                     className={inputClass}
                   />
                 </div>
@@ -273,7 +280,7 @@ export function PrestigeContactCTA() {
               <div className="grid gap-5 md:grid-cols-2">
                 <div>
                   <label htmlFor="prestige-contact-phone" className={labelClass}>
-                    Téléphone <span className="text-kp-gold/90">*</span>
+                    {tr("Téléphone", "Phone")} <span className="text-kp-gold/90">*</span>
                   </label>
                   <input
                     id="prestige-contact-phone"
@@ -291,7 +298,7 @@ export function PrestigeContactCTA() {
                 </div>
                 <div>
                   <label htmlFor="prestige-contact-email" className={labelClass}>
-                    E-mail <span className="text-kp-gold/90">*</span>
+                    {tr("E-mail", "Email")} <span className="text-kp-gold/90">*</span>
                   </label>
                   <input
                     id="prestige-contact-email"
@@ -325,10 +332,10 @@ export function PrestigeContactCTA() {
                   disabled={isSubmitting}
                   className="w-full rounded-full bg-kp-gold px-8 py-3.5 font-sans text-[11px] font-semibold uppercase tracking-[0.22em] text-black shadow-[0_16px_40px_-12px_rgba(201,169,98,0.45)] transition-colors duration-300 hover:bg-[#d4b56e] disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
                 >
-                  {isSubmitting ? "Envoi en cours…" : "Envoyer la demande"}
+                  {isSubmitting ? tr("Envoi en cours…", "Sending…") : tr("Envoyer la demande", "Send request")}
                 </button>
                 <p className="text-center text-[11px] leading-relaxed text-white/30 sm:text-right">
-                  Données utilisées uniquement pour vous recontacter.
+                  {tr("Données utilisées uniquement pour vous recontacter.", "Your data is only used to get back to you.")}
                 </p>
               </div>
             </form>
