@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Reveal } from "@/components/kp/Reveal";
@@ -81,7 +82,7 @@ const pillars: {
   body: Copy;
   image: string;
   alt: Copy;
-  icon: React.ReactNode;
+  icon: ReactNode;
 }[] = [
   {
     tag: { fr: "Souveraineté", en: "Sovereignty" },

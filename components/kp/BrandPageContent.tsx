@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Reveal } from "@/components/kp/Reveal";
@@ -38,7 +39,7 @@ const marqueeValues: Copy[] = [
   { fr: "Made in Côte d’Ivoire", en: "Made in Côte d’Ivoire" },
 ];
 
-const pillars: { title: Copy; body: Copy; icon: React.ReactNode }[] = [
+const pillars: { title: Copy; body: Copy; icon: ReactNode }[] = [
   {
     title: { fr: "Ingénierie locale", en: "Local engineering" },
     body: {
@@ -231,7 +232,7 @@ export default function BrandPageContent() {
 
           <Reveal from="bottom" delayMs={280}>
             <div className="mt-9 flex flex-wrap items-center gap-3 sm:gap-4">
-              <Link href="/modeles" className={btnPrimary}>
+              <Link href="/#modeles" className={btnPrimary}>
                 <span>{tr("Découvrir nos véhicules", "Discover our vehicles")}</span>
                 <svg
                   viewBox="0 0 24 24"
@@ -977,7 +978,7 @@ export default function BrandPageContent() {
 
           <Reveal from="bottom" delayMs={300}>
             <div className="mt-10 flex flex-wrap items-center justify-center gap-3 sm:gap-4">
-              <Link href="/modeles" className={btnPrimary}>
+              <Link href="/#modeles" className={btnPrimary}>
                 <span>{tr("Voir les modèles", "View the models")}</span>
                 <svg
                   viewBox="0 0 24 24"
