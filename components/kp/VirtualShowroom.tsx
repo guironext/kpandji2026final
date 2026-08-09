@@ -41,7 +41,7 @@ const MODELS: ShowroomModel[] = [
       fr: "Motorisations essence 2.0 GDI (197 ch, 360 Nm). Régulateur adaptatif, alerte de ligne, collision frontale, vision 360° et équipements de confort haut de gamme.",
       en: "2.0 GDI petrol engine (197 hp, 360 Nm). Adaptive cruise control, lane-departure warning, forward-collision warning, 360° vision, and premium comfort equipment.",
     },
-    brochureHref: "/fiche_djetran.pdf",
+    brochureHref: "/djetranplus.pdf",
     highlights: [
       {
         fr: "Diesel 2.3T — 163 ch / 380 Nm",
@@ -82,7 +82,7 @@ const MODELS: ShowroomModel[] = [
       fr: "Turbo Diesel 2,3L, développant 163 chevaux  avec un couple 340 Nm, offran puissance et souplesse pour la route comme le tout-terrain. Cockpit intelligent, caméra 360°, contrôle électronique de stabilité et ABS + EBD. ",
       en: "2.3L Turbo Diesel delivering 163 hp with 340 Nm of torque, offering power and flexibility on the road and off it. Smart cockpit, 360° camera, electronic stability control, and ABS + EBD.",
     },
-    brochureHref: "/fiche_djetran.pdf",
+    brochureHref: "/djetranbva.pdf",
     highlights: [
       { fr: "Moteur Turbo Diesel 2.3L", en: "2.3L Turbo Diesel engine" },
       { fr: "163 ch et 340 Nm de couple", en: "163 hp and 340 Nm of torque" },
@@ -114,7 +114,7 @@ const MODELS: ShowroomModel[] = [
       fr: "Avec un moteur 2.0T GDI Turbo compressé de 165 Kw. Transmission automatique CVT à 8 vitesses pour une vitesse maximale de 210 km/h. C'est un véritable bilide qui redéfinit la performance à chaque voyage.",
       en: "Powered by a 2.0T GDI turbocharged engine developing 165 kW. 8-speed automatic CVT transmission for a top speed of 210 km/h. A true powerhouse that redefines performance on every journey.",
     },
-    brochureHref: "/fiche_lath.pdf",
+    brochureHref: "/lathaye.pdf",
     highlights: [
       { fr: "Moteur 2.0T GDI Turbo", en: "2.0T GDI Turbo engine" },
       { fr: "Puissance maximale de 165 kW", en: "Maximum power of 165 kW" },
