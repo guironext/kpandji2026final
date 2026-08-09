@@ -7,7 +7,7 @@ function HeaderFallback() {
   return (
     <header
       aria-hidden
-      className="kp-header-mount fixed inset-x-0 top-0 z-50 h-[110px] border-b border-transparent bg-linear-to-b from-black/55 via-black/20 to-transparent md:h-[132px]"
+      className="kp-header-mount fixed inset-x-0 top-0 z-50 h-14 border-b border-transparent bg-linear-to-b from-black/55 via-black/20 to-transparent sm:h-16 md:h-[132px]"
     />
   );
 }

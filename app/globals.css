@@ -30,7 +30,13 @@
 
 html {
   scroll-behavior: auto;
-  scroll-padding-top: 7rem;
+  scroll-padding-top: 4.5rem;
+}
+
+@media (min-width: 768px) {
+  html {
+    scroll-padding-top: 7rem;
+  }
 }
 
 body {
@@ -459,7 +465,7 @@ body {
 @keyframes kp-menu-stagger {
   from {
     opacity: 0;
-    transform: translate3d(12px, 0, 0);
+    transform: translate3d(14px, 0, 0);
   }
   to {
     opacity: 1;
@@ -468,6 +474,17 @@ body {
 }
 
 .kp-mobile-link {
+  opacity: 1;
+}
+
+.kp-menu-panel[data-open="true"] .kp-mobile-link {
   opacity: 0;
   animation: kp-menu-stagger 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kp-menu-panel[data-open="true"] .kp-mobile-link {
+    opacity: 1;
+    animation: none;
+  }
 }
