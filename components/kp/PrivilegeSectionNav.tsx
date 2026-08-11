@@ -6,12 +6,11 @@ import { useLocale } from "@/components/providers/KpLocaleProvider";
 export function PrivilegeSectionNav() {
   const { tr } = useLocale();
   const links = [
+    { href: "#chemins", label: tr("Chemins", "Paths") },
     { href: "#modeles", label: tr("Modèles", "Models") },
     { href: "#paiement", label: tr("Paiement", "Payment") },
-    { href: "#conciergerie", label: tr("Conciergerie", "Concierge") },
     { href: "#parcours", label: tr("Parcours", "Journey") },
-    { href: "#kpandji-rent", label: "Rent" },
-    { href: "#flotte-elite", label: tr("Flotte", "Fleet") },
+    { href: "#rent", label: "Rent" },
     { href: "#contact", label: tr("Contact", "Contact") },
   ] as const;
 
