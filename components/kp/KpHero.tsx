@@ -262,13 +262,20 @@ export function KpHero() {
 						</motion.span>
 					</motion.h1>
 
-					
+					<motion.p
+						variants={lineSoft}
+						className="mt-5 max-w-[34ch] font-sans text-[15px] font-light italic leading-relaxed text-white/75 sm:mt-6 sm:max-w-xl sm:text-base md:mt-8 md:text-lg">
+						{tr(
+							"Ingénierie, assemblage et mobilité durable — une signature africaine pour des véhicules pensés pour exiger le meilleur.",
+							"Engineering, assembly, and sustainable mobility — an African signature for vehicles built to demand the best.",
+						)}
+					</motion.p>
 
 					<motion.div
 						variants={lineSoft}
 						className="mt-7 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:flex-wrap sm:items-center sm:gap-5 md:mt-12">
 						<a
-							href="#vehicules"
+							href="/showroom"
 							className="group inline-flex w-full items-center justify-center gap-3 rounded-full bg-white px-6 py-3.5 font-sans text-[11px] font-semibold uppercase tracking-[0.22em] text-black transition duration-300 ease-out hover:scale-[1.02] hover:bg-white/95 active:scale-[0.98] sm:w-auto sm:justify-start sm:px-7 md:px-8 md:text-[12px]">
 							<span>{tr("Découvrir nos véhicules", "Discover our vehicles")}</span>
 							<svg
