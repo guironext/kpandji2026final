@@ -167,21 +167,14 @@ export default function DernierSortie() {
                 className="h-px w-28 bg-linear-to-r from-transparent via-kp-gold/90 to-transparent md:w-52"
                 aria-hidden
               />
-              <p className="mt-6 font-sans text-[11px] font-semibold uppercase tracking-[0.38em] text-kp-muted">
-                {tr("Dernières sorties", "Latest releases")}
-              </p>
+              
               <h2
                 id="derniere-sortie-heading"
                 className="mt-5 font-serif text-[clamp(1.875rem,4.8vw,3rem)] font-medium leading-[1.08] tracking-[-0.02em] text-kp-accent"
               >
-                {tr("Nos derniers modèles", "Our latest models")}
+                {tr("Dernières sorties", "Latest releases")}
               </h2>
-              <p className="mt-4 text-balance font-sans text-sm leading-relaxed text-kp-muted md:text-[15px]">
-                {tr(
-                  "Une sélection premium, pensée pour la route, le travail et la distinction — découvrez les véhicules qui incarnent l’ADN KPANDJI.",
-                  "A premium selection built for the road, for work, and for distinction — discover the vehicles that embody the KPANDJI DNA.",
-                )}
-              </p>
+              
             </div>
           </header>
         </Reveal>

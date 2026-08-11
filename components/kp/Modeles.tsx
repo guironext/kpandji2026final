@@ -292,21 +292,14 @@ export default function Modeles() {
 							className="mx-auto block h-px w-28 bg-linear-to-r from-transparent via-kp-gold/90 to-transparent md:w-56"
 							aria-hidden
 						/>
-						<p className="mt-6 font-sans text-[11px] font-semibold uppercase tracking-[0.38em] text-kp-muted">
-							{tr("Gamme KPANDJI AUTOMOBILES", "The KPANDJI AUTOMOBILES range")}
-						</p>
+						
 						<h2 className="mt-5 font-serif text-[clamp(2.1rem,5.4vw,3.35rem)] font-medium leading-[1.04] tracking-[-0.03em] text-kp-accent">
 							{tr(
 								"Des modèles conçus pour la route, le travail et l’aventure.",
 								"Models built for the road, for work, and for adventure.",
 							)}
 						</h2>
-						<p className="mx-auto mt-5 max-w-2xl text-sm leading-relaxed text-kp-muted">
-							{tr(
-								"Découvrez la gamme, explorez les détails, et choisissez le véhicule qui correspond à votre style de conduite.",
-								"Explore the range, discover the details, and choose the vehicle that matches your driving style.",
-							)}
-						</p>
+						
 					</header>
 				</Reveal>
 			</div>

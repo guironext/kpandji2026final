@@ -357,21 +357,14 @@ export default function VirtualShowroom() {
               className="mx-auto block h-px w-24 bg-linear-to-r from-transparent via-kp-gold/90 to-transparent sm:w-40 md:w-52"
               aria-hidden
             />
-            <p className="mt-5 font-sans text-[10px] font-semibold uppercase tracking-[0.32em] text-kp-muted sm:mt-6 sm:text-[11px] sm:tracking-[0.38em]">
-              {tr("Découvrez notre", "Discover our")}
-            </p>
+            
             <h1
               id={regionId}
               className="mt-4 font-serif text-[clamp(1.85rem,6.5vw,3.4rem)] font-medium leading-[1.08] tracking-[-0.02em] text-kp-accent sm:mt-5"
             >
               {tr("Showroom virtuel", "Virtual showroom")}
             </h1>
-            <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-white/50 sm:text-[15px]">
-              {tr(
-                "Parcourez nos modèles en images, filtrez extérieur et intérieur, et téléchargez les fiches techniques.",
-                "Browse our models in pictures, filter by exterior and interior, and download the technical sheets."
-              )}
-            </p>
+            
           </header>
 
           <div className="mt-8 opacity-0-start animate-fade-up animation-delay-100 sm:mt-10">

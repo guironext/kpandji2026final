@@ -110,18 +110,11 @@ export function EssaiPageContent() {
                   className="h-px w-32 bg-linear-to-r from-transparent via-kp-gold/90 to-transparent md:w-48"
                   aria-hidden
                 />
-                <p className="mt-6 font-sans text-[10px] font-semibold uppercase tracking-[0.42em] text-kp-muted md:text-[11px]">
-                  {tr("Essai routier", "Test drive")}
-                </p>
+                
                 <h1 className="mt-5 max-w-[16ch] font-serif text-[clamp(2.15rem,5.4vw,3.5rem)] font-medium leading-[1.05] tracking-[-0.025em] text-kp-accent">
                   {tr("Réserver un essai", "Book a test drive")}
                 </h1>
-                <p className="mx-auto mt-6 max-w-lg text-pretty text-sm leading-relaxed text-white/50 md:text-[15px] md:leading-[1.65]">
-                  {tr(
-                    "Choisissez les modèles que vous souhaitez essayer — un seul ou plusieurs — et indiquez vos disponibilités. Notre équipe vous recontacte pour fixer le rendez-vous.",
-                    "Choose the models you'd like to test — one or several — and share your availability. Our team will get back to you to set the appointment."
-                  )}
-                </p>
+                
               </div>
             </header>
           </Reveal>

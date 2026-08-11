@@ -15,17 +15,15 @@ export default function Home() {
       <Reveal from="bottom" distance="lg" amount={0.18} delayMs={40}>
         <DernierSortie />
       </Reveal>
+      
+      <Reveal from="bottom" distance="lg" amount={0.14} delayMs={60}>
+        <Modeles />
+      </Reveal>
 
-      <Modeles />
 
       <Reveal from="bottom" distance="lg" amount={0.14} delayMs={60}>
         <Parala />
       </Reveal>
-
-      <Reveal from="bottom" distance="lg" amount={0.14} delayMs={60}>
-        <Sira />
-      </Reveal>
-
 
       <Reveal from="bottom" distance="lg" amount={0.18} delayMs={60}>
         <Sav />

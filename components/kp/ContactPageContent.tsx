@@ -94,18 +94,11 @@ export function ContactPageContent() {
                 className="h-px w-32 bg-linear-to-r from-transparent via-kp-gold/90 to-transparent md:w-48"
                 aria-hidden
               />
-              <p className="mt-6 font-sans text-[10px] font-semibold uppercase tracking-[0.42em] text-kp-muted md:text-[11px]">
-                {tr("Relation constructeur", "Manufacturer relations")}
-              </p>
+             
               <h1 className="mt-5 max-w-[18ch] font-serif text-[clamp(2.15rem,5.4vw,3.5rem)] font-medium leading-[1.05] tracking-[-0.025em] text-kp-accent">
                 {tr("Une équipe à votre écoute", "A team that listens")}
               </h1>
-              <p className="mx-auto mt-6 max-w-lg text-pretty text-sm leading-relaxed text-white/50 md:text-[15px] md:leading-[1.65]">
-                {tr(
-                  "Essai, disponibilité, entretien ou partenariat : décrivez votre besoin. Nous vous répondons avec la même exigence que sur nos chaînes d’assemblage.",
-                  "Test drive, availability, maintenance or partnership: describe your need. We respond with the same rigor as on our assembly lines."
-                )}
-              </p>
+              
             </div>
           </header>
 

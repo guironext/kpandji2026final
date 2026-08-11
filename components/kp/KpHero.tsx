@@ -244,23 +244,7 @@ export function KpHero() {
 					variants={copyContainer}
 					initial="hidden"
 					animate={copyPhase}>
-					<motion.p
-						variants={lineSoft}
-						className="mb-4 flex flex-col gap-1.5 font-sans text-[9px] font-semibold uppercase tracking-[0.28em] text-white/70 sm:mb-5 sm:flex-row sm:items-center sm:gap-3 sm:text-[10px] sm:tracking-[0.45em] md:text-xs">
-						<span className="flex items-center gap-2.5">
-							<span className="sm:hidden">
-								<span className="relative inline-flex h-1.5 w-1.5">
-									<span className="kp-pulse-dot absolute inline-flex h-full w-full rounded-full bg-(--kp-gold)/80" />
-									<span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-kp-gold" />
-								</span>
-							</span>
-							<span>{tr("La force d'une racine,", "The strength of a root,")}</span>
-						</span>
-						<span className="hidden h-px w-6 bg-white/30 sm:block md:w-10" />
-						<span className="text-kp-gold sm:pl-0">
-							{tr("L'élan d'une Nation", "The drive of a Nation")}
-						</span>
-					</motion.p>
+					
 
 					<motion.h1
 						variants={titleGroup}
@@ -278,14 +262,7 @@ export function KpHero() {
 						</motion.span>
 					</motion.h1>
 
-					<motion.p
-						variants={lineSoft}
-						className="mt-5 max-w-[34ch] font-sans text-[15px] font-light italic leading-relaxed text-white/75 sm:mt-6 sm:max-w-xl sm:text-base md:mt-8 md:text-lg">
-						{tr(
-							"Ingénierie, assemblage et mobilité durable — une signature africaine pour des véhicules pensés pour exiger le meilleur.",
-							"Engineering, assembly, and sustainable mobility — an African signature for vehicles built to demand the best.",
-						)}
-					</motion.p>
+					
 
 					<motion.div
 						variants={lineSoft}

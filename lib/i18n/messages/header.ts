@@ -9,7 +9,7 @@ export type HeaderMessages = {
   nav: {
     home: string;
     showroom: string;
-    privilege: string;
+    opportunities: string;
     sav: string;
     contact: string;
   };
@@ -56,7 +56,7 @@ const fr: HeaderMessages = {
   nav: {
     home: "Accueil",
     showroom: "ShowRoom",
-    privilege: "Privilège & Rent",
+    opportunities: "Opportunités",
     sav: "S.A.V.",
     contact: "Contact",
   },
@@ -103,7 +103,7 @@ const en: HeaderMessages = {
   nav: {
     home: "Home",
     showroom: "Showroom",
-    privilege: "Privilege & Rent",
+    opportunities: "Opportunities",
     sav: "After-Sales",
     contact: "Contact",
   },

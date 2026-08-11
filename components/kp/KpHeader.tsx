@@ -17,67 +17,6 @@ type NavItem = {
   href: string;
 };
 
-function KpVideoLogo({
-  className,
-  preferStatic,
-}: {
-  className?: string;
-  preferStatic?: boolean;
-}) {
-  const videoRef = useRef<HTMLVideoElement>(null);
-
-  useEffect(() => {
-    const el = videoRef.current;
-    if (!el || preferStatic) return;
-
-    el.muted = true;
-    const play = () => {
-      void el.play().catch(() => {
-        /* Autoplay can be blocked; muted + playsInline covers most cases. */
-      });
-    };
-
-    if (el.readyState >= 2) play();
-    else el.addEventListener("loadeddata", play, { once: true });
-
-    return () => {
-      el.pause();
-    };
-  }, [preferStatic]);
-
-  if (preferStatic) {
-    return (
-      <Image
-        src="/logo.png"
-        alt=""
-        width={220}
-        height={62}
-        className={className}
-        priority
-        loading="eager"
-        aria-hidden
-      />
-    );
-  }
-
-  return (
-    <video
-      ref={videoRef}
-      className={className}
-      src="/videologo.mp4"
-      poster="/logo.png"
-      autoPlay
-      muted
-      loop
-      playsInline
-      preload="auto"
-      disablePictureInPicture
-      controls={false}
-      aria-hidden
-    />
-  );
-}
-
 function KpAnimatedLogo() {
   const { t } = useLocale();
   const reduceMotion = useReducedMotion();
@@ -240,9 +179,15 @@ function KpAnimatedLogo() {
             }}
           >
             <div className="relative overflow-hidden rounded-sm">
-              <KpVideoLogo
-                preferStatic={!!reduceMotion}
+              <Image
+                src="/logo.png"
+                alt=""
+                width={220}
+                height={62}
                 className={logoMediaClass}
+                priority
+                loading="eager"
+                aria-hidden
               />
             </div>
           </motion.div>
@@ -308,7 +253,7 @@ export function KpHeader() {
   const nav: NavItem[] = [
     { label: t.nav.home, href: "/" },
     { label: t.nav.showroom, href: "/showroom" },
-    { label: t.nav.privilege, href: "/privilege" },
+    { label: t.nav.opportunities, href: "/opportunities" },
     { label: t.nav.sav, href: "/sav" },
     { label: t.nav.contact, href: "/contact" },
   ];
