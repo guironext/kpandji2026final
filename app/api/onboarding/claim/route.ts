@@ -23,7 +23,7 @@ type ClaimBody = {
 };
 
 function parseRole(value: unknown): UserRole {
-  return value === "ADMIN" || value === "admin" ? UserRole.ADMIN : UserRole.PRESTIGE_USER;
+  return value === "ADMIN" || value === "admin" ? UserRole.ADMIN : UserRole.CLIENT_USER;
 }
 
 function resolveRole(
@@ -33,7 +33,7 @@ function resolveRole(
   if (invitation) {
     return requestedRole !== invitation.role ? invitation.role : requestedRole;
   }
-  return requestedRole === UserRole.ADMIN ? UserRole.ADMIN : UserRole.PRESTIGE_USER;
+  return requestedRole === UserRole.ADMIN ? UserRole.ADMIN : UserRole.CLIENT_USER;
 }
 
 function clerkFullName(

@@ -28,7 +28,7 @@ export function AdminSendMessage() {
       const res = await fetch("/api/admin/users");
       const data = (await res.json().catch(() => ({}))) as { users?: AdminUser[] };
       const approvedPrestige = (data.users ?? []).filter(
-        (u) => u.role === "PRESTIGE_USER" && u.status === "APPROVED"
+        (u) => u.role === "CLIENT_USER" && u.status === "APPROVED"
       );
       setMembers(approvedPrestige);
     } finally {

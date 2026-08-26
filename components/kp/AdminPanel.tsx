@@ -46,7 +46,7 @@ async function copyInviteLink(link: string): Promise<void> {
 
 export function InvitePanel() {
   const [email, setEmail] = useState("");
-  const [role, setRole] = useState<"prestige-user" | "admin">("prestige-user");
+  const [role, setRole] = useState<"client-user" | "admin">("client-user");
   const [link, setLink] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -107,10 +107,10 @@ export function InvitePanel() {
         />
         <select
           value={role}
-          onChange={(e) => setRole(e.target.value as "prestige-user" | "admin")}
+          onChange={(e) => setRole(e.target.value as "client-user" | "admin")}
           className={adminFieldClass()}
         >
-          <option value="prestige-user">{tr("Membre Prestige", "Prestige member")}</option>
+          <option value="client-user">{tr("Membre client", "Client member")}</option>
           <option value="admin">{tr("Administrateur", "Administrator")}</option>
         </select>
         <button
@@ -262,7 +262,7 @@ export function MembersPanel({ pendingOnly = false }: MembersPanelProps) {
                 </p>
                 <p className="truncate font-sans text-xs text-white/45">
                   {u.email} ·{" "}
-                  {u.role === "ADMIN" ? tr("Administrateur", "Administrator") : tr("Membre Prestige", "Prestige member")}
+                  {u.role === "ADMIN" ? tr("Administrateur", "Administrator") : tr("Membre client", "Client member")}
                 </p>
               </div>
 

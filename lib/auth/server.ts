@@ -5,7 +5,7 @@ import {
   APPROVAL_APPROVED,
   APPROVAL_PENDING,
   APPROVAL_REJECTED,
-  PRESTIGE_USER_ROLE,
+  CLIENT_USER_ROLE,
   getUserRoleFromMetadata,
   type KpApprovalStatus,
   type KpUserRole,
@@ -13,7 +13,7 @@ import {
 
 /** Map the Prisma role enum to the string stored in Clerk metadata. */
 export function prismaRoleToKp(role: UserRole): KpUserRole {
-  return role === UserRole.ADMIN ? ADMIN_ROLE : PRESTIGE_USER_ROLE;
+  return role === UserRole.ADMIN ? ADMIN_ROLE : CLIENT_USER_ROLE;
 }
 
 /** Map the Prisma status enum to the string stored in Clerk metadata. */

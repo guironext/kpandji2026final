@@ -213,6 +213,16 @@ const NAV_SECTIONS: AdminNavSection[] = [
         },
         icon: <IconCrown />,
       },
+      {
+        label: { fr: "Message SIRA", en: "SIRA message" },
+        shortLabel: { fr: "SIRA", en: "SIRA" },
+        href: "/admin/sira-message",
+        description: {
+          fr: "Gérer les contacts SIRA",
+          en: "Manage SIRA contacts",
+        },
+        icon: <IconWrench />,
+      },
     ],
   },
 ];

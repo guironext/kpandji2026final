@@ -5,7 +5,7 @@ import {
   APPROVAL_APPROVED,
   APPROVAL_PENDING,
   APPROVAL_REJECTED,
-  PRESTIGE_USER_ROLE,
+  CLIENT_USER_ROLE,
   canAccessAdminRoute,
   canAccessPrestigeRoute,
   getApprovalStatusFromSessionClaims,
@@ -73,7 +73,7 @@ export default clerkMiddleware(async (auth, req) => {
     status = membership.status ?? status;
 
     if (
-      membership.role === PRESTIGE_USER_ROLE &&
+      membership.role === CLIENT_USER_ROLE &&
       membership.status === APPROVAL_APPROVED
     ) {
       return NextResponse.redirect(new URL(PRESTIGE_HOME_PATH, req.url));

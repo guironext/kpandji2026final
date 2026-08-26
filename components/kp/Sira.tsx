@@ -3,8 +3,10 @@
 import type { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useLocale } from "@/components/providers/KpLocaleProvider";
 import { Reveal } from "@/components/kp/Reveal";
+import { SiraContactCTA } from "@/components/kp/SiraContactCTA";
 
 const WHATSAPP_SIRA =
   "https://wa.me/2250707201553?text=KPANDJI%20SIRA%20-%20Demande%20flotte";
@@ -28,6 +30,9 @@ const btnGold =
 
 const btnGhost =
   "inline-flex min-h-12 w-full items-center justify-center rounded-full border border-white/15 bg-white/5 px-7 py-3.5 font-sans text-[11px] font-semibold uppercase tracking-[0.18em] text-white/85 backdrop-blur-sm transition hover:border-white/25 hover:bg-white/10 sm:min-h-11 sm:w-auto sm:px-8";
+
+const btnBack =
+  "group inline-flex min-h-10 items-center gap-2 rounded-full border border-white/15 bg-black/35 px-4 py-2 font-sans text-[11px] font-semibold uppercase tracking-[0.18em] text-white/80 backdrop-blur-md transition hover:border-white/25 hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-kp-gold/55";
 
 function getTiers(tr: (fr: string, en: string) => string) {
   return [
@@ -223,9 +228,18 @@ function TierNode({ tier }: { tier: Tier }) {
 
 const Sira = () => {
   const { tr } = useLocale();
+  const router = useRouter();
   const tiers = getTiers(tr);
   const included = getIncluded(tr);
   const howSteps = getHowSteps(tr);
+
+  function handleBack() {
+    if (typeof window !== "undefined" && window.history.length > 1) {
+      router.back();
+      return;
+    }
+    router.push("/");
+  }
 
   return (
     <section id="sira" className="relative overflow-hidden bg-kp-bg" aria-labelledby="sira-title">
@@ -250,7 +264,23 @@ const Sira = () => {
 
         <div className={`relative z-10 w-full ${pageMax} ${sectionPad} pb-12 pt-28 sm:pb-16 sm:pt-32 md:pb-20`}>
           <Reveal from="bottom">
-            <p className={eyebrow}>
+            <button type="button" onClick={handleBack} className={btnBack}>
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                className="size-3.5 transition-transform duration-300 group-hover:-translate-x-0.5"
+                aria-hidden
+              >
+                <path d="M19 12H5M11 6l-6 6 6 6" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              <span>{tr("Retour", "Back")}</span>
+            </button>
+          </Reveal>
+
+          <Reveal from="bottom" delayMs={40}>
+            <p className={`${eyebrow} mt-6 sm:mt-7`}>
               <span aria-hidden className="h-px w-8 bg-kp-gold/80 sm:w-12" />
               {tr("Offre flotte · Institutions & mutuelles", "Fleet offer · Institutions & mutuals")}
             </p>
@@ -279,12 +309,7 @@ const Sira = () => {
 
           <Reveal from="bottom" delayMs={200}>
             <div className="mt-8 flex flex-col gap-3 sm:mt-9 sm:flex-row sm:flex-wrap sm:items-center">
-              <a href={WHATSAPP_SIRA} target="_blank" rel="noopener noreferrer" className={btnGold}>
-                <span>{tr("Demander une offre flotte", "Request a fleet quote")}</span>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="size-3.5 transition-transform duration-300 group-hover:translate-x-0.5" aria-hidden>
-                  <path d="M5 12h14M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </a>
+            <SiraContactCTA />
               <a href="#niveaux" className={btnGhost}>
                 {tr("Voir les 3 niveaux", "See the 3 tiers")}
               </a>
@@ -528,17 +553,12 @@ const Sira = () => {
               </h2>
               <p className={`mx-auto mt-4 max-w-lg text-pretty ${bodyTextLg}`}>
                 {tr(
-                  "Un conseiller KPANDJI vous répond sur WhatsApp et construit l’offre adaptée à votre institution.",
-                  "A KPANDJI advisor will reply on WhatsApp and build the offer for your institution.",
+                  "Inscrivez-vous au projet Sira — un conseiller KPANDJI construit l’offre adaptée à votre institution.",
+                  "Register for the Sira project — a KPANDJI advisor will build the offer for your institution.",
                 )}
               </p>
               <div className="mt-8 flex flex-col items-stretch gap-3 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center sm:gap-4">
-                <a href={WHATSAPP_SIRA} target="_blank" rel="noopener noreferrer" className={btnGold}>
-                  <span>{tr("Lancer mon projet flotte", "Start my fleet project")}</span>
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="size-3.5 transition-transform duration-300 group-hover:translate-x-0.5" aria-hidden>
-                    <path d="M5 12h14M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </a>
+                <SiraContactCTA />
                 <Link href="/contact" className={btnGhost}>
                   {tr("Parler à un conseiller", "Speak to an advisor")}
                 </Link>

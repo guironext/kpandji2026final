@@ -1,7 +1,10 @@
 export const ADMIN_ROLE = "admin" as const;
-export const PRESTIGE_USER_ROLE = "prestige-user" as const;
+export const CLIENT_USER_ROLE = "client-user" as const;
 
-export type KpUserRole = typeof ADMIN_ROLE | typeof PRESTIGE_USER_ROLE;
+/** @deprecated Use CLIENT_USER_ROLE */
+export const PRESTIGE_USER_ROLE = CLIENT_USER_ROLE;
+
+export type KpUserRole = typeof ADMIN_ROLE | typeof CLIENT_USER_ROLE;
 
 export const APPROVAL_PENDING = "pending" as const;
 export const APPROVAL_APPROVED = "approved" as const;
@@ -20,17 +23,23 @@ export function isKpApprovalStatus(value: unknown): value is KpApprovalStatus {
   return normalizeKpApprovalStatus(value) !== undefined;
 }
 
-/** Accept Clerk metadata (`prestige-user`) and DB enum (`PRESTIGE_USER`) values. */
+/**
+ * Accept Clerk metadata (`client-user`) and DB enum (`CLIENT_USER`) values.
+ * Also accepts legacy `prestige-user` / `PRESTIGE_USER` for existing sessions.
+ */
 export function normalizeKpUserRole(value: unknown): KpUserRole | undefined {
   if (value === ADMIN_ROLE || value === "ADMIN" || value === "admin") {
     return ADMIN_ROLE;
   }
   if (
-    value === PRESTIGE_USER_ROLE ||
+    value === CLIENT_USER_ROLE ||
+    value === "CLIENT_USER" ||
+    value === "client_user" ||
+    value === "prestige-user" ||
     value === "PRESTIGE_USER" ||
     value === "prestige_user"
   ) {
-    return PRESTIGE_USER_ROLE;
+    return CLIENT_USER_ROLE;
   }
   return undefined;
 }
@@ -108,19 +117,19 @@ export function canAccessAdminRoute(role: KpUserRole | undefined): boolean {
   return role === ADMIN_ROLE;
 }
 
-/** A prestige member can enter their space only once an admin approved them. */
+/** A client member can enter their space only once an admin approved them. */
 export function canAccessPrestigeRoute(
   role: KpUserRole | undefined,
   status: KpApprovalStatus | undefined
 ): boolean {
   if (role === ADMIN_ROLE) return true;
-  return role === PRESTIGE_USER_ROLE && status === APPROVAL_APPROVED;
+  return role === CLIENT_USER_ROLE && status === APPROVAL_APPROVED;
 }
 
-/** Client prestige layout: approved members with the PRESTIGE_USER role only. */
+/** Client prestige layout: approved members with the CLIENT_USER role only. */
 export function canAccessClientPrestigeRoute(
   role: KpUserRole | undefined,
   status: KpApprovalStatus | undefined
 ): boolean {
-  return role === PRESTIGE_USER_ROLE && status === APPROVAL_APPROVED;
+  return role === CLIENT_USER_ROLE && status === APPROVAL_APPROVED;
 }

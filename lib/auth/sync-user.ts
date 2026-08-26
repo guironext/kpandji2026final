@@ -46,7 +46,7 @@ export async function syncClerkUserToDatabase(clerkUserId: string) {
       data: {
         clerkUserId,
         ...profileData,
-        role: UserRole.PRESTIGE_USER,
+        role: UserRole.CLIENT_USER,
         invitationId: invitedByUserId ?? null,
       },
     });

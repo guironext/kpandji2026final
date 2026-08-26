@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { PrestigeContactCTA } from "@/components/kp/PrestigeContactCTA";
 import { PrivilegeFloatingCTA } from "@/components/kp/PrivilegeFloatingCTA";
 import { Reveal } from "@/components/kp/Reveal";
@@ -22,17 +23,8 @@ const bodyText =
 const bodyTextLg =
   "font-sans text-[16px] leading-relaxed text-white/75 sm:text-[18px] md:text-[19px]";
 
-const btnPrimary =
-  "group inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-white px-6 py-3.5 font-sans text-[12px] font-semibold uppercase tracking-[0.16em] text-black transition duration-300 hover:bg-white/90 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-kp-gold/55 sm:w-auto sm:px-8 sm:text-[13px]";
-
-const btnGold =
-  "group inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-kp-gold px-6 py-3.5 font-sans text-[12px] font-semibold uppercase tracking-[0.16em] text-black shadow-[0_12px_40px_-12px_rgba(201,169,98,0.55)] transition duration-300 hover:bg-[#d4b56e] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-kp-gold/55 sm:w-auto sm:px-8 sm:text-[13px]";
-
-const btnGhost =
-  "inline-flex min-h-12 w-full items-center justify-center rounded-full border border-white/15 bg-white/5 px-6 py-3.5 font-sans text-[12px] font-semibold uppercase tracking-[0.16em] text-white/85 backdrop-blur-sm transition hover:border-white/25 hover:bg-white/10 active:scale-[0.98] sm:w-auto sm:px-8 sm:text-[13px]";
-
-const WHATSAPP_COMMERCIAL = "https://wa.me/2250707201992?text=PRIVILEGE";
-const WHATSAPP_FLOTTE = "https://wa.me/2250707201992?text=FLOTTE";
+const btnBack =
+  "group inline-flex min-h-10 items-center gap-2 rounded-full border border-white/15 bg-black/35 px-4 py-2 font-sans text-[11px] font-semibold uppercase tracking-[0.18em] text-white/80 backdrop-blur-md transition hover:border-white/25 hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-kp-gold/55";
 
 function PathCard({
   image,
@@ -44,9 +36,6 @@ function PathCard({
   secondary,
   secondaryLabel,
   points,
-  ctaHref,
-  ctaLabel,
-  ctaClass,
   from,
   delayMs = 0,
 }: {
@@ -59,10 +48,7 @@ function PathCard({
   secondary: string;
   secondaryLabel: string;
   points: readonly string[];
-  ctaHref: string;
-  ctaLabel: string;
-  ctaClass: string;
-  from: "left" | "right";
+  from?: "left" | "right";
   delayMs?: number;
 }) {
   return (
@@ -122,25 +108,6 @@ function PathCard({
               </li>
             ))}
           </ul>
-
-          <a
-            href={ctaHref}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`${ctaClass} mt-auto pt-6`}
-          >
-            <span>{ctaLabel}</span>
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.8"
-              className="size-3.5 transition-transform duration-300 group-hover:translate-x-0.5"
-              aria-hidden
-            >
-              <path d="M5 12h14M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </a>
         </div>
       </article>
     </Reveal>
@@ -149,6 +116,15 @@ function PathCard({
 
 export function PrestigePrivilege() {
   const { tr } = useLocale();
+  const router = useRouter();
+
+  function handleBack() {
+    if (typeof window !== "undefined" && window.history.length > 1) {
+      router.back();
+      return;
+    }
+    router.push("/");
+  }
 
   const steps = [
     {
@@ -237,7 +213,23 @@ export function PrestigePrivilege() {
             className={`relative z-10 w-full ${sectionPad} pb-[max(3.5rem,env(safe-area-inset-bottom))] pt-28 sm:pb-16 sm:pt-32 md:pb-20`}
           >
             <Reveal from="bottom">
-              <p className={eyebrow}>
+              <button type="button" onClick={handleBack} className={btnBack}>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  className="size-3.5 transition-transform duration-300 group-hover:-translate-x-0.5"
+                  aria-hidden
+                >
+                  <path d="M19 12H5M11 6l-6 6 6 6" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                <span>{tr("Retourner", "Back")}</span>
+              </button>
+            </Reveal>
+
+            <Reveal from="bottom" delayMs={40}>
+              <p className={`${eyebrow} mt-6 sm:mt-7`}>
                 <span aria-hidden className="h-px w-7 bg-kp-gold/80 sm:w-12" />
                 {tr("Diaspora · Côte d’Ivoire", "Diaspora · Côte d’Ivoire")}
               </p>
@@ -261,27 +253,37 @@ export function PrestigePrivilege() {
 
             <Reveal from="bottom" delayMs={200}>
               <div className="mt-8 flex flex-col gap-3 sm:mt-9 sm:flex-row sm:flex-wrap sm:items-center">
-                <a
-                  href={WHATSAPP_COMMERCIAL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={btnGold}
-                >
-                  <span>{tr("Parler à un conseiller", "Talk to an advisor")}</span>
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                    className="size-3.5 transition-transform duration-300 group-hover:translate-x-0.5"
-                    aria-hidden
-                  >
-                    <path d="M5 12h14M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </a>
-                <a href="#chemins" className={btnGhost}>
-                  {tr("Voir les 2 options", "See both options")}
-                </a>
+              <div className="mt-8 flex flex-col items-stretch gap-3 sm:mt-9 sm:flex-row sm:items-center sm:justify-center">
+                  <PrestigeContactCTA
+                    variant="gold"
+                    label={{
+                      fr: "Parler à un conseiller",
+                      en: "Talk to an advisor",
+                    }}
+                    modalTitle={{
+                      fr: "Parler à un conseiller",
+                      en: "Talk to an advisor",
+                    }}
+                    modalSubtitle={{
+                      fr: "Laissez vos coordonnées — un conseiller Privilège vous recontacte pour choisir votre plan.",
+                      en: "Leave your details — a Privilège advisor will get back to you to choose your plan.",
+                    }}
+                    submitLabel={{
+                      fr: "Être recontacté",
+                      en: "Request a callback",
+                    }}
+                    successTitle={{
+                      fr: "Demande enregistrée",
+                      en: "Request received",
+                    }}
+                    successMessage={{
+                      fr: "Merci. Un conseiller Privilège vous recontactera très prochainement.",
+                      en: "Thank you. A Privilège advisor will contact you shortly.",
+                    }}
+                  />
+                  <PrestigeContactCTA />
+                </div>
+                
               </div>
             </Reveal>
 
@@ -309,24 +311,60 @@ export function PrestigePrivilege() {
         >
           <div className={`${sectionPad} py-12 sm:py-16 md:py-20 lg:py-24`}>
             <Reveal from="bottom">
-              <div className="mx-auto max-w-2xl text-center">
-                <p className={`${eyebrow} justify-center`}>
-                  <span aria-hidden className="h-px w-6 bg-kp-gold/60 sm:w-8" />
+              <div className="relative mx-auto max-w-3xl text-center">
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute -inset-x-6 -top-8 bottom-0 mx-auto max-w-md bg-[radial-gradient(ellipse_at_center,rgba(201,169,98,0.14),transparent_72%)] sm:-inset-x-12 sm:max-w-xl"
+                />
+
+                <p className={`${eyebrow} relative justify-center`}>
+                  <span aria-hidden className="h-px w-8 bg-linear-to-r from-transparent to-kp-gold/70 sm:w-12" />
                   {tr("Une idée simple", "One simple idea")}
-                  <span aria-hidden className="h-px w-6 bg-kp-gold/60 sm:w-8" />
+                  <span aria-hidden className="h-px w-8 bg-linear-to-l from-transparent to-kp-gold/70 sm:w-12" />
                 </p>
+
                 <h2
                   id="chemins-heading"
-                  className="mt-4 font-serif text-[clamp(1.85rem,5vw,3.25rem)] font-medium leading-[1.05] tracking-tight text-white"
+                  className="relative mt-5 font-serif text-[clamp(2rem,5.5vw,3.5rem)] font-medium leading-[1.02] tracking-[-0.02em] text-white"
                 >
-                  {tr("Deux façons de profiter", "Two ways to benefit")}
+                  <span className="block">{tr("Deux façons", "Two ways")}</span>
+                  <span className="mt-1 block text-kp-gold">
+                    {tr("de profiter", "to benefit")}
+                  </span>
                 </h2>
-                <p className={`mx-auto mt-4 max-w-md ${bodyText}`}>
+
+                <div
+                  aria-hidden
+                  className="relative mx-auto mt-7 flex max-w-xs items-center gap-3 sm:mt-8 sm:max-w-sm sm:gap-4"
+                >
+                  <span className="h-px flex-1 bg-linear-to-r from-transparent via-kp-gold/35 to-kp-gold/55" />
+                  <span className="size-1.5 rotate-45 border border-kp-gold/50 bg-kp-gold/20" />
+                  <span className="h-px flex-1 bg-linear-to-l from-transparent via-kp-gold/35 to-kp-gold/55" />
+                </div>
+
+                <p className={`relative mx-auto mt-6 max-w-lg text-pretty sm:mt-7 ${bodyTextLg}`}>
                   {tr(
                     "Vous achetez un véhicule premium. Ensuite, c’est vous qui choisissez.",
                     "You buy a premium vehicle. Then you choose what comes next."
                   )}
                 </p>
+
+                <div className="relative mt-8 flex flex-col items-center justify-center gap-2.5 sm:mt-9 sm:flex-row sm:gap-0">
+                  <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.24em] text-white/50 sm:px-5">
+                    <span className="text-kp-gold/80">01</span>
+                    <span aria-hidden className="mx-2.5 text-white/20">·</span>
+                    {tr("Acheter & rouler", "Buy & drive")}
+                  </p>
+                  <span
+                    aria-hidden
+                    className="hidden h-3 w-px bg-white/12 sm:block"
+                  />
+                  <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.24em] text-white/50 sm:px-5">
+                    <span className="text-kp-gold/80">02</span>
+                    <span aria-hidden className="mx-2.5 text-white/20">·</span>
+                    {tr("Acheter & rentabiliser", "Buy & earn")}
+                  </p>
+                </div>
               </div>
             </Reveal>
 
@@ -344,9 +382,7 @@ export function PrestigePrivilege() {
                 secondary="Cash"
                 secondaryLabel={tr("Ou paiement direct", "Or direct payment")}
                 points={buyPoints}
-                ctaHref={WHATSAPP_COMMERCIAL}
-                ctaLabel={tr("Demander des infos", "Request info")}
-                ctaClass={btnPrimary}
+                
                 from="left"
               />
 
@@ -363,9 +399,7 @@ export function PrestigePrivilege() {
                 secondary="30%"
                 secondaryLabel={tr("Gestion KPANDJI", "KPANDJI management")}
                 points={rentPoints}
-                ctaHref={WHATSAPP_FLOTTE}
-                ctaLabel={tr("Simuler · FLOTTE", "Simulate · FLOTTE")}
-                ctaClass={btnGold}
+
                 from="right"
                 delayMs={80}
               />
@@ -475,17 +509,34 @@ export function PrestigePrivilege() {
                 </p>
 
                 <div className="mt-8 flex flex-col items-stretch gap-3 sm:mt-9 sm:flex-row sm:items-center sm:justify-center">
-                  <a
-                    href={WHATSAPP_COMMERCIAL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={btnGold}
-                  >
-                    <span>{tr("WhatsApp conseiller", "WhatsApp advisor")}</span>
-                  </a>
-                  <div className="w-full sm:w-auto [&_button]:w-full sm:[&_button]:w-auto">
-                    <PrestigeContactCTA />
-                  </div>
+                  <PrestigeContactCTA
+                    variant="gold"
+                    label={{
+                      fr: "Parler à un conseiller",
+                      en: "Talk to an advisor",
+                    }}
+                    modalTitle={{
+                      fr: "Parler à un conseiller",
+                      en: "Talk to an advisor",
+                    }}
+                    modalSubtitle={{
+                      fr: "Laissez vos coordonnées — un conseiller Privilège vous recontacte pour choisir votre plan.",
+                      en: "Leave your details — a Privilège advisor will get back to you to choose your plan.",
+                    }}
+                    submitLabel={{
+                      fr: "Être recontacté",
+                      en: "Request a callback",
+                    }}
+                    successTitle={{
+                      fr: "Demande enregistrée",
+                      en: "Request received",
+                    }}
+                    successMessage={{
+                      fr: "Merci. Un conseiller Privilège vous recontactera très prochainement.",
+                      en: "Thank you. A Privilège advisor will contact you shortly.",
+                    }}
+                  />
+                  <PrestigeContactCTA />
                 </div>
 
                 <div className="mt-10 flex flex-col items-center gap-3 border-t border-white/10 pt-8 sm:mt-12 sm:flex-row sm:justify-center sm:gap-8 sm:pt-10">

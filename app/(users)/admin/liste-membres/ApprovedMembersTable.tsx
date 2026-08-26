@@ -12,7 +12,7 @@ export type ApprovedMemberRow = {
   fullName: string;
   phone: string;
   residenceCountry: string;
-  role: "ADMIN" | "PRESTIGE_USER";
+  role: "ADMIN" | "CLIENT_USER";
   status: "PENDING" | "APPROVED" | "REJECTED";
   invitationId: string;
   approvedAt: string;
@@ -26,7 +26,7 @@ const iconButtonClass =
 
 const ROLE_LABEL: Record<ApprovedMemberRow["role"], { fr: string; en: string }> = {
   ADMIN: { fr: "Administrateur", en: "Administrator" },
-  PRESTIGE_USER: { fr: "Membre Prestige", en: "Prestige member" },
+  CLIENT_USER: { fr: "Membre client", en: "Client member" },
 };
 
 const STATUS_LABEL: Record<ApprovedMemberRow["status"], { fr: string; en: string }> = {

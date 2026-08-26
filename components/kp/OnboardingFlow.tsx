@@ -10,7 +10,7 @@ import {
   APPROVAL_APPROVED,
   APPROVAL_PENDING,
   APPROVAL_REJECTED,
-  PRESTIGE_USER_ROLE,
+  CLIENT_USER_ROLE,
   type KpApprovalStatus,
   type KpUserRole,
 } from "@/lib/auth/roles";
@@ -35,8 +35,8 @@ type OnboardingState = {
 
 const ROLE_OPTIONS = [
   {
-    value: PRESTIGE_USER_ROLE,
-    label: { fr: "Membre Prestige", en: "Prestige member" },
+    value: CLIENT_USER_ROLE,
+    label: { fr: "Membre client", en: "Client member" },
     description: {
       fr: "Accès à l'espace client privé KPANDJI.",
       en: "Access to the KPANDJI private client area.",
@@ -45,7 +45,7 @@ const ROLE_OPTIONS = [
 ] as const;
 
 function postOnboardingPath(role: KpUserRole | null | undefined) {
-  if (role === PRESTIGE_USER_ROLE) return PRESTIGE_HOME_PATH;
+  if (role === CLIENT_USER_ROLE) return PRESTIGE_HOME_PATH;
   return homePathForRole(role);
 }
 
@@ -95,7 +95,7 @@ function PendingApprovalMessage({
   const greeting = name
     ? tr(`Merci ${name}.`, `Thank you ${name}.`)
     : tr("Merci.", "Thank you.");
-  const spaceLabel = role === ADMIN_ROLE ? "administration" : "prestige";
+  const spaceLabel = role === ADMIN_ROLE ? "administration" : "client";
 
   return (
     <div className="mt-8 rounded-xl border border-white/8 bg-white/2 p-6 sm:p-8">
@@ -143,7 +143,7 @@ export function OnboardingFlow() {
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
   const [residenceCountry, setResidenceCountry] = useState("");
-  const [role, setRole] = useState<KpUserRole>(PRESTIGE_USER_ROLE);
+  const [role, setRole] = useState<KpUserRole>(CLIENT_USER_ROLE);
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 

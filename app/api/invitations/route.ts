@@ -58,7 +58,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "A valid email is required" }, { status: 400 });
   }
 
-  const role = body.role === "admin" ? UserRole.ADMIN : UserRole.PRESTIGE_USER;
+  const role = body.role === "admin" ? UserRole.ADMIN : UserRole.CLIENT_USER;
 
   const existingUser = await prisma.user.findFirst({
     where: { email },

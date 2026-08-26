@@ -1,7 +1,7 @@
 import {
   ADMIN_ROLE,
   APPROVAL_APPROVED,
-  PRESTIGE_USER_ROLE,
+  CLIENT_USER_ROLE,
   type KpApprovalStatus,
   type KpUserRole,
 } from "@/lib/auth/roles";
@@ -21,7 +21,7 @@ export function accountHomePathForMember(
   status: KpApprovalStatus | null | undefined
 ): string {
   if (role === ADMIN_ROLE) return ADMIN_HOME_PATH;
-  if (role === PRESTIGE_USER_ROLE && status === APPROVAL_APPROVED) {
+  if (role === CLIENT_USER_ROLE && status === APPROVAL_APPROVED) {
     return PRESTIGE_HOME_PATH;
   }
   return ONBOARDING_PATH;

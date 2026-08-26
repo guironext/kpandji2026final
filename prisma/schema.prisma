@@ -9,7 +9,7 @@ datasource db {
 
 enum UserRole {
   ADMIN
-  PRESTIGE_USER
+  CLIENT_USER
 }
 
 enum UserStatus {
@@ -28,7 +28,7 @@ enum InvitationStatus {
 model Invitation {
   id         String           @id @default(uuid())
   email      String
-  role       UserRole         @default(PRESTIGE_USER)
+  role       UserRole         @default(CLIENT_USER)
   token      String           @unique
   status     InvitationStatus @default(PENDING)
   invitedBy  String
@@ -43,20 +43,24 @@ model Invitation {
 }
 
 model User {
-  id               String     @id @default(uuid())
-  clerkUserId      String     @unique
-  email            String     @unique
-  fullName         String?
-  phone            String?
-  residenceCountry String?
-  role             UserRole   @default(PRESTIGE_USER)
-  status           UserStatus @default(PENDING)
-  invitationId     String?    @unique
-  approvedAt       DateTime?  @db.Timestamp(3)
-  approvedBy       String?
-  createdAt        DateTime   @default(now()) @db.Timestamp(3)
-  updatedAt        DateTime   @updatedAt @db.Timestamp(3)
-  invitation       Invitation? @relation(fields: [invitationId], references: [id])
+  id                    String                @id @default(uuid())
+  clerkUserId           String                @unique
+  email                 String                @unique
+  fullName              String?
+  phone                 String?
+  residenceCountry      String?
+  role                  UserRole              @default(CLIENT_USER)
+  status                UserStatus            @default(PENDING)
+  invitationId          String?               @unique
+  approvedAt            DateTime?             @db.Timestamp(3)
+  approvedBy            String?
+  createdAt             DateTime              @default(now()) @db.Timestamp(3)
+  updatedAt             DateTime              @updatedAt @db.Timestamp(3)
+  invitation            Invitation?           @relation(fields: [invitationId], references: [id])
+  prestigeOpportunities PrestigeOpportunity[]
+  siraOpportunities     SiraOpportunity[]
+  remunerations         Renumeration[]
+  comptesVirement       CompteVirement[]
 
   @@index([status], map: "User_status_idx")
   @@map("User")
@@ -142,3 +146,96 @@ model Message_Contact {
   @@index([createdAt], map: "Message_Contact_createdAt_idx")
   @@map("Message_Contact")
 }
+
+model SiraContact {
+  id        String   @id @default(uuid())
+  name      String
+  country   String
+  city      String
+  phone     String
+  email     String
+  createdAt DateTime @default(now()) @db.Timestamp(3)
+
+  @@index([email], map: "SiraContact_email_idx")
+  @@index([createdAt], map: "SiraContact_createdAt_idx")
+  @@map("SiraContact")
+}
+
+model Opportunites {
+  id                    String                @id @default(uuid())
+  createdAt             DateTime              @default(now()) @db.Timestamp(3)
+  siraOpportunities     SiraOpportunity[]
+  prestigeOpportunities PrestigeOpportunity[]
+
+  @@map("Opportunites")
+}
+
+model PrestigeOpportunity {
+  id               String         @id @default(uuid())
+  nomFormule       String
+  dateDebutFormule DateTime       @db.Timestamp(3)
+  dateFin          DateTime       @db.Timestamp(3)
+  userId           String
+  opportunitesId   String
+  createdAt        DateTime       @default(now()) @db.Timestamp(3)
+  user             User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  opportunites     Opportunites   @relation(fields: [opportunitesId], references: [id], onDelete: Cascade)
+  remunerations    Renumeration[]
+
+  @@index([userId], map: "PrestigeOpportunity_userId_idx")
+  @@index([opportunitesId], map: "PrestigeOpportunity_opportunitesId_idx")
+  @@map("PrestigeOpportunity")
+}
+
+model SiraOpportunity {
+  id               String         @id @default(uuid())
+  nomFormule       String
+  dateDebutFormule DateTime       @db.Timestamp(3)
+  dateFin          DateTime       @db.Timestamp(3)
+  userId           String
+  opportunitesId   String
+  createdAt        DateTime       @default(now()) @db.Timestamp(3)
+  user             User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  opportunites     Opportunites   @relation(fields: [opportunitesId], references: [id], onDelete: Cascade)
+  remunerations    Renumeration[]
+
+  @@index([userId], map: "SiraOpportunity_userId_idx")
+  @@index([opportunitesId], map: "SiraOpportunity_opportunitesId_idx")
+  @@map("SiraOpportunity")
+}
+
+model CompteVirement {
+  id             String         @id @default(uuid())
+  compteBancaire String
+  numeroCarte    String
+  validiteCarte  String
+  userId         String
+  createdAt      DateTime       @default(now()) @db.Timestamp(3)
+  user           User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  remunerations  Renumeration[]
+
+  @@index([userId], map: "CompteVirement_userId_idx")
+  @@map("CompteVirement")
+}
+
+model Renumeration {
+  id                    String               @id @default(uuid())
+  montant               Decimal              @db.Decimal(12, 2)
+  datePayement          DateTime             @db.Timestamp(3)
+  siraOpportunityId     String?
+  prestigeOpportunityId String?
+  compteVirementId      String
+  userId                String
+  createdAt             DateTime             @default(now()) @db.Timestamp(3)
+  siraOpportunity       SiraOpportunity?     @relation(fields: [siraOpportunityId], references: [id], onDelete: SetNull)
+  prestigeOpportunity   PrestigeOpportunity? @relation(fields: [prestigeOpportunityId], references: [id], onDelete: SetNull)
+  compteVirement        CompteVirement       @relation(fields: [compteVirementId], references: [id], onDelete: Restrict)
+  user                  User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId], map: "Renumeration_userId_idx")
+  @@index([compteVirementId], map: "Renumeration_compteVirementId_idx")
+  @@index([siraOpportunityId], map: "Renumeration_siraOpportunityId_idx")
+  @@index([prestigeOpportunityId], map: "Renumeration_prestigeOpportunityId_idx")
+  @@map("Renumeration")
+}
+
